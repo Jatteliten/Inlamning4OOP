@@ -9,7 +9,8 @@ public class Client {
     String ip = "127.0.0.1";
     PrintWriter out;
     BufferedReader in;
-    String question;
+    String textFromServer;
+    int numberOfAlternatives = 4;
 
     public Client() {
         try(Socket socketToServer = new Socket(ip, port)) {
@@ -17,9 +18,18 @@ public class Client {
             in = new BufferedReader(new InputStreamReader(socketToServer.getInputStream()));
             BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in));
 
-            while((question = in.readLine()) != null){
-                System.out.println(question);
-                out.println(userInput.readLine());
+            while(true){
+                textFromServer = in.readLine();
+                if(textFromServer.equals("You win!")){
+                    System.exit(0);
+                }
+                else {
+                    System.out.println(textFromServer);
+                    for (int i = 0; i < numberOfAlternatives; i++) {
+                        System.out.println(in.readLine());
+                    }
+                    out.println(userInput.readLine());
+                }
             }
         } catch(IOException e) {
             throw new RuntimeException(e);

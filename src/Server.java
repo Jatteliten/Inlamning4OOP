@@ -8,8 +8,9 @@ import java.net.Socket;
 
 public class Server extends Thread {
     Socket serverSocket;
-    String[] questions = new String[]{"1+1=", "1+2=", "1+3=", "1+4=", "1+5="};
-    String[] answers = new String[]{"2", "3", "4", "5", "6"};
+    String[] questions = new String[]{"What color is red?"};
+    String[] answers = new String[]{"1: red", "2: blue", "3: green", "4: yellow"};
+    String correctAnswer = "1";
     String answer;
     int counter = 0;
 
@@ -23,10 +24,14 @@ public class Server extends Thread {
             PrintWriter out = new PrintWriter(serverSocket.getOutputStream(), true)){
 
             while (true){
-                out.println(questions[counter%5]);
+                out.println(questions[counter]);
+                for(String s: answers){
+                    out.println(s);
+                }
                 answer = in.readLine();
-                if(answer.equalsIgnoreCase(answers[counter%5])){
-                    counter++;
+                if(answer.equalsIgnoreCase(correctAnswer)){
+                    out.println("You win!");
+                    System.exit(0);
                 }
             }
 
