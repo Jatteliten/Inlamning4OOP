@@ -4,9 +4,11 @@ import java.util.ArrayList;
 
 public class Questions {
 
+    String questionText;
     ArrayList<Answers> answersList = new ArrayList<>();
 
-    public Questions(Answers answer1, Answers answer2, Answers answer3, Answers answer4){
+    public Questions(String text, Answers answer1, Answers answer2, Answers answer3, Answers answer4){
+        this.questionText = text;
         answersList.add(answer1);
         answersList.add(answer2);
         answersList.add(answer3);
