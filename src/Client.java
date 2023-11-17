@@ -21,6 +21,7 @@ public class Client {
             while(true){
                 textFromServer = in.readLine();
                 if(textFromServer.equals("You win!")){
+                    System.out.println(textFromServer);
                     System.exit(0);
                 }
                 else {
