@@ -15,6 +15,14 @@ public class Questions {
         answersList.add(answer4);
     }
 
+    public String getQuestionText() {
+        return questionText;
+    }
+
+    public void setQuestionText(String questionText) {
+        this.questionText = questionText;
+    }
+
     public ArrayList<Answers> getAnswersList() {
         return answersList;
     }

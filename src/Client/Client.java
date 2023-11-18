@@ -15,6 +15,7 @@ public class Client {
     int numberOfAlternatives = 4;
 
     public Client() {
+        GameGraphics g = new GameGraphics();
         try(Socket socketToServer = new Socket(ip, port)) {
             out = new PrintWriter(socketToServer.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socketToServer.getInputStream()));

@@ -5,11 +5,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 
 public class Server extends Thread {
     Socket serverSocket;
     String[] questions = new String[]{"What color is red?"};
     String[] answers = new String[]{"1: red", "2: blue", "3: green", "4: yellow"};
+    ArrayList<Categories> categories;
     String correctAnswer = "1";
     String answer;
     int counter = 0;
@@ -20,6 +25,12 @@ public class Server extends Thread {
 
     @Override
     public void run(){
+        createQuestionsAndCategoriesFromFile();
+
+        for(Categories c: categories){
+            System.out.println(c.getCategoryText());
+        }
+
         try(BufferedReader in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
             PrintWriter out = new PrintWriter(serverSocket.getOutputStream(), true)){
 
@@ -35,6 +46,45 @@ public class Server extends Thread {
                 }
             }
 
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void createQuestionsAndCategoriesFromFile(){
+        Path path = Paths.get("src/Server/Categories and questions");
+        String read;
+        categories = new ArrayList<>();
+
+        try(BufferedReader bf = Files.newBufferedReader(path)){
+            while((read = bf.readLine()) != null){
+                boolean categoryExists = false;
+                String question = read.substring(0, read.indexOf("("));
+                String category = read.substring(read.indexOf("(") + 1, read.indexOf(")"));
+                String answerOne = bf.readLine();
+                String answerTwo = bf.readLine();
+                String answerThree = bf.readLine();
+                String answerFour = bf.readLine();
+
+                Categories c = new Categories(category);
+                Questions q = new Questions(question, new Answers(true, answerOne),
+                        new Answers(false, answerTwo), new Answers(false, answerThree),
+                        new Answers(false, answerFour));
+
+                if(!categories.isEmpty()){
+                    for(Categories ca: categories){
+                        if (ca.getCategoryText().equals(category)){
+                            categoryExists = true;
+                            ca.addQuestionToList(q);
+                            break;
+                        }
+                    }
+                }
+                if(!categoryExists){
+                    c.addQuestionToList(q);
+                    categories.add(c);
+                }
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -10,20 +10,33 @@ public class GameGraphics extends JFrame {
     static final int CORRECT_ANSWER = 1;
     static final int WRONG_ANSWER = 2;
     int answer;
-    JLabel title = new JLabel("Quizkampen");
+    JLabel title = new JLabel();
     JLabel categoryChoice;
     JLabel category;
     JPanel questionsPanel = new JPanel();
+    ImageIcon icon = new ImageIcon("src/Server/images/Answer.png");
     GameGraphics(){
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(500,500);
+        setSize(700,700);
+        setTitle("Quizkampen");
         setLayout(new BorderLayout());
-        add(title, BorderLayout.NORTH);
         setLocationRelativeTo(null);
-        categoryChoice("Hej1", "Hej2", "Hej3");
+        questionsPanel.setOpaque(true);
+        questionsPanel.setBackground(new Color(231, 253, 244));
         add(questionsPanel);
+        setTitle();
+        categoryChoice("Kategori1", "Kategori2", "Kategori3");
 
         setVisible(true);
+    }
+
+    private void setTitle(){
+        ImageIcon image = new ImageIcon("src/Server/images/Title.png");
+        title.setIcon(image);
+        title.setHorizontalAlignment(SwingConstants.CENTER);
+        title.setOpaque(true);
+        title.setBackground(new Color(153, 231, 207));
+        add(title, BorderLayout.NORTH);
     }
 
     public void categoryChoice(String category1, String category2, String category3){
@@ -31,18 +44,21 @@ public class GameGraphics extends JFrame {
         questionsPanel.removeAll();
         questionsPanel.setLayout(new GridLayout(3, 1));
 
-        JLabel categoryOne = new JLabel("hej1");
-        JLabel categoryTwo = new JLabel("hej2");
-        JLabel categoryThree = new JLabel("hej3");
+        JLabel categoryOne = new JLabel(category1);
+        JLabel categoryTwo = new JLabel(category2);
+        JLabel categoryThree = new JLabel(category3);
         categories.add(categoryOne);
         categories.add(categoryTwo);
         categories.add(categoryThree);
 
         for(JLabel j: categories){
+            j.setIcon(icon);
+            j.setHorizontalTextPosition(SwingConstants.CENTER);
+            j.setHorizontalAlignment(SwingConstants.CENTER);
             j.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    questions("Hej", "Hej2", "Hej3", "Hej4");
+                    questions(j.getText(), "Fråga1", "Fråga2", "Fråga3", "Fråga4");
                 }
             });
         }
@@ -50,13 +66,18 @@ public class GameGraphics extends JFrame {
         questionsPanel.add(categoryOne);
         questionsPanel.add(categoryTwo);
         questionsPanel.add(categoryThree);
+        revalidate();
         repaint();
     }
 
-    private void questions(String question1, String question2, String question3, String question4){
+    private void questions(String category, String question1, String question2, String question3, String question4){
         questionsPanel.removeAll();
         questionsPanel.setLayout(new GridLayout(2,2));
         ArrayList<JLabel> questions = new ArrayList<>();
+
+        categoryChoice = new JLabel(category);
+        categoryChoice.setHorizontalAlignment(SwingConstants.CENTER);
+        add(categoryChoice, BorderLayout.SOUTH);
 
         JLabel questionOne = new JLabel(question1);
         questionOne.addMouseListener(new MouseAdapter() {
@@ -85,15 +106,14 @@ public class GameGraphics extends JFrame {
         questions.add(questionOne);
         Collections.shuffle(questions);
 
+
         for(JLabel j: questions){
+            j.setIcon(icon);
+            j.setHorizontalTextPosition(SwingConstants.CENTER);
             questionsPanel.add(j);
         }
         revalidate();
         repaint();
-    }
-
-    public static void main(String[] args) {
-        new GameGraphics();
     }
 
 }
