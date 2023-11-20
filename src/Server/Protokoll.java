@@ -75,7 +75,7 @@ public class Protokoll {
                 state = GameState.ROUND_1;
                 return "Du har valt kategori: " + selectedCategory + ". Nu börjar runda 1!";
             } else {
-                return "Ogiltigt kategoriindex. Vänligen välj igen.";
+                return "Ogiltigt kategori. Vänligen välj igen.";
             }
         } else if (state == GameState.ROUND_1 || state == GameState.ROUND_2 || state == GameState.ROUND_3) {
             if (roundsQuestions.get(state.ordinal() - GameState.ROUND_1.ordinal()).isEmpty()) {
