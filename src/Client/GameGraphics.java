@@ -58,7 +58,7 @@ public class GameGraphics extends JFrame {
             j.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    questions(j.getText(), "Fråga1", "Fråga2", "Fråga3", "Fråga4");
+                    questions(j.getText(), "Svar1", "Svar2", "Svar3", "Svar4");
                 }
             });
         }
