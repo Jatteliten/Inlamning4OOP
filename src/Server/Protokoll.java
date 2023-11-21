@@ -14,17 +14,11 @@ public class Protokoll {
         ROUND_2,
         ROUND_3,
         SCORE_RESULT,
-
-
-
     }
 
     public enum RoundState {
-
         NOT_IN_ROUND,
-
         QUESTION,
-
     }
 
 

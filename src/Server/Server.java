@@ -9,38 +9,31 @@ import java.util.ArrayList;
 
 public class Server extends Thread {
     Socket serverSocket;
-    String[] questions = new String[]{"What color is red?"};
-    String[] answers = new String[]{"1: red", "2: blue", "3: green", "4: yellow"};
     ArrayList<Category> categories;
-    String correctAnswer = "1";
-    String answer;
-    int counter = 0;
 
     public Server(Socket s){
         this.serverSocket = s;
     }
-
-    @Override
-    public void run(){
-        createQuestionsAndCategoriesFromFile();
-
-        for(Category c: categories){
-            System.out.println(c.getCategoryText());
-        }
-
-        try(BufferedReader in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
-            PrintWriter out = new PrintWriter(serverSocket.getOutputStream(), true)){
    @Override
    public void run(){
+            createQuestionsAndCategoriesFromFile();
+
+            for(Category c: categories){
+                System.out.println(c.getCategoryText());
+            }
+
        try(ObjectOutputStream out = new ObjectOutputStream(serverSocket.getOutputStream());
            ObjectInputStream in = new ObjectInputStream(serverSocket.getInputStream())){
 
            while (true){
+               /*
                out.writeObject(q);
                Object answer = in.readObject();
+
                if (answer.toString().equalsIgnoreCase("red")){
                    out.writeObject("You win!");
                }
+               */
            }
 
         } catch (IOException e) {
@@ -86,9 +79,5 @@ public class Server extends Thread {
             throw new RuntimeException(e);
         }
     }
-       } catch (IOException | ClassNotFoundException e) {
-           throw new RuntimeException(e);
-       }
-   }
 
 }
