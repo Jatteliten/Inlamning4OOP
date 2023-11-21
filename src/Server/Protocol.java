@@ -26,7 +26,6 @@ public class Protocol {
     private List<String> currentQuestions;
     private int questionCounter = 0;
     private Integer score;
-    private String playerName;
 
     public void processUserInput(Object userInput, ObjectOutputStream out) throws IOException {
         switch (state) {
@@ -47,7 +46,6 @@ public class Protocol {
                 break;
 
             case FINISHED:
-                // + logik för att beräkna resultatet
                 break;
             default:
         }

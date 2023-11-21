@@ -10,9 +10,8 @@ public class Client {
     String ip = "127.0.0.1";
     List<Integer> points;
     Object obj;
-    static final String WELCOME = "STARTGAMEFROMCLIENTXXX";
-    static final String END_GAME = "ENDGAMEFROMCLIENTXXX";
-    Answers playerAnswer;
+    static final String WELCOME = "START_GAME_FROM_CLIENT_XXX";
+    static final String END_GAME = "END_GAME_FROM_CLIENT_XXX";
 
     public Client() {
         try (Socket socketToServer = new Socket(ip, port);

@@ -11,8 +11,8 @@ public class Server extends Thread {
    Socket serverSocket;
    ArrayList<Category> categories;
    GameCoordinator gameCoordinator;
-   static final String WELCOME = "STARTGAMEFROMCLIENTXXX";
-   static final String END_GAME = "ENDGAMEFROMCLIENTXXX";
+   static final String WELCOME = "START_GAME_FROM_CLIENT_XXX";
+   static final String END_GAME = "END_GAME_FROM_CLIENT_XXX";
 
    public Server(Socket s, GameCoordinator g){
         this.serverSocket = s;
