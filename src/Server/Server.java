@@ -1,9 +1,6 @@
 package Server;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,18 +30,18 @@ public class Server extends Thread {
 
         try(BufferedReader in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
             PrintWriter out = new PrintWriter(serverSocket.getOutputStream(), true)){
+   @Override
+   public void run(){
+       try(ObjectOutputStream out = new ObjectOutputStream(serverSocket.getOutputStream());
+           ObjectInputStream in = new ObjectInputStream(serverSocket.getInputStream())){
 
-            while (true){
-                out.println(questions[counter]);
-                for(String s: answers){
-                    out.println(s);
-                }
-                answer = in.readLine();
-                if(answer.equalsIgnoreCase(correctAnswer)){
-                    out.println("You win!");
-                    System.exit(0);
-                }
-            }
+           while (true){
+               out.writeObject(q);
+               Object answer = in.readObject();
+               if (answer.toString().equalsIgnoreCase("red")){
+                   out.writeObject("You win!");
+               }
+           }
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -89,5 +86,9 @@ public class Server extends Thread {
             throw new RuntimeException(e);
         }
     }
+       } catch (IOException | ClassNotFoundException e) {
+           throw new RuntimeException(e);
+       }
+   }
 
 }

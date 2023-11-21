@@ -1,10 +1,11 @@
 package Client;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import Server.Answers;
+import Server.Questions;
+
+import java.io.*;
 import java.net.Socket;
+import java.util.List;
 
 public class Client {
     int port = 12344;
@@ -13,30 +14,29 @@ public class Client {
     BufferedReader in;
     String textFromServer;
     int numberOfAlternatives = 4;
+    Object obj;
 
     public Client() {
-        GameGraphics g = new GameGraphics();
-        try(Socket socketToServer = new Socket(ip, port)) {
-            out = new PrintWriter(socketToServer.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(socketToServer.getInputStream()));
-            BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in));
+        try (Socket socketToServer = new Socket(ip, port);
+             ObjectOutputStream out = new ObjectOutputStream(socketToServer.getOutputStream());
+             ObjectInputStream in = new ObjectInputStream(socketToServer.getInputStream());
+             BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in))) {
 
-            while(true){
-                textFromServer = in.readLine();
-                if(textFromServer.equals("You win!")){
-                    System.out.println(textFromServer);
+            while (true) {
+                obj = in.readObject();
+                if (obj.equals("You win!")) {
+                    System.out.println(obj);
                     System.exit(0);
-                }
-                else {
-                    System.out.println(textFromServer);
-                    for (int i = 0; i < numberOfAlternatives; i++) {
-                        System.out.println(in.readLine());
+                } else if (obj instanceof Questions s) {
+                    System.out.println(s.getQuestonText());
+                    for (int i = 0; i < s.getAnswersList().size(); i++) {
+                        System.out.println(s.getAnswer(i).getAnswerText());
                     }
-                    out.println(userInput.readLine());
+                    out.writeObject(userInput.readLine());
                 }
             }
-        } catch(IOException e) {
-            throw new RuntimeException(e);
+        } catch (IOException | ClassNotFoundException ex) {
+            throw new RuntimeException(ex);
         }
     }
 
