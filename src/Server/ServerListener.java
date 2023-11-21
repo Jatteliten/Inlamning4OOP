@@ -12,12 +12,13 @@ public class ServerListener {
         /*Protokoll newProtokoll = new Protokoll();
         String txt = newProtokoll.getOutPut("");
         System.out.println(txt);*/
+        GameCoordinator g = new GameCoordinator();
 
         try(ServerSocket serverSocket = new ServerSocket(port)){
 
             while(true){
                 Socket sock = serverSocket.accept();
-                Server st = new Server(sock);
+                Server st = new Server(sock, g);
                 st.start();
             }
         }

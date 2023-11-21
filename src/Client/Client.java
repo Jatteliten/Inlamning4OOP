@@ -6,13 +6,10 @@ import java.net.Socket;
 public class Client {
     int port = 12344;
     String ip = "127.0.0.1";
-    PrintWriter out;
-    BufferedReader in;
-    String textFromServer;
-    int numberOfAlternatives = 4;
     Object obj;
 
     public Client() {
+        GameGraphics g = new GameGraphics();
         try (Socket socketToServer = new Socket(ip, port);
              ObjectOutputStream out = new ObjectOutputStream(socketToServer.getOutputStream());
              ObjectInputStream in = new ObjectInputStream(socketToServer.getInputStream());

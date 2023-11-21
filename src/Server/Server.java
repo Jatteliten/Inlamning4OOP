@@ -8,11 +8,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class Server extends Thread {
-    Socket serverSocket;
-    ArrayList<Category> categories;
+   Socket serverSocket;
+   ArrayList<Category> categories;
+   GameCoordinator gameCoordinator;
 
-    public Server(Socket s){
+   public Server(Socket s, GameCoordinator g){
         this.serverSocket = s;
+        this.gameCoordinator = g;
     }
    @Override
    public void run(){
@@ -24,6 +26,10 @@ public class Server extends Thread {
 
        try(ObjectOutputStream out = new ObjectOutputStream(serverSocket.getOutputStream());
            ObjectInputStream in = new ObjectInputStream(serverSocket.getInputStream())){
+
+           Player p = new Player(out);
+           gameCoordinator.addPlayer(p);
+           gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
 
            while (true){
                /*
@@ -41,43 +47,43 @@ public class Server extends Thread {
         }
     }
 
-    private void createQuestionsAndCategoriesFromFile(){
-        Path path = Paths.get("src/Server/Categories and questions");
-        String read;
-        categories = new ArrayList<>();
+   private void createQuestionsAndCategoriesFromFile(){
+       Path path = Paths.get("src/Server/Categories and questions");
+       String read;
+       categories = new ArrayList<>();
 
-        try(BufferedReader bf = Files.newBufferedReader(path)){
-            while((read = bf.readLine()) != null){
-                boolean categoryExists = false;
-                String question = read.substring(0, read.indexOf("("));
-                String category = read.substring(read.indexOf("(") + 1, read.indexOf(")"));
-                String answerOne = bf.readLine();
-                String answerTwo = bf.readLine();
-                String answerThree = bf.readLine();
-                String answerFour = bf.readLine();
+       try(BufferedReader bf = Files.newBufferedReader(path)){
+           while((read = bf.readLine()) != null){
+               boolean categoryExists = false;
+               String question = read.substring(0, read.indexOf("("));
+               String category = read.substring(read.indexOf("(") + 1, read.indexOf(")"));
+               String answerOne = bf.readLine();
+               String answerTwo = bf.readLine();
+               String answerThree = bf.readLine();
+               String answerFour = bf.readLine();
 
-                Category c = new Category(category);
-                Question q = new Question(question, new Answers(true, answerOne),
-                        new Answers(false, answerTwo), new Answers(false, answerThree),
-                        new Answers(false, answerFour));
+               Category c = new Category(category);
+               Question q = new Question(question, new Answers(true, answerOne),
+                       new Answers(false, answerTwo), new Answers(false, answerThree),
+                       new Answers(false, answerFour));
 
-                if(!categories.isEmpty()){
-                    for(Category ca: categories){
-                        if (ca.getCategoryText().equals(category)){
-                            categoryExists = true;
-                            ca.addQuestionToList(q);
-                            break;
-                        }
-                    }
-                }
-                if(!categoryExists){
-                    c.addQuestionToList(q);
-                    categories.add(c);
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+               if(!categories.isEmpty()){
+                   for(Category ca: categories){
+                       if (ca.getCategoryText().equals(category)){
+                           categoryExists = true;
+                           ca.addQuestionToList(q);
+                           break;
+                       }
+                   }
+               }
+               if(!categoryExists){
+                   c.addQuestionToList(q);
+                   categories.add(c);
+               }
+           }
+       } catch (IOException e) {
+           throw new RuntimeException(e);
+       }
+   }
 
 }
