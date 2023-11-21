@@ -9,6 +9,8 @@ public class Client {
     String ip = "127.0.0.1";
     List<Integer> points;
     Object obj;
+    static final String WELCOME = "STARTGAMEFROMCLIENTXXX";
+    static final String END_GAME = "ENDGAMEFROMCLIENTXXX";
     Answers playerAnswer;
 
     public Client() {
