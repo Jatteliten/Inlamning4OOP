@@ -8,8 +8,36 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Categories {
+public class Category {
+    List<Questions> questionsList;
+    String categoryText;
 
+    public Category(String text) {
+        this.categoryText = text;
+        this.questionsList = new ArrayList<>();
+    }
+
+    public List<Questions> getQuestionsList() {
+        return questionsList;
+    }
+
+    public void setQuestionsList(List<Questions> questionsList) {
+        this.questionsList = questionsList;
+    }
+
+    public String getCategoryText() {
+        return categoryText;
+    }
+
+    public void setCategoryText(String categoryText) {
+        this.categoryText = categoryText;
+    }
+
+    public void addQuestionToList(Questions q){
+        questionsList.add(q);
+    }
+
+    /*
     public static void main(String[] args) {
         new QuizApp();
     }
@@ -79,13 +107,7 @@ public class Categories {
         }
     }
 
-    static class Category implements Serializable {
-        List<String> questionsList;
-        String categoryText;
+    */
 
-        public Category(String text) {
-            this.categoryText = text;
-            this.questionsList = new ArrayList<>();
-        }
-    }
+
 }

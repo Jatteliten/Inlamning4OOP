@@ -14,7 +14,7 @@ public class Server extends Thread {
     Socket serverSocket;
     String[] questions = new String[]{"What color is red?"};
     String[] answers = new String[]{"1: red", "2: blue", "3: green", "4: yellow"};
-    ArrayList<Categories> categories;
+    ArrayList<Category> categories;
     String correctAnswer = "1";
     String answer;
     int counter = 0;
@@ -27,7 +27,7 @@ public class Server extends Thread {
     public void run(){
         createQuestionsAndCategoriesFromFile();
 
-        for(Categories c: categories){
+        for(Category c: categories){
             System.out.println(c.getCategoryText());
         }
 
@@ -66,13 +66,13 @@ public class Server extends Thread {
                 String answerThree = bf.readLine();
                 String answerFour = bf.readLine();
 
-                Categories c = new Categories(category);
+                Category c = new Category(category);
                 Questions q = new Questions(question, new Answers(true, answerOne),
                         new Answers(false, answerTwo), new Answers(false, answerThree),
                         new Answers(false, answerFour));
 
                 if(!categories.isEmpty()){
-                    for(Categories ca: categories){
+                    for(Category ca: categories){
                         if (ca.getCategoryText().equals(category)){
                             categoryExists = true;
                             ca.addQuestionToList(q);
