@@ -24,7 +24,7 @@ public class Protocol {
     }
 
     private GameState state = GameState.INITIAL;
-    private List<String> currentQuestions;
+    private List<Question> currentQuestions;
     private int questionCounter = 0;
     private Integer score;
     private String playerName;
@@ -32,22 +32,22 @@ public class Protocol {
     public void processUserInput(Object userInput, ObjectOutputStream out) throws IOException {
         switch (state) {
             case CATEGORY_SELECTION:
-                //skickar kategorier
-                //får tillbaka svar
+                out.writeObject(categories);
+                if (userInput instanceof Category s){
+                    currentQuestions = s.questionList;
+                }
                 state = GameState.QUESTION1;
             case QUESTION1:
-                //skickar frågorna
-                //får tillbaka poäng
-                state = GameState.QUESTION2;
+                out.writeObject(currentQuestions);
+                if (userInput instanceof Integer s) {
+                   score = score + s;
+                }
+                //state = GameState.QUESTION2;
                 break;
             case QUESTION2:
                 //skickar frågorna
                 //får tillbaka poäng
                 state = GameState.CATEGORY_SELECTION;
-
-            case FINISHED:
-                // + logik för att beräkna resultatet
-                break;
             default:
         }
     }
