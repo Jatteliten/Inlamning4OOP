@@ -2,11 +2,14 @@ package Client;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.List;
 
 public class Client {
     int port = 12344;
     String ip = "127.0.0.1";
+    List<Integer> points;
     Object obj;
+    Answers playerAnswer;
 
     public Client() {
         GameGraphics g = new GameGraphics();
@@ -17,15 +20,27 @@ public class Client {
 
             while (true) {
                 obj = in.readObject();
-                if (obj.equals("You win!")) {
-                    System.out.println(obj);
+                if (obj.equals("results")) {
+
                     System.exit(0);
                 } else if (obj instanceof Question s) {
                     System.out.println(s.getQuestonText());
                     for (int i = 0; i < s.getAnswersList().size(); i++) {
                         System.out.println(s.getAnswer(i).getAnswerText());
                     }
-                    out.writeObject(userInput.readLine());
+                    if (playerAnswer.answerText.equalsIgnoreCase(s.getAnswer(0).getAnswerText())) {
+                        points.add(1);
+                        out.writeObject(points);
+                    }
+                    out.writeObject(points);
+                } else if (obj instanceof Category s) {
+                    System.out.println(s.getCategoryText());
+
+                } else if (obj.equals("welcome")) {
+
+                    out.writeObject("playerName");
+                } else if (obj instanceof Integer s) {
+                    System.out.println(s);
                 }
             }
         } catch (IOException | ClassNotFoundException ex) {
