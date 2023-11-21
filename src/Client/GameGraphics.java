@@ -14,7 +14,7 @@ public class GameGraphics extends JFrame {
     JLabel categoryChoice;
     JLabel category;
     JPanel questionsPanel = new JPanel();
-    ImageIcon icon = new ImageIcon("src/Server/images/Answer.png");
+    ImageIcon icon = new ImageIcon("src/Client/images/Answer.png");
     GameGraphics(){
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(700,700);
@@ -62,7 +62,6 @@ public class GameGraphics extends JFrame {
                 }
             });
         }
-
         questionsPanel.add(categoryOne);
         questionsPanel.add(categoryTwo);
         questionsPanel.add(categoryThree);
