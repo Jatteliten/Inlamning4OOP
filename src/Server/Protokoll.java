@@ -1,12 +1,15 @@
 package Server;
 
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class Protokoll {
 
     public enum GameState {
+
         INITIAL,
         PLAYER_ENTRY,
         CATEGORY_SELECTION,
@@ -27,11 +30,20 @@ public class Protokoll {
     protected String selectedCategory;
     protected int playerScore = 0;
     protected int roundNumber = 1;
-
+    Properties p = new Properties();
+    int numberOfRounds = Integer.parseInt(p.getProperty("numberOfRounds","3"));
+    int numberOfQuestions = Integer.parseInt(p.getProperty("numberOfQuestions","3"));
     private List<String> categories = new ArrayList<>();
     private List<List<String>> roundsQuestions = new ArrayList<>();
 
     public Protokoll() {
+        try {
+            p.load(new FileInputStream("src/Server/Properties.properties"));
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
         categories.add("Kategori 1");
         categories.add("Kategori 2");
 
