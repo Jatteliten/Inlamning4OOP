@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Properties;
 
 public class Protokoll {
+    static final String WELCOME = "STARTGAMEFROMCLIENTXXX";
+    static final String END_GAME = "ENDGAMEFROMCLIENTXXX";
 
     public enum GameState {
 
