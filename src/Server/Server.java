@@ -19,33 +19,25 @@ public class Server extends Thread {
    @Override
    public void run(){
             createQuestionsAndCategoriesFromFile();
-
-            for(Category c: categories){
-                System.out.println(c.getCategoryText());
-            }
+            Protocol p = new Protocol(categories);
 
        try(ObjectOutputStream out = new ObjectOutputStream(serverSocket.getOutputStream());
            ObjectInputStream in = new ObjectInputStream(serverSocket.getInputStream())){
 
-           Player p = new Player(out);
-           gameCoordinator.addPlayer(p);
+           Player player = new Player(out);
+           gameCoordinator.addPlayer(player);
            gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
 
            while (true){
-               /*
-               out.writeObject(q);
-               Object answer = in.readObject();
-
-               if (answer.toString().equalsIgnoreCase("red")){
-                   out.writeObject("You win!");
-               }
-               */
+               p.processUserInput(in.readObject(), out);
            }
 
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
-    }
+        } catch (ClassNotFoundException e) {
+           throw new RuntimeException(e);
+       }
+   }
 
     /**
      * Läser in frågor och kategorier från Questions and Answers-filen.
