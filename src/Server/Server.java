@@ -19,24 +19,18 @@ public class Server extends Thread {
    @Override
    public void run(){
             createQuestionsAndCategoriesFromFile();
-            Protocol p = new Protocol(categories);
+            Protocol p = new Protocol(categories, gameCoordinator);
 
        try(ObjectOutputStream out = new ObjectOutputStream(serverSocket.getOutputStream());
            ObjectInputStream in = new ObjectInputStream(serverSocket.getInputStream())){
-
-           Player player = new Player(out);
-           gameCoordinator.addPlayer(player);
-           gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
 
            while (true){
                p.processUserInput(in.readObject(), out);
            }
 
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-           throw new RuntimeException(e);
-       }
+        }
    }
 
     /**

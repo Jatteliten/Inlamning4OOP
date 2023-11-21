@@ -7,8 +7,9 @@ public class Player {
     int score = 0;
     ObjectOutputStream objectOutputStream;
 
-    public Player(ObjectOutputStream os){
+    public Player(ObjectOutputStream os, String name){
         this.objectOutputStream = os;
+        this.name = name;
     }
     public int getScore() {
         return score;
