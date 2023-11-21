@@ -25,6 +25,8 @@ public class Server extends Thread {
        try(ObjectOutputStream out = new ObjectOutputStream(serverSocket.getOutputStream());
            ObjectInputStream in = new ObjectInputStream(serverSocket.getInputStream())){
 
+           Player p = new Player(out);
+
            while (true){
                /*
                out.writeObject(q);
