@@ -14,11 +14,12 @@ public class Client {
     Answers playerAnswer;
 
     public Client() {
-        GameGraphics g = new GameGraphics();
         try (Socket socketToServer = new Socket(ip, port);
              ObjectOutputStream out = new ObjectOutputStream(socketToServer.getOutputStream());
              ObjectInputStream in = new ObjectInputStream(socketToServer.getInputStream());
              BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in))) {
+
+            GameGraphics g = new GameGraphics();
 
             while (true) {
                 obj = in.readObject();
@@ -35,9 +36,8 @@ public class Client {
                         out.writeObject(points);
                     }
                     out.writeObject(points);
-                } else if (obj instanceof Category s) {
-                    System.out.println(s.getCategoryText());
-
+                } else if (obj instanceof Category c) {
+                    g.categoryChoice(c, (Category) in.readObject(), (Category) in.readObject(), out);
                 } else if (obj.equals("welcome")) {
 
                     out.writeObject("playerName");

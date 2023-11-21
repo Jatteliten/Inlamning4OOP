@@ -3,6 +3,8 @@ package Client;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -25,7 +27,6 @@ public class GameGraphics extends JFrame {
         questionsPanel.setBackground(new Color(88, 168, 134));
         add(questionsPanel);
         setTitle();
-        categoryChoice("Kategori1", "Kategori2", "Kategori3");
 
         setVisible(true);
     }
@@ -39,14 +40,44 @@ public class GameGraphics extends JFrame {
         add(title, BorderLayout.NORTH);
     }
 
-    public void categoryChoice(String category1, String category2, String category3){
+    public void categoryChoice(Category c1, Category c2, Category c3, ObjectOutputStream out) throws IOException{
         ArrayList<JLabel> categories = new ArrayList<>();
         questionsPanel.removeAll();
         questionsPanel.setLayout(new GridLayout(3, 1));
 
-        JLabel categoryOne = new JLabel(category1);
-        JLabel categoryTwo = new JLabel(category2);
-        JLabel categoryThree = new JLabel(category3);
+        JLabel categoryOne = new JLabel(c1.getCategoryText());
+        categoryOne.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    out.writeObject(c1);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        JLabel categoryTwo = new JLabel(c2.getCategoryText());
+        categoryTwo.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    out.writeObject(c2);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        JLabel categoryThree = new JLabel(c3.getCategoryText());
+        categoryTwo.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    out.writeObject(c3);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
         categories.add(categoryOne);
         categories.add(categoryTwo);
         categories.add(categoryThree);
@@ -55,12 +86,6 @@ public class GameGraphics extends JFrame {
             j.setIcon(icon);
             j.setHorizontalTextPosition(SwingConstants.CENTER);
             j.setHorizontalAlignment(SwingConstants.CENTER);
-            j.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    questions(j.getText(), "Svar1", "Svar2", "Svar3", "Svar4");
-                }
-            });
         }
         questionsPanel.add(categoryOne);
         questionsPanel.add(categoryTwo);
