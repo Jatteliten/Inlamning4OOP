@@ -1,9 +1,6 @@
 package Server;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 
 public class Server extends Thread {
@@ -11,33 +8,33 @@ public class Server extends Thread {
     String[] questions = new String[]{"What color is red?"};
     String[] answers = new String[]{"1: red", "2: blue", "3: green", "4: yellow"};
     String correctAnswer = "1";
-    String answer;
     int counter = 0;
+    Answers a1 = new Answers(true,"red");
+    Answers a2 = new Answers(true,"red2");
+    Answers a3 = new Answers(true,"red3");
+    Answers a4 = new Answers(true,"red4");
+    Questions q = new Questions("What is the color red?",a1,a2,a3,a4);
+
 
     public Server(Socket s){
         this.serverSocket = s;
     }
+   @Override
+   public void run(){
+       try(ObjectOutputStream out = new ObjectOutputStream(serverSocket.getOutputStream());
+           ObjectInputStream in = new ObjectInputStream(serverSocket.getInputStream())){
 
-    @Override
-    public void run(){
-        try(BufferedReader in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
-            PrintWriter out = new PrintWriter(serverSocket.getOutputStream(), true)){
+           while (true){
+               out.writeObject(q);
+               Object answer = in.readObject();
+               if (answer.toString().equalsIgnoreCase("red")){
+                   out.writeObject("You win!");
+               }
+           }
 
-            while (true){
-                out.println(questions[counter]);
-                for(String s: answers){
-                    out.println(s);
-                }
-                answer = in.readLine();
-                if(answer.equalsIgnoreCase(correctAnswer)){
-                    out.println("You win!");
-                    System.exit(0);
-                }
-            }
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+       } catch (IOException | ClassNotFoundException e) {
+           throw new RuntimeException(e);
+       }
+   }
 
 }

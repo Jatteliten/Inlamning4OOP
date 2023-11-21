@@ -1,8 +1,9 @@
 package Server;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Questions {
+public class Questions implements Serializable {
 
     String questionText;
     ArrayList<Answers> answersList = new ArrayList<>();
@@ -26,4 +27,8 @@ public class Questions {
     public Answers getAnswer(int questionNumber){
         return answersList.get(questionNumber);
     }
+    public String getQuestonText(){
+        return this.questionText;
+    }
+
 }
