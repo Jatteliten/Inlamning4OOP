@@ -13,12 +13,12 @@ public class Protocol {
         this.categories = categories;
     }
     private enum GameState {
-        INITIAL,
-        PLAYER_1_ENTRY,
-        PLAYER_2_ENTRY,
         CATEGORY_SELECTION,
         QUESTION,
+        QUESTION2,
+        WAITINNGFORRESPONCE,
         FINISHED,
+
     }
 
     private GameState state = GameState.INITIAL;
@@ -33,30 +33,14 @@ public class Protocol {
 
     public void processUserInput(Object userInput, ObjectOutputStream out) throws IOException {
         switch (state) {
-            case INITIAL:
-                state = GameState.PLAYER_1_ENTRY;
-                out.writeObject(WELCOME);
-
-            case PLAYER_1_ENTRY:
-                player1Name = (String) userInput;
-                state = GameState.CATEGORY_SELECTION;
-
-            case PLAYER_2_ENTRY:
-                player2Name = (String) userInput;
-                state = GameState.CATEGORY_SELECTION;
-
             case CATEGORY_SELECTION:
                 state = GameState.QUESTION;
                 currentQuestions = getQuestionsForCategory((String)userInput);
-
             case QUESTION:
-                if (questionCounter < 3) {
-                    String currentQuestion = currentQuestions.get(questionCounter);
-                    questionCounter++;
-                } else {
-                    state = GameState.FINISHED;
-                }
+                state = GameState.WAITINNGFORRESPONCE;
 
+            case QUESTION2:
+                state = GameState.WAITINNGFORRESPONCE;
             case FINISHED:
                 // + logik för att beräkna resultatet
                 String resultMessage = "results Resultatet är klart.\n" +
