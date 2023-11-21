@@ -9,6 +9,7 @@ public class Client {
     Object obj;
 
     public Client() {
+        GameGraphics g = new GameGraphics();
         try (Socket socketToServer = new Socket(ip, port);
              ObjectOutputStream out = new ObjectOutputStream(socketToServer.getOutputStream());
              ObjectInputStream in = new ObjectInputStream(socketToServer.getInputStream());
