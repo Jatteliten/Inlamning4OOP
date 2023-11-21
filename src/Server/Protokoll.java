@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Protokoll {
+    static final String WELCOME = "STARTGAMEFROMCLIENTXXX";
+    static final String END_GAME = "ENDGAMEFROMCLIENTXXX";
 
     public enum GameState {
         INITIAL,
