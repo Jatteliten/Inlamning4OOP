@@ -6,10 +6,6 @@ import java.net.Socket;
 public class Client {
     int port = 12344;
     String ip = "127.0.0.1";
-    PrintWriter out;
-    BufferedReader in;
-    String textFromServer;
-    int numberOfAlternatives = 4;
     Object obj;
 
     public Client() {
