@@ -16,7 +16,6 @@ public class Protocol {
     }
     private enum GameState {
         INITIAL,
-        PLAYER_NAME_ENTRY,
         CATEGORY_SELECTION,
         QUESTION,
         WAITING,
@@ -28,26 +27,11 @@ public class Protocol {
     private int questionCounter = 0;
     private Integer score;
     private String playerName;
-    static final String WELCOME = "STARTGAMEFROMCLIENTXXX";
-    static final String END_GAME = "ENDGAMEFROMCLIENTXXX";
 
     public void processUserInput(Object userInput, ObjectOutputStream out) throws IOException {
         switch (state) {
             case INITIAL:
-                state = GameState.PLAYER_NAME_ENTRY;
-                out.writeObject(WELCOME);
-                break;
-
-            case PLAYER_NAME_ENTRY:
-                if(!gameCoordinator.isTwoPlayers) {
-                    state = GameState.CATEGORY_SELECTION;
-                }else{
-                    state = GameState.WAITING;
-                }
-                playerName = (String) userInput;
-                Player player = new Player(out, playerName);
-                gameCoordinator.addPlayer(player);
-                gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
+                state = GameState.CATEGORY_SELECTION;
                 break;
 
             case WAITING:

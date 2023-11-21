@@ -11,6 +11,8 @@ public class Server extends Thread {
    Socket serverSocket;
    ArrayList<Category> categories;
    GameCoordinator gameCoordinator;
+   static final String WELCOME = "STARTGAMEFROMCLIENTXXX";
+   static final String END_GAME = "ENDGAMEFROMCLIENTXXX";
 
    public Server(Socket s, GameCoordinator g){
         this.serverSocket = s;
@@ -23,6 +25,11 @@ public class Server extends Thread {
 
        try(ObjectOutputStream out = new ObjectOutputStream(serverSocket.getOutputStream());
            ObjectInputStream in = new ObjectInputStream(serverSocket.getInputStream())){
+
+           out.writeObject(WELCOME);
+           Player player = new Player(out, (String) in.readObject());
+           gameCoordinator.addPlayer(player);
+           gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
 
            while (true){
                p.processUserInput(in.readObject(), out);
