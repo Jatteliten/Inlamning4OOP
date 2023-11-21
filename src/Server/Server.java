@@ -10,9 +10,11 @@ import java.util.ArrayList;
 public class Server extends Thread {
    Socket serverSocket;
    ArrayList<Category> categories;
+   GameCoordinator gameCoordinator;
 
-   public Server(Socket s){
+   public Server(Socket s, GameCoordinator g){
         this.serverSocket = s;
+        this.gameCoordinator = g;
     }
    @Override
    public void run(){
@@ -26,6 +28,8 @@ public class Server extends Thread {
            ObjectInputStream in = new ObjectInputStream(serverSocket.getInputStream())){
 
            Player p = new Player(out);
+           gameCoordinator.addPlayer(p);
+           gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
 
            while (true){
                /*
