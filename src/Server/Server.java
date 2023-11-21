@@ -47,6 +47,12 @@ public class Server extends Thread {
         }
     }
 
+    /**
+     * Läser in frågor och kategorier från Questions and Answers-filen.
+     * Skapar kategori om det inte redan finns en kategori vid det namnet och lägger den i en lista.
+     * Skapar frågor och lägger det hos kategorin.
+     * Skapar svarsalternativ och lägger det hos frågorna.
+     */
    private void createQuestionsAndCategoriesFromFile(){
        Path path = Paths.get("src/Server/Categories and questions");
        String read;

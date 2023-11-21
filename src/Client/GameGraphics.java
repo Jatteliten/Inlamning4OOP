@@ -22,7 +22,7 @@ public class GameGraphics extends JFrame {
         setLayout(new BorderLayout());
         setLocationRelativeTo(null);
         questionsPanel.setOpaque(true);
-        questionsPanel.setBackground(new Color(231, 253, 244));
+        questionsPanel.setBackground(new Color(88, 168, 134));
         add(questionsPanel);
         setTitle();
         categoryChoice("Kategori1", "Kategori2", "Kategori3");
@@ -31,11 +31,11 @@ public class GameGraphics extends JFrame {
     }
 
     private void setTitle(){
-        ImageIcon image = new ImageIcon("src/Server/images/Title.png");
+        ImageIcon image = new ImageIcon("src/Client/images/Title.png");
         title.setIcon(image);
         title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setOpaque(true);
-        title.setBackground(new Color(153, 231, 207));
+        title.setBackground(new Color(121, 197, 173));
         add(title, BorderLayout.NORTH);
     }
 
@@ -109,6 +109,7 @@ public class GameGraphics extends JFrame {
         for(JLabel j: questions){
             j.setIcon(icon);
             j.setHorizontalTextPosition(SwingConstants.CENTER);
+            j.setHorizontalAlignment(SwingConstants.CENTER);
             questionsPanel.add(j);
         }
         revalidate();

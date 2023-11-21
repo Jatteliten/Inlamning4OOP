@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class GameCoordinator {
     ArrayList<Player> players = new ArrayList<>();
-
     boolean isTwoPlayers = true;
 
     public GameCoordinator() {
