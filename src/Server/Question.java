@@ -3,12 +3,12 @@ package Server;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Questions implements Serializable {
+public class Question implements Serializable {
 
     String questionText;
     ArrayList<Answers> answersList = new ArrayList<>();
 
-    public Questions(String text, Answers answer1, Answers answer2, Answers answer3, Answers answer4){
+    public Question(String text, Answers answer1, Answers answer2, Answers answer3, Answers answer4){
         this.questionText = text;
         answersList.add(answer1);
         answersList.add(answer2);

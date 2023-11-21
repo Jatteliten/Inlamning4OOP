@@ -1,11 +1,7 @@
 package Client;
 
-import Server.Answers;
-import Server.Questions;
-
 import java.io.*;
 import java.net.Socket;
-import java.util.List;
 
 public class Client {
     int port = 12344;
@@ -27,7 +23,7 @@ public class Client {
                 if (obj.equals("You win!")) {
                     System.out.println(obj);
                     System.exit(0);
-                } else if (obj instanceof Questions s) {
+                } else if (obj instanceof Question s) {
                     System.out.println(s.getQuestonText());
                     for (int i = 0; i < s.getAnswersList().size(); i++) {
                         System.out.println(s.getAnswer(i).getAnswerText());

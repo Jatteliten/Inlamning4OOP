@@ -57,7 +57,7 @@ public class Server extends Thread {
                 String answerFour = bf.readLine();
 
                 Category c = new Category(category);
-                Questions q = new Questions(question, new Answers(true, answerOne),
+                Question q = new Question(question, new Answers(true, answerOne),
                         new Answers(false, answerTwo), new Answers(false, answerThree),
                         new Answers(false, answerFour));
 

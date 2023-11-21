@@ -1,4 +1,6 @@
-package Server;
+package Client;
+
+import Server.Question;
 
 import java.util.ArrayList;
 import java.util.List;

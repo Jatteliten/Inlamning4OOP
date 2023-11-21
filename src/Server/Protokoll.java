@@ -21,10 +21,7 @@ public class Protokoll {
         QUESTION,
     }
 
-
-
     protected GameState state = GameState.INITIAL;
-
     protected RoundState roundState = RoundState.NOT_IN_ROUND;
     protected String playerName;
     protected String selectedCategory;
