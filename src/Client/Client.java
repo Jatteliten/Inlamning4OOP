@@ -7,6 +7,8 @@ public class Client {
     int port = 12344;
     String ip = "127.0.0.1";
     Object obj;
+    static final String WELCOME = "STARTGAMEFROMCLIENTXXX";
+    static final String END_GAME = "ENDGAMEFROMCLIENTXXX";
 
     public Client() {
         GameGraphics g = new GameGraphics();
