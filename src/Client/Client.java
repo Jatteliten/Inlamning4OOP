@@ -1,5 +1,6 @@
 package Client;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.List;
@@ -16,31 +17,20 @@ public class Client {
     public Client() {
         try (Socket socketToServer = new Socket(ip, port);
              ObjectOutputStream out = new ObjectOutputStream(socketToServer.getOutputStream());
-             ObjectInputStream in = new ObjectInputStream(socketToServer.getInputStream());
-             BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in))) {
+             ObjectInputStream in = new ObjectInputStream(socketToServer.getInputStream())) {
 
             GameGraphics g = new GameGraphics();
 
             while (true) {
                 obj = in.readObject();
-                if (obj.equals("results")) {
-
+                if (obj.equals(END_GAME)) {
                     System.exit(0);
-                } else if (obj instanceof Question s) {
-                    System.out.println(s.getQuestonText());
-                    for (int i = 0; i < s.getAnswersList().size(); i++) {
-                        System.out.println(s.getAnswer(i).getAnswerText());
-                    }
-                    if (playerAnswer.answerText.equalsIgnoreCase(s.getAnswer(0).getAnswerText())) {
-                        points.add(1);
-                        out.writeObject(points);
-                    }
-                    out.writeObject(points);
+                } else if (obj instanceof Question q) {
+                    g.questions(q, out);
                 } else if (obj instanceof Category c) {
                     g.categoryChoice(c, (Category) in.readObject(), (Category) in.readObject(), out);
-                } else if (obj.equals("welcome")) {
-
-                    out.writeObject("playerName");
+                } else if (obj.equals(WELCOME)) {
+                    out.writeObject(JOptionPane.showInputDialog(null, "What is your name?"));
                 } else if (obj instanceof Integer s) {
                     System.out.println(s);
                 }

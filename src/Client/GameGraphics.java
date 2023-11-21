@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class GameGraphics extends JFrame {
-    static final int CORRECT_ANSWER = 1;
-    static final int WRONG_ANSWER = 2;
+    Integer points;
     int answer;
     JLabel title = new JLabel();
     JLabel categoryChoice;
     JLabel category;
     JPanel questionsPanel = new JPanel();
     ImageIcon icon = new ImageIcon("src/Client/images/Answer.png");
+
     GameGraphics(){
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(700,700);
@@ -40,7 +40,7 @@ public class GameGraphics extends JFrame {
         add(title, BorderLayout.NORTH);
     }
 
-    public void categoryChoice(Category c1, Category c2, Category c3, ObjectOutputStream out) throws IOException{
+    public void categoryChoice(Category c1, Category c2, Category c3, ObjectOutputStream out) {
         ArrayList<JLabel> categories = new ArrayList<>();
         questionsPanel.removeAll();
         questionsPanel.setLayout(new GridLayout(3, 1));
@@ -94,44 +94,39 @@ public class GameGraphics extends JFrame {
         repaint();
     }
 
-    private void questions(String category, String question1, String question2, String question3, String question4){
+    public void questions(Question q, ObjectOutputStream out){
         questionsPanel.removeAll();
         questionsPanel.setLayout(new GridLayout(2,2));
-        ArrayList<JLabel> questions = new ArrayList<>();
+        ArrayList<JLabel> answers = new ArrayList<>();
 
-        categoryChoice = new JLabel(category);
-        categoryChoice.setHorizontalAlignment(SwingConstants.CENTER);
-        add(categoryChoice, BorderLayout.SOUTH);
+        JLabel answerOne = new JLabel(q.getAnswer(0).getAnswerText());
+        JLabel answerTwo = new JLabel(q.getAnswer(1).getAnswerText());
+        JLabel answerThree = new JLabel(q.getAnswer(2).getAnswerText());
+        JLabel answerFour = new JLabel(q.getAnswer(3).getAnswerText());
+        answers.add(answerOne);
+        answers.add(answerTwo);
+        answers.add(answerThree);
+        answers.add(answerFour);
 
-        JLabel questionOne = new JLabel(question1);
-        questionOne.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                answer = CORRECT_ANSWER;
-            }
-        });
-
-        JLabel questionTwo = new JLabel(question2);
-        JLabel questionThree = new JLabel(question3);
-        JLabel questionFour = new JLabel(question4);
-        questions.add(questionTwo);
-        questions.add(questionThree);
-        questions.add(questionFour);
-
-        for(JLabel j: questions){
+        for(JLabel j: answers){
             j.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    answer = WRONG_ANSWER;
+                    if(e.getSource() == answerOne){
+                        points++;
+                    }
+                    try {
+                        out.writeObject(points);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
             });
         }
 
-        questions.add(questionOne);
-        Collections.shuffle(questions);
+        Collections.shuffle(answers);
 
-
-        for(JLabel j: questions){
+        for(JLabel j: answers){
             j.setIcon(icon);
             j.setHorizontalTextPosition(SwingConstants.CENTER);
             j.setHorizontalAlignment(SwingConstants.CENTER);

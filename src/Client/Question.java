@@ -37,8 +37,5 @@ public class Question implements Serializable {
     public Answers getAnswer(int questionNumber){
         return answersList.get(questionNumber);
     }
-    public String getQuestonText(){
-        return this.questionText;
-    }
 
 }

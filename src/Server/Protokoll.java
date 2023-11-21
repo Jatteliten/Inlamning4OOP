@@ -1,9 +1,5 @@
 package Server;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class Protokoll {
@@ -22,6 +18,8 @@ public class Protokoll {
     private int questionCounter = 0;
     private String player1Name;
     private String player2Name;
+    static final String WELCOME = "STARTGAMEFROMCLIENTXXX";
+    static final String END_GAME = "ENDGAMEFROMCLIENTXXX";
     private int player1Score = 0;
     private int player2Score = 0;
 
