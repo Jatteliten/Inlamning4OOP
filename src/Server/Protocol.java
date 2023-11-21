@@ -17,7 +17,8 @@ public class Protocol {
     private enum GameState {
         INITIAL,
         CATEGORY_SELECTION,
-        QUESTION,
+        QUESTION1,
+        QUESTION2,
         WAITING,
         FINISHED,
     }
@@ -30,21 +31,19 @@ public class Protocol {
 
     public void processUserInput(Object userInput, ObjectOutputStream out) throws IOException {
         switch (state) {
-            case INITIAL:
-                state = GameState.CATEGORY_SELECTION;
-                break;
-
-            case WAITING:
-                state = GameState.CATEGORY_SELECTION;
-                break;
-
             case CATEGORY_SELECTION:
-                state = GameState.QUESTION;
+                //skickar kategorier
+                //får tillbaka svar
+                state = GameState.QUESTION1;
+            case QUESTION1:
+                //skickar frågorna
+                //får tillbaka poäng
+                state = GameState.QUESTION2;
                 break;
-
-            case QUESTION:
-                out.writeObject(score);
-                break;
+            case QUESTION2:
+                //skickar frågorna
+                //får tillbaka poäng
+                state = GameState.CATEGORY_SELECTION;
 
             case FINISHED:
                 // + logik för att beräkna resultatet
