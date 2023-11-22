@@ -134,14 +134,13 @@ public class GameGraphics extends JFrame {
                         try {
                             waiting();
                             out.writeObject(points);
+                            points = 0;
                         } catch (IOException ex) {
                             throw new RuntimeException(ex);
                         }
                     }else{
                         questions(ql, out);
                     }
-                    System.out.println(counter);
-                    System.out.println(ql.size());
                 }
             });
         }

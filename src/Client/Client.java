@@ -29,7 +29,7 @@ public class Client {
                     System.exit(0);
                 } else if (obj instanceof Question q) {
                     g.addQuestions(q);
-                    if(g.getQuestions().size() == 4) {
+                    if(g.getQuestions().size() == 3) {
                         g.questions(g.getQuestions(), out);
                     }
                 } else if (obj instanceof Category c) {
