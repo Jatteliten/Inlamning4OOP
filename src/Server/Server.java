@@ -27,12 +27,14 @@ public class Server extends Thread {
            ObjectInputStream in = new ObjectInputStream(serverSocket.getInputStream())){
 
            out.writeObject(WELCOME);
-           Player player = new Player(out, (String) in.readObject());
+           Player player = new Player(out,in.readObject().toString());
            gameCoordinator.addPlayer(player);
            gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
-
+           out.writeObject(categories);
            while (true){
+
                p.processUserInput(in.readObject(), out);
+               System.out.println("då");
            }
 
         } catch (IOException | ClassNotFoundException e) {

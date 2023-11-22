@@ -28,6 +28,7 @@ public class Client {
                 } else if (obj instanceof Question q) {
                     g.questions(q, out);
                 } else if (obj instanceof Category c) {
+                    System.out.println("fick categorierna!");
                     g.categoryChoice(c, (Category) in.readObject(), (Category) in.readObject(), out);
                 } else if (obj.equals(WELCOME)) {
                     out.writeObject(JOptionPane.showInputDialog(null, "What is your name?"));
