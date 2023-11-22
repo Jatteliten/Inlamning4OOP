@@ -1,54 +1,38 @@
 package Server;
 
+import Utilities.Category;
+
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Protocol {
 
     ArrayList<Category> categories;
-    GameCoordinator gameCoordinator;
 
-    public Protocol(ArrayList<Category> categories, GameCoordinator gameCoordinator){
+    public Protocol(ArrayList<Category> categories){
         this.categories = categories;
-        this.gameCoordinator = gameCoordinator;
     }
-    private enum GameState {
-        INITIAL,
-        CATEGORY_SELECTION,
-        QUESTION1,
-        QUESTION2,
-        WAITING,
-        FINISHED,
-    }
-
-    private GameState state = GameState.INITIAL;
-    private List<Question> currentQuestions;
+    private List<String> currentQuestions;
     private int questionCounter = 0;
     private Integer score;
-    private String playerName;
 
-    public void processUserInput(Object userInput, ObjectOutputStream out) throws IOException {
-        switch (state) {
-            case CATEGORY_SELECTION:
-                out.writeObject(categories);
-                if (userInput instanceof Category s){
-                    currentQuestions = s.questionList;
+    public void processUserInput(Object userInput, ObjectInputStream in,
+                                 ObjectOutputStream out, Player p, GameCoordinator gameCoordinator) throws IOException, ClassNotFoundException {
+
+        if(userInput instanceof Category q){
+            Collections.shuffle(q.getQuestionsList());
+                for(int j = 0; j < 3; j++){
+                    gameCoordinator.getPlayers().get(0).getObjectOutputStream().writeObject(q.getQuestionsList().get(j));
                 }
-                state = GameState.QUESTION1;
-            case QUESTION1:
-                out.writeObject(currentQuestions);
-                if (userInput instanceof Integer s) {
-                   score = score + s;
-                }
-                //state = GameState.QUESTION2;
-                break;
-            case QUESTION2:
-                //skickar frågorna
-                //får tillbaka poäng
-                state = GameState.CATEGORY_SELECTION;
-            default:
+
+        }else if(userInput instanceof Integer){
+            for(Player pl: gameCoordinator.getPlayers()){
+                pl.getObjectOutputStream().writeObject(userInput);
+            }
         }
     }
 

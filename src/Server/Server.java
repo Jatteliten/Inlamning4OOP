@@ -1,18 +1,22 @@
 package Server;
 
+import Utilities.Answers;
+import Utilities.Category;
+import Utilities.Question;
+
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Server extends Thread {
    Socket serverSocket;
    ArrayList<Category> categories;
    GameCoordinator gameCoordinator;
-   static final String WELCOME = "STARTGAMEFROMCLIENTXXX";
-   static final String END_GAME = "ENDGAMEFROMCLIENTXXX";
+   static final String WELCOME = "START_GAME_FROM_CLIENT_XXX";
 
    public Server(Socket s, GameCoordinator g){
         this.serverSocket = s;
@@ -21,7 +25,7 @@ public class Server extends Thread {
    @Override
    public void run(){
             createQuestionsAndCategoriesFromFile();
-            Protocol p = new Protocol(categories, gameCoordinator);
+            Protocol p = new Protocol(categories);
 
        try(ObjectOutputStream out = new ObjectOutputStream(serverSocket.getOutputStream());
            ObjectInputStream in = new ObjectInputStream(serverSocket.getInputStream())){
@@ -30,9 +34,15 @@ public class Server extends Thread {
            Player player = new Player(out, (String) in.readObject());
            gameCoordinator.addPlayer(player);
            gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
+           if(!gameCoordinator.isTwoPlayers){
+               Collections.shuffle(categories);
+               for(int i = 0; i < 3; i++){
+                   out.writeObject(categories.get(i));
+               }
+           }
 
            while (true){
-               p.processUserInput(in.readObject(), out);
+               p.processUserInput(in.readObject(), in, out, player, gameCoordinator);
            }
 
         } catch (IOException | ClassNotFoundException e) {

@@ -6,6 +6,7 @@ public class Player {
     String name;
     int score = 0;
     ObjectOutputStream objectOutputStream;
+    boolean playerOne;
 
     public Player(ObjectOutputStream os, String name){
         this.objectOutputStream = os;
@@ -28,6 +29,18 @@ public class Player {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public boolean isPlayerOne() {
+        return playerOne;
+    }
+
+    public void setPlayerOne(boolean playerOne) {
+        this.playerOne = playerOne;
     }
 
     public void setObjectOutputStream(ObjectOutputStream objectOutputStream) {
