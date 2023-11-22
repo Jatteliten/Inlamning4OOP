@@ -14,10 +14,7 @@ import Utilities.Answers;
 public class GameGraphics extends JFrame {
     Integer points = 0;
     int counter = 0;
-    int answer;
     JLabel title = new JLabel();
-    JLabel categoryChoice;
-    JLabel category;
     JPanel questionsPanel = new JPanel();
     ImageIcon icon = new ImageIcon("src/Client/images/Answer.png");
     ArrayList<Question> questions = new ArrayList<>();
@@ -51,38 +48,12 @@ public class GameGraphics extends JFrame {
         questionsPanel.setLayout(new GridLayout(3, 1));
 
         JLabel categoryOne = new JLabel(c1.getCategoryText());
-        categoryOne.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                try {
-                    out.writeObject(c1);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
+        addMouseListener(categoryOne, c1, out);
         JLabel categoryTwo = new JLabel(c2.getCategoryText());
-        categoryTwo.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                try {
-                    out.writeObject(c2);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
+        addMouseListener(categoryTwo, c2, out);
         JLabel categoryThree = new JLabel(c3.getCategoryText());
-        categoryTwo.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                try {
-                    out.writeObject(c3);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
+        addMouseListener(categoryThree, c3, out);
+
         categories.add(categoryOne);
         categories.add(categoryTwo);
         categories.add(categoryThree);
@@ -99,6 +70,19 @@ public class GameGraphics extends JFrame {
         repaint();
     }
 
+    private void addMouseListener(JLabel j, Category c, ObjectOutputStream out){
+        j.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    out.writeObject(c);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+    }
+
     public void addQuestions(Question q){
         questions.add(q);
     }
@@ -111,6 +95,8 @@ public class GameGraphics extends JFrame {
         questionsPanel.removeAll();
         questionsPanel.setLayout(new GridLayout(2, 2));
         ArrayList<JLabel> answers = new ArrayList<>();
+
+
 
         JLabel answerOne = new JLabel(ql.get(counter).getAnswer(0).getAnswerText());
         JLabel answerTwo = new JLabel(ql.get(counter).getAnswer(1).getAnswerText());

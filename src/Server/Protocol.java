@@ -1,6 +1,7 @@
 package Server;
 
 import Utilities.Category;
+import Utilities.Question;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -12,28 +13,35 @@ import java.util.List;
 public class Protocol {
 
     ArrayList<Category> categories;
+    ArrayList<Question> currentQuestions;
 
     public Protocol(ArrayList<Category> categories){
         this.categories = categories;
     }
-    private List<String> currentQuestions;
     private int questionCounter = 0;
-    private Integer score;
 
     public void processUserInput(Object userInput, ObjectInputStream in,
                                  ObjectOutputStream out, Player p, GameCoordinator gameCoordinator) throws IOException, ClassNotFoundException {
 
         if(userInput instanceof Category q){
             Collections.shuffle(q.getQuestionsList());
-                for(int j = 0; j < 3; j++){
-                    gameCoordinator.getPlayers().get(0).getObjectOutputStream().writeObject(q.getQuestionsList().get(j));
+            currentQuestions = new ArrayList<>();
+                for(int i = 0; i < 3; i++){
+                    currentQuestions.add(q.getQuestionsList().get(i));
+                    gameCoordinator.getPlayers().get(0).getObjectOutputStream().writeObject(q.getQuestionsList().get(i));
                 }
 
         }else if(userInput instanceof Integer){
             for(Player pl: gameCoordinator.getPlayers()){
-                pl.getObjectOutputStream().writeObject(userInput);
+                if(p != pl){
+                    pl.getObjectOutputStream().writeObject(userInput);
+                    for(Question q: currentQuestions){
+                        pl.getObjectOutputStream().writeObject(q);
+                    }
+                }
             }
         }
+
     }
 
 }
