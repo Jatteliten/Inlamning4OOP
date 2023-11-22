@@ -25,11 +25,10 @@ public class Protocol {
 
         if(userInput instanceof Category q){
             Collections.shuffle(q.getQuestionsList());
-            for(int i = 0; i < 2; i++){
                 for(int j = 0; j < 3; j++){
-                    gameCoordinator.getPlayers().get(i).getObjectOutputStream().writeObject(q.getQuestionsList().get(j));
+                    gameCoordinator.getPlayers().get(0).getObjectOutputStream().writeObject(q.getQuestionsList().get(j));
                 }
-            }
+
         }else if(userInput instanceof Integer){
             for(Player pl: gameCoordinator.getPlayers()){
                 pl.getObjectOutputStream().writeObject(userInput);
