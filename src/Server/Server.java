@@ -1,16 +1,22 @@
 package Server;
 
+import Utilities.Answers;
+import Utilities.Category;
+import Utilities.Question;
+
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Server extends Thread {
    Socket serverSocket;
    ArrayList<Category> categories;
    GameCoordinator gameCoordinator;
+   static final String WELCOME = "START_GAME_FROM_CLIENT_XXX";
 
    public Server(Socket s, GameCoordinator g){
         this.serverSocket = s;
@@ -19,34 +25,37 @@ public class Server extends Thread {
    @Override
    public void run(){
             createQuestionsAndCategoriesFromFile();
-
-            for(Category c: categories){
-                System.out.println(c.getCategoryText());
-            }
+            Protocol p = new Protocol(categories);
 
        try(ObjectOutputStream out = new ObjectOutputStream(serverSocket.getOutputStream());
            ObjectInputStream in = new ObjectInputStream(serverSocket.getInputStream())){
 
-           Player p = new Player(out);
-           gameCoordinator.addPlayer(p);
+           out.writeObject(WELCOME);
+           Player player = new Player(out, (String) in.readObject());
+           gameCoordinator.addPlayer(player);
            gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
-
-           while (true){
-               /*
-               out.writeObject(q);
-               Object answer = in.readObject();
-
-               if (answer.toString().equalsIgnoreCase("red")){
-                   out.writeObject("You win!");
+           if(!gameCoordinator.isTwoPlayers){
+               Collections.shuffle(categories);
+               for(int i = 0; i < 3; i++){
+                   out.writeObject(categories.get(i));
                }
-               */
            }
 
-        } catch (IOException e) {
+           while (true){
+               p.processUserInput(in.readObject(), in, out, player, gameCoordinator);
+           }
+
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-    }
+   }
 
+    /**
+     * Läser in frågor och kategorier från Questions and Answers-filen.
+     * Skapar kategori om det inte redan finns en kategori vid det namnet och lägger den i en lista.
+     * Skapar frågor och lägger det hos kategorin.
+     * Skapar svarsalternativ och lägger det hos frågorna.
+     */
    private void createQuestionsAndCategoriesFromFile(){
        Path path = Paths.get("src/Server/Categories and questions");
        String read;

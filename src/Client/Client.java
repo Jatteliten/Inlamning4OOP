@@ -1,46 +1,41 @@
 package Client;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.List;
+import Utilities.Category;
+import Utilities.Question;
+import Utilities.Answers;
 
 public class Client {
     int port = 12344;
     String ip = "127.0.0.1";
     List<Integer> points;
     Object obj;
-    static final String WELCOME = "STARTGAMEFROMCLIENTXXX";
-    static final String END_GAME = "ENDGAMEFROMCLIENTXXX";
-    Answers playerAnswer;
+    static final String WELCOME = "START_GAME_FROM_CLIENT_XXX";
+    static final String END_GAME = "END_GAME_FROM_CLIENT_XXX";
 
     public Client() {
-        GameGraphics g = new GameGraphics();
         try (Socket socketToServer = new Socket(ip, port);
              ObjectOutputStream out = new ObjectOutputStream(socketToServer.getOutputStream());
-             ObjectInputStream in = new ObjectInputStream(socketToServer.getInputStream());
-             BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in))) {
+             ObjectInputStream in = new ObjectInputStream(socketToServer.getInputStream())) {
 
-            while (true) {
-                obj = in.readObject();
-                if (obj.equals("results")) {
+            GameGraphics g = new GameGraphics();
 
+            while ((obj = in.readObject()) != null) {
+                System.out.println(obj);
+                if (obj.equals(END_GAME)) {
                     System.exit(0);
-                } else if (obj instanceof Question s) {
-                    System.out.println(s.getQuestonText());
-                    for (int i = 0; i < s.getAnswersList().size(); i++) {
-                        System.out.println(s.getAnswer(i).getAnswerText());
+                } else if (obj instanceof Question q) {
+                    g.addQuestions(q);
+                    if(g.getQuestions().size() == 3) {
+                        g.questions(g.getQuestions(), out);
                     }
-                    if (playerAnswer.answerText.equalsIgnoreCase(s.getAnswer(0).getAnswerText())) {
-                        points.add(1);
-                        out.writeObject(points);
-                    }
-                    out.writeObject(points);
-                } else if (obj instanceof Category s) {
-                    System.out.println(s.getCategoryText());
-
-                } else if (obj.equals("welcome")) {
-
-                    out.writeObject("playerName");
+                } else if (obj instanceof Category c) {
+                    g.categoryChoice(c, (Category) in.readObject(), (Category) in.readObject(), out);
+                } else if (obj.equals(WELCOME)) {
+                    out.writeObject(JOptionPane.showInputDialog(null, "What is your name?"));
                 } else if (obj instanceof Integer s) {
                     System.out.println(s);
                 }
