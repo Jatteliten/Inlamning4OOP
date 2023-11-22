@@ -133,6 +133,10 @@ public class GameGraphics extends JFrame {
                         counter = 0;
                         try {
                             waiting();
+
+                            // Skriv ut poängen innan du skickar till servern
+                            System.out.println("Sending points to server: " + points);
+
                             out.writeObject(points);
                             points = 0;
                         } catch (IOException ex) {

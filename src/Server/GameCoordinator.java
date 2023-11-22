@@ -28,4 +28,17 @@ public class GameCoordinator {
     public void setTwoPlayers(boolean twoPlayers) {
         isTwoPlayers = twoPlayers;
     }
+
+    private boolean roundComplete = false;
+
+    public boolean isRoundComplete() {
+        return roundComplete;
+    }
+
+    public void setRoundComplete(boolean roundComplete) {
+        this.roundComplete = roundComplete;
+    }
+
+    public void playerScored() {
+    }
 }

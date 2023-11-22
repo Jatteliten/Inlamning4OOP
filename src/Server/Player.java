@@ -8,13 +8,15 @@ public class Player {
     ObjectOutputStream objectOutputStream;
     boolean playerOne;
 
-    public Player(ObjectOutputStream os, String name){
+    public Player(ObjectOutputStream os, String name) {
         this.objectOutputStream = os;
         this.name = name;
     }
+
     public int getScore() {
         return score;
     }
+
     public void addScore(int scoreToAdd) {
         this.score = score + scoreToAdd;
     }
@@ -45,5 +47,9 @@ public class Player {
 
     public void setObjectOutputStream(ObjectOutputStream objectOutputStream) {
         this.objectOutputStream = objectOutputStream;
+    }
+
+    public int getPlayerNumber() {
+        return playerOne ? 1 : 2;
     }
 }
