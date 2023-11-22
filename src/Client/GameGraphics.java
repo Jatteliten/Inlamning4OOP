@@ -129,7 +129,7 @@ public class GameGraphics extends JFrame {
                         points++;
                     }
                     counter++;
-                    if(counter == ql.size() - 1){
+                    if(counter == ql.size()){
                         counter = 0;
                         try {
                             waiting();
