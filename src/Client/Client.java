@@ -20,13 +20,13 @@ public class Client {
 
             GameGraphics g = new GameGraphics();
 
-            while (true) {
-                obj = in.readObject();
+            while ((obj = in.readObject()) != null) {
                 if (obj.equals(END_GAME)) {
                     System.exit(0);
                 } else if (obj instanceof Question q) {
                     g.questions(q, out);
                 } else if (obj instanceof Category c) {
+                    System.out.println("hej");
                     g.categoryChoice(c, (Category) in.readObject(), (Category) in.readObject(), out);
                 } else if (obj.equals(WELCOME)) {
                     out.writeObject(JOptionPane.showInputDialog(null, "What is your name?"));
