@@ -1,4 +1,6 @@
-package Client;
+package Utilities;
+
+import Utilities.Question;
 
 import java.io.Serializable;
 import java.util.ArrayList;

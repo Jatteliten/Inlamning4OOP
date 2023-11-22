@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.List;
+import Utilities.Category;
+import Utilities.Question;
+import Utilities.Answers;
 
 public class Client {
     int port = 12344;
@@ -21,12 +24,15 @@ public class Client {
             GameGraphics g = new GameGraphics();
 
             while ((obj = in.readObject()) != null) {
+                System.out.println(obj);
                 if (obj.equals(END_GAME)) {
                     System.exit(0);
                 } else if (obj instanceof Question q) {
-                    g.questions(q, out);
+                    g.addQuestions(q);
+                    if(g.getQuestions().size() == 4) {
+                        g.questions(g.getQuestions(), out);
+                    }
                 } else if (obj instanceof Category c) {
-                    System.out.println("hej");
                     g.categoryChoice(c, (Category) in.readObject(), (Category) in.readObject(), out);
                 } else if (obj.equals(WELCOME)) {
                     out.writeObject(JOptionPane.showInputDialog(null, "What is your name?"));

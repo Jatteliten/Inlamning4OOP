@@ -1,5 +1,9 @@
 package Server;
 
+import Utilities.Answers;
+import Utilities.Category;
+import Utilities.Question;
+
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
