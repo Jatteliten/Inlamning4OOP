@@ -1,4 +1,4 @@
-package Server;
+package Utilities;
 
 import java.io.Serializable;
 
@@ -7,7 +7,7 @@ public class Answers implements Serializable {
     boolean isCorrectAnswer;
     String answerText;
 
-    Answers(boolean correct, String text){
+    public Answers(boolean correct, String text){
         isCorrectAnswer = correct;
         answerText = text;
     }
