@@ -35,6 +35,7 @@ public class Server extends Thread {
            gameCoordinator.addPlayer(player);
            gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
            if(!gameCoordinator.isTwoPlayers){
+               player.setPicksCurrentCategory(true);
                Collections.shuffle(categories);
                for(int i = 0; i < 3; i++){
                    out.writeObject(categories.get(i));
