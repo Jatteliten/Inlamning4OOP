@@ -6,17 +6,19 @@ public class Player {
     String name;
     int score = 0;
     ObjectOutputStream objectOutputStream;
-    boolean playerOne;
+    boolean picksCurrentCategory;
 
-    public Player(ObjectOutputStream os, String name) {
+    public Player(ObjectOutputStream os, String name){
         this.objectOutputStream = os;
         this.name = name;
+        this.picksCurrentCategory = false;
     }
-
     public int getScore() {
         return score;
     }
-
+    public void setScore(int score) {
+        this.score = score;
+    }
     public void addScore(int scoreToAdd) {
         this.score = score + scoreToAdd;
     }
@@ -32,24 +34,13 @@ public class Player {
     public void setName(String name) {
         this.name = name;
     }
-
-    public void setScore(int score) {
-        this.score = score;
+    public boolean isPicksCurrentCategory() {
+        return picksCurrentCategory;
     }
-
-    public boolean isPlayerOne() {
-        return playerOne;
+    public void setPicksCurrentCategory(boolean picksCurrentCategory) {
+        this.picksCurrentCategory = picksCurrentCategory;
     }
-
-    public void setPlayerOne(boolean playerOne) {
-        this.playerOne = playerOne;
-    }
-
     public void setObjectOutputStream(ObjectOutputStream objectOutputStream) {
         this.objectOutputStream = objectOutputStream;
-    }
-
-    public int getPlayerNumber() {
-        return playerOne ? 1 : 2;
     }
 }
