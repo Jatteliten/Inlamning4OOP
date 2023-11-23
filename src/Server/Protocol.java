@@ -29,9 +29,10 @@ public class Protocol {
                     gameCoordinator.getPlayers().get(0).getObjectOutputStream().writeObject(q.getQuestionsList().get(j));
                 }
 
-        }else if(userInput instanceof Integer){
+        }else if(userInput instanceof Integer i){
+            p.setScore(p.getScore() + i);
             for(Player pl: gameCoordinator.getPlayers()){
-                pl.getObjectOutputStream().writeObject(userInput);
+                pl.getObjectOutputStream().writeObject(i);
             }
         }
     }
