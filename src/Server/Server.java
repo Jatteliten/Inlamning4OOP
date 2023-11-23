@@ -14,7 +14,7 @@ import java.util.Collections;
 
 public class Server extends Thread {
    Socket serverSocket;
-   ArrayList<Category> categories;
+   ArrayList<Category> categories = new ArrayList<>();
    GameCoordinator gameCoordinator;
    static final String WELCOME = "START_GAME_FROM_CLIENT_XXX";
 
@@ -35,6 +35,7 @@ public class Server extends Thread {
            gameCoordinator.addPlayer(player);
            gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
            if(!gameCoordinator.isTwoPlayers){
+               player.setPicksCurrentCategory(true);
                Collections.shuffle(categories);
                for(int i = 0; i < 3; i++){
                    out.writeObject(categories.get(i));
