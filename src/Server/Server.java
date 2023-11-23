@@ -31,7 +31,8 @@ public class Server extends Thread {
            ObjectInputStream in = new ObjectInputStream(serverSocket.getInputStream())){
 
            out.writeObject(WELCOME);
-           out.writeObject(p.getP().getProperty("numberOfQuestions","2"));
+           out.writeObject(p.getProperties().getProperty("numberOfQuestions","2"));
+           out.writeObject(p.getProperties().getProperty("numberOfRounds", "3"));
            Player player = new Player(out, (String) in.readObject());
            gameCoordinator.addPlayer(player);
            gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
