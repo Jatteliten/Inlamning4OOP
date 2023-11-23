@@ -3,7 +3,6 @@ package Client;
 import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
 import Utilities.Category;
 import Utilities.Question;
 import Utilities.Answers;

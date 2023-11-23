@@ -152,12 +152,16 @@ public class GameGraphics extends JFrame {
         questionsPanel.setLayout(new GridLayout(totalPoints.size(), 2));
         for(int i = 0; i < totalPoints.size(); i++){
             JLabel yourPoints = new JLabel(String.valueOf(totalPoints.get(i)));
-            JLabel theirPoints = new JLabel();
+            yourPoints.setHorizontalTextPosition(SwingConstants.CENTER);
+            yourPoints.setHorizontalAlignment(SwingConstants.CENTER);
+            JLabel theirPoints;
             if(opponentPoints.size() > i) {
                 theirPoints = new JLabel(String.valueOf(opponentPoints.get(i)));
             }else{
                 theirPoints = new JLabel("?");
             }
+            theirPoints.setHorizontalTextPosition(SwingConstants.CENTER);
+            theirPoints.setHorizontalAlignment(SwingConstants.CENTER);
             questionsPanel.add(yourPoints);
             questionsPanel.add(theirPoints);
         }
