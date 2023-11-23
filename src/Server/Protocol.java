@@ -31,13 +31,15 @@ public class Protocol {
                     gameCoordinator.getPlayers().get(0).getObjectOutputStream().writeObject(q.getQuestionsList().get(i));
                 }
 
-        }else if(userInput instanceof Integer){
+        }else if(userInput instanceof Integer i){
             for(Player pl: gameCoordinator.getPlayers()){
                 if(p != pl){
-                    pl.getObjectOutputStream().writeObject(userInput);
+                    pl.getObjectOutputStream().writeObject(i);
                     for(Question q: currentQuestions){
                         pl.getObjectOutputStream().writeObject(q);
                     }
+                }else{
+                    p.addScore(i);
                 }
             }
         }
