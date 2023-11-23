@@ -9,8 +9,6 @@ import Utilities.Question;
 import Utilities.Answers;
 
 public class Client {
-    ArrayList<Integer> points = new ArrayList<>();
-    ArrayList<Integer> opponentPoints = new ArrayList<>();
     int port = 12344;
     String ip = "127.0.0.1";
     Object obj;
@@ -25,7 +23,7 @@ public class Client {
             GameGraphics g = new GameGraphics();
 
             while ((obj = in.readObject()) != null) {
-                System.out.println(obj);
+                //System.out.println(obj);
                 if (obj.equals(END_GAME)) {
                     System.exit(0);
                 } else if (obj instanceof Question q) {
@@ -39,7 +37,7 @@ public class Client {
                 } else if (obj.equals(WELCOME)) {
                     out.writeObject(JOptionPane.showInputDialog(null, "What is your name?"));
                 } else if (obj instanceof Integer s) {
-                    opponentPoints.add(s);
+                    g.addPointsToOpponent(s);
                 }
             }
         } catch (IOException | ClassNotFoundException ex) {

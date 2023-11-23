@@ -12,6 +12,8 @@ import Utilities.Question;
 import Utilities.Answers;
 
 public class GameGraphics extends JFrame {
+    ArrayList<Integer> totalPoints = new ArrayList<>();
+    ArrayList<Integer> opponentPoints = new ArrayList<>();
     Integer points = 0;
     int counter = 0;
     JLabel title = new JLabel();
@@ -113,11 +115,16 @@ public class GameGraphics extends JFrame {
                     counter++;
                     if(counter == ql.size()){
                         counter = 0;
+                        totalPoints.add(points);
                         try {
                             waiting();
                             out.writeObject(points);
                             points = 0;
                             questions.clear();
+                            System.out.println("mina poäng");
+                            for (int i = 0; i < totalPoints.size(); i++) {
+                                System.out.println(totalPoints.get(i));
+                            }
                         } catch (IOException ex) {
                             throw new RuntimeException(ex);
                         }
@@ -147,6 +154,9 @@ public class GameGraphics extends JFrame {
         questionsPanel.add(waiting);
         revalidate();
         repaint();
+    }
+    public void addPointsToOpponent(int points){
+        this.opponentPoints.add(points);
     }
 
 }
