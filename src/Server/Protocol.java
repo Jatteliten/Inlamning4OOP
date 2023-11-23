@@ -42,7 +42,6 @@ public class Protocol {
 
         if(gameCoordinator.getPlayers().size() != 1) {
             secondPlayer = checkForSecondPlayer(p, gameCoordinator);
-            System.out.println("hej");
         }
 
         if (userInput instanceof Category q) {
@@ -66,8 +65,6 @@ public class Protocol {
 
             p.setPicksCurrentCategory(!p.isPicksCurrentCategory());
             p.addScore(i);
-            System.out.println(p.getName());
-            System.out.println(p.getScore());
             if (counter == numberOfRounds){
                     p.getObjectOutputStream().writeObject(END_GAME);
                 } else if (p.isPicksCurrentCategory()) {
