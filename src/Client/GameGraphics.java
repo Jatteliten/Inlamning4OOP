@@ -96,16 +96,12 @@ public class GameGraphics extends JFrame {
         questionsPanel.setLayout(new GridLayout(2, 2));
         ArrayList<JLabel> answers = new ArrayList<>();
 
-
-
         JLabel answerOne = new JLabel(ql.get(counter).getAnswer(0).getAnswerText());
-        JLabel answerTwo = new JLabel(ql.get(counter).getAnswer(1).getAnswerText());
-        JLabel answerThree = new JLabel(ql.get(counter).getAnswer(2).getAnswerText());
-        JLabel answerFour = new JLabel(ql.get(counter).getAnswer(3).getAnswerText());
         answers.add(answerOne);
-        answers.add(answerTwo);
-        answers.add(answerThree);
-        answers.add(answerFour);
+        for(int i = 1; i < 4; i++){
+            JLabel answer = new JLabel(ql.get(counter).getAnswer(i).getAnswerText());
+            answers.add(answer);
+        }
 
         for (JLabel j : answers) {
             j.addMouseListener(new MouseAdapter() {
@@ -141,7 +137,6 @@ public class GameGraphics extends JFrame {
         }
         revalidate();
         repaint();
-
     }
 
     public void waiting(){
