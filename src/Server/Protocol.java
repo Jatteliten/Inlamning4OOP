@@ -12,7 +12,7 @@ import java.util.Collections;
 public class Protocol {
 
     ArrayList<Category> categories;
-    ArrayList<Question> currentQuestions;
+    ArrayList<Question> currentQuestions = new ArrayList<>();
 
     public Protocol(ArrayList<Category> categories){
         this.categories = categories;
@@ -27,7 +27,10 @@ public class Protocol {
             currentQuestions = new ArrayList<>();
                 for(int i = 0; i < 3; i++){
                     currentQuestions.add(q.getQuestionsList().get(i));
-                    gameCoordinator.getPlayers().get(0).getObjectOutputStream().writeObject(q.getQuestionsList().get(i));
+                    if(p.isPicksCurrentCategory()) {
+                        p.getObjectOutputStream().writeObject(q.getQuestionsList().get(i));
+                    }
+
                 }
 
         }else if(userInput instanceof Integer i){
@@ -37,8 +40,18 @@ public class Protocol {
                     for(Question q: currentQuestions){
                         pl.getObjectOutputStream().writeObject(q);
                     }
+                    currentQuestions.clear();
                 }else{
+                    p.setPicksCurrentCategory(!p.isPicksCurrentCategory());
                     p.addScore(i);
+                    System.out.println(p.getName());
+                    System.out.println(p.getScore());
+                    if(p.isPicksCurrentCategory()){
+                        Collections.shuffle(categories);
+                        for(int j = 0; j < 3; j++){
+                            out.writeObject(categories.get(j));
+                        }
+                    }
                 }
             }
         }

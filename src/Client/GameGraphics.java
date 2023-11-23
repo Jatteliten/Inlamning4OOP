@@ -117,6 +117,7 @@ public class GameGraphics extends JFrame {
                             waiting();
                             out.writeObject(points);
                             points = 0;
+                            questions.clear();
                         } catch (IOException ex) {
                             throw new RuntimeException(ex);
                         }
