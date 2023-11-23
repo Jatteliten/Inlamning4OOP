@@ -37,6 +37,14 @@ public class Protocol {
 
     public void processUserInput(Object userInput, ObjectInputStream in,
                                  ObjectOutputStream out, Player p, GameCoordinator gameCoordinator) throws IOException, ClassNotFoundException {
+
+        Player secondPlayer = null;
+
+        if(gameCoordinator.getPlayers().size() != 1) {
+            secondPlayer = checkForSecondPlayer(p, gameCoordinator);
+            System.out.println("hej");
+        }
+
         if (userInput instanceof Category q) {
             Collections.shuffle(q.getQuestionsList());
             currentQuestions = new ArrayList<>();
@@ -50,33 +58,49 @@ public class Protocol {
 
         } else if (userInput instanceof Integer i) {
             counter++;
-            for (Player pl : gameCoordinator.getPlayers()) {
-                if (p != pl) {
-                    pl.getObjectOutputStream().writeObject(i);
-                    for (Question q : currentQuestions) {
-                        pl.getObjectOutputStream().writeObject(q);
-                    }
-                    currentQuestions.clear();
-                } else {
-                    p.setPicksCurrentCategory(!p.isPicksCurrentCategory());
-                    p.addScore(i);
-                    System.out.println(p.getName());
-                    System.out.println(p.getScore());
-                    if (counter == numberOfRounds){
-                            p.getObjectOutputStream().writeObject(END_GAME);
-                        } else if (p.isPicksCurrentCategory()) {
-                        Collections.shuffle(categories);
-                        for (int j = 0; j < 3; j++) {
-                            out.writeObject(categories.get(j));
-                        }
-
-                    }
-                }
+            secondPlayer.getObjectOutputStream().writeObject(i);
+            for (Question q : currentQuestions) {
+                secondPlayer.getObjectOutputStream().writeObject(q);
             }
+            currentQuestions.clear();
+
+            p.setPicksCurrentCategory(!p.isPicksCurrentCategory());
+            p.addScore(i);
+            System.out.println(p.getName());
+            System.out.println(p.getScore());
+            if (counter == numberOfRounds){
+                    p.getObjectOutputStream().writeObject(END_GAME);
+                } else if (p.isPicksCurrentCategory()) {
+                Collections.shuffle(categories);
+                for (int j = 0; j < 3; j++) {
+                    out.writeObject(categories.get(j));
+                }
+
+            }
+
         }
     }
 
     public Properties getProperties() {
         return properties;
+    }
+
+    private Player checkForSecondPlayer(Player firstPlayer, GameCoordinator gameCoordinator){
+        int playerNumberCheck = 0;
+        Player secondPlayer;
+        for(Player pl: gameCoordinator.getPlayers()){
+            if (firstPlayer == pl){
+                break;
+            }
+            else{
+                playerNumberCheck++;
+            }
+        }
+        if(playerNumberCheck % 2 != 0){
+            secondPlayer = gameCoordinator.getPlayers().get(playerNumberCheck - 1);
+        }else{
+            secondPlayer = gameCoordinator.getPlayers().get(playerNumberCheck + 1);
+        }
+        return secondPlayer;
     }
 }
