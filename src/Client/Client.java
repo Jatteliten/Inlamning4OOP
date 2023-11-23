@@ -13,6 +13,7 @@ public class Client {
     Object obj;
     static final String WELCOME = "START_GAME_FROM_CLIENT_XXX";
     static final String END_GAME = "END_GAME_FROM_CLIENT_XXX";
+    int numberOfQuestions = 0;
 
     public Client() {
         try (Socket socketToServer = new Socket(ip, port);
@@ -27,13 +28,14 @@ public class Client {
                     System.exit(0);
                 } else if (obj instanceof Question q) {
                     g.addQuestions(q);
-                    if(g.getQuestions().size() == 3) {
+                    if(g.getQuestions().size() == numberOfQuestions) {
                         g.questions(g.getQuestions(), out);
                     }
                 } else if (obj instanceof Category c) {
                     System.out.println("fick categorierna!");
                     g.categoryChoice(c, (Category) in.readObject(), (Category) in.readObject(), out);
                 } else if (obj.equals(WELCOME)) {
+                    numberOfQuestions = Integer.parseInt((String) in.readObject());
                     out.writeObject(JOptionPane.showInputDialog(null, "What is your name?"));
                 } else if (obj instanceof Integer s) {
                     g.addPointsToOpponent(s);
