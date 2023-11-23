@@ -59,8 +59,6 @@ public class Protocol {
                 } else {
                     p.setPicksCurrentCategory(!p.isPicksCurrentCategory());
                     p.addScore(i);
-                    System.out.println(p.getName());
-                    System.out.println(p.getScore());
                     if (p.isPicksCurrentCategory()) {
                         Collections.shuffle(categories);
                         for (int j = 0; j < 3; j++) {
