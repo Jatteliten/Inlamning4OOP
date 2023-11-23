@@ -25,7 +25,7 @@ public class Client {
 
             while ((obj = in.readObject()) != null) {
                 if (obj.equals(END_GAME)) {
-                    System.exit(0);
+                    break;
                 } else if (obj instanceof Question q) {
                     g.addQuestions(q);
                     if(g.getQuestions().size() == numberOfQuestions) {
@@ -40,6 +40,13 @@ public class Client {
                     out.writeObject(JOptionPane.showInputDialog(null, "What is your name?"));
                 } else if (obj instanceof Integer s) {
                     g.addPointsToOpponent(s);
+                }
+            }
+            while ((obj = in.readObject()) != null) {
+                if (obj instanceof Integer s) {
+                    System.out.println("sista poängen");
+                    g.addPointsToOpponent(s);
+                    g.waiting();
                 }
             }
         } catch (IOException | ClassNotFoundException ex) {

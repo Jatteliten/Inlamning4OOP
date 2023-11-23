@@ -49,6 +49,7 @@ public class Protocol {
             }
 
         } else if (userInput instanceof Integer i) {
+            counter++;
             for (Player pl : gameCoordinator.getPlayers()) {
                 if (p != pl) {
                     pl.getObjectOutputStream().writeObject(i);
@@ -61,11 +62,14 @@ public class Protocol {
                     p.addScore(i);
                     System.out.println(p.getName());
                     System.out.println(p.getScore());
-                    if (p.isPicksCurrentCategory()) {
+                    if (counter == numberOfRounds){
+                            p.getObjectOutputStream().writeObject(END_GAME);
+                        } else if (p.isPicksCurrentCategory()) {
                         Collections.shuffle(categories);
                         for (int j = 0; j < 3; j++) {
                             out.writeObject(categories.get(j));
                         }
+
                     }
                 }
             }
