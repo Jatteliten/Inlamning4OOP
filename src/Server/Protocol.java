@@ -37,6 +37,7 @@ public class Protocol {
         if(userInput instanceof Category q){
             Collections.shuffle(q.getQuestionsList());
             currentQuestions = new ArrayList<>();
+            System.out.println(numberOfQuestions + "number of q");
                 for(int i = 0; i < numberOfQuestions; i++){
                     currentQuestions.add(q.getQuestionsList().get(i));
                     if(p.isPicksCurrentCategory()) {
