@@ -17,9 +17,10 @@ public class Protocol {
     int numberOfQuestions;
     ArrayList<Category> categories;
     ArrayList<Question> currentQuestions = new ArrayList<>();
+    Properties p;
 
     public Protocol(ArrayList<Category> categories){
-        Properties p = new Properties();
+        this.p = new Properties();
         try {
             p.load(new FileInputStream("src/Server/Properties.properties"));
         }
@@ -67,5 +68,9 @@ public class Protocol {
                 }
             }
         }
+    }
+
+    public Properties getP() {
+        return p;
     }
 }
