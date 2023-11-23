@@ -3,15 +3,16 @@ package Client;
 import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
-import java.util.List;
+import java.util.ArrayList;
 import Utilities.Category;
 import Utilities.Question;
 import Utilities.Answers;
 
 public class Client {
+    ArrayList<Integer> points = new ArrayList<>();
+    ArrayList<Integer> opponentPoints = new ArrayList<>();
     int port = 12344;
     String ip = "127.0.0.1";
-    List<Integer> points;
     Object obj;
     static final String WELCOME = "START_GAME_FROM_CLIENT_XXX";
     static final String END_GAME = "END_GAME_FROM_CLIENT_XXX";
@@ -37,7 +38,7 @@ public class Client {
                 } else if (obj.equals(WELCOME)) {
                     out.writeObject(JOptionPane.showInputDialog(null, "What is your name?"));
                 } else if (obj instanceof Integer s) {
-                    System.out.println(s);
+                    opponentPoints.add(s);
                 }
             }
         } catch (IOException | ClassNotFoundException ex) {

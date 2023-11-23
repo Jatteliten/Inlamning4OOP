@@ -1,40 +1,61 @@
 package Server;
 
 import Utilities.Category;
+import Utilities.Question;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 public class Protocol {
 
     ArrayList<Category> categories;
+    ArrayList<Question> currentQuestions = new ArrayList<>();
 
     public Protocol(ArrayList<Category> categories){
         this.categories = categories;
     }
-    private List<String> currentQuestions;
     private int questionCounter = 0;
-    private Integer score;
 
     public void processUserInput(Object userInput, ObjectInputStream in,
                                  ObjectOutputStream out, Player p, GameCoordinator gameCoordinator) throws IOException, ClassNotFoundException {
 
         if(userInput instanceof Category q){
             Collections.shuffle(q.getQuestionsList());
-            for(int i = 0; i < 2; i++){
-                for(int j = 0; j < 3; j++){
-                    gameCoordinator.getPlayers().get(i).getObjectOutputStream().writeObject(q.getQuestionsList().get(j));
+            currentQuestions = new ArrayList<>();
+                for(int i = 0; i < 3; i++){
+                    currentQuestions.add(q.getQuestionsList().get(i));
+                    if(p.isPicksCurrentCategory()) {
+                        p.getObjectOutputStream().writeObject(q.getQuestionsList().get(i));
+                    }
+
+                }
+
+        }else if(userInput instanceof Integer i){
+            for(Player pl: gameCoordinator.getPlayers()){
+                if(p != pl){
+                    pl.getObjectOutputStream().writeObject(i);
+                    for(Question q: currentQuestions){
+                        pl.getObjectOutputStream().writeObject(q);
+                    }
+                    currentQuestions.clear();
+                }else{
+                    p.setPicksCurrentCategory(!p.isPicksCurrentCategory());
+                    p.addScore(i);
+                    System.out.println(p.getName());
+                    System.out.println(p.getScore());
+                    if(p.isPicksCurrentCategory()){
+                        Collections.shuffle(categories);
+                        for(int j = 0; j < 3; j++){
+                            out.writeObject(categories.get(j));
+                        }
+                    }
                 }
             }
-        }else if(userInput instanceof Integer){
-            for(Player pl: gameCoordinator.getPlayers()){
-                pl.getObjectOutputStream().writeObject(userInput);
-            }
         }
+
     }
 
 }
