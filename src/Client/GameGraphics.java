@@ -149,9 +149,18 @@ public class GameGraphics extends JFrame {
 
     public void waiting(){
         questionsPanel.removeAll();
-        questionsPanel.setLayout(new FlowLayout());
-        JLabel waiting = new JLabel("Waiting");
-        questionsPanel.add(waiting);
+        questionsPanel.setLayout(new GridLayout(totalPoints.size(), 2));
+        for(int i = 0; i < totalPoints.size(); i++){
+            JLabel yourPoints = new JLabel(String.valueOf(totalPoints.get(i)));
+            JLabel theirPoints = new JLabel();
+            if(opponentPoints.size() > i) {
+                theirPoints = new JLabel(String.valueOf(opponentPoints.get(i)));
+            }else{
+                theirPoints = new JLabel("?");
+            }
+            questionsPanel.add(yourPoints);
+            questionsPanel.add(theirPoints);
+        }
         revalidate();
         repaint();
     }
