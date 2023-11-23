@@ -3,21 +3,33 @@ package Server;
 import Utilities.Category;
 import Utilities.Question;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Properties;
 
 public class Protocol {
 
+    int numberOfRounds;
+    int numberOfQuestions;
     ArrayList<Category> categories;
     ArrayList<Question> currentQuestions = new ArrayList<>();
 
     public Protocol(ArrayList<Category> categories){
+        Properties p = new Properties();
+        try {
+            p.load(new FileInputStream("src/Server/Properties.properties"));
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        this.numberOfRounds = Integer.parseInt(p.getProperty("numberOfRounds","3"));
+        this.numberOfQuestions = Integer.parseInt(p.getProperty("numberOfQuestions","2"));
         this.categories = categories;
     }
-    private int questionCounter = 0;
 
     public void processUserInput(Object userInput, ObjectInputStream in,
                                  ObjectOutputStream out, Player p, GameCoordinator gameCoordinator) throws IOException, ClassNotFoundException {
@@ -25,7 +37,7 @@ public class Protocol {
         if(userInput instanceof Category q){
             Collections.shuffle(q.getQuestionsList());
             currentQuestions = new ArrayList<>();
-                for(int i = 0; i < 3; i++){
+                for(int i = 0; i < numberOfQuestions; i++){
                     currentQuestions.add(q.getQuestionsList().get(i));
                     if(p.isPicksCurrentCategory()) {
                         p.getObjectOutputStream().writeObject(q.getQuestionsList().get(i));
