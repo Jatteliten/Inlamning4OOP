@@ -147,27 +147,73 @@ public class GameGraphics extends JFrame {
         repaint();
     }
 
-    public void waiting(){
+    public void waiting() {
         questionsPanel.removeAll();
-        questionsPanel.setLayout(new GridLayout(totalPoints.size(), 2));
-        for(int i = 0; i < totalPoints.size(); i++){
+        questionsPanel.setLayout(new GridLayout(totalPoints.size() + 1, 2));
+
+        JLabel yourPointsLabel = new JLabel("Dina poäng");
+        JLabel opponentPointsLabel = new JLabel("Motståndarens poäng");
+
+        yourPointsLabel.setFont(new Font("Arial", Font.BOLD, 26));
+
+        opponentPointsLabel.setFont(new Font("Arial", Font.BOLD, 26));
+
+        JPanel yourPointsPanel = new JPanel();
+        yourPointsPanel.setBackground(new Color(121, 197, 173));
+        yourPointsPanel.setLayout(new BorderLayout());
+        yourPointsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        yourPointsPanel.add(yourPointsLabel, BorderLayout.CENTER);
+
+        JPanel opponentPointsPanel = new JPanel();
+        opponentPointsPanel.setBackground(new Color(121, 197, 173));
+        opponentPointsPanel.setLayout(new BorderLayout());
+        opponentPointsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        opponentPointsPanel.add(opponentPointsLabel, BorderLayout.CENTER);
+
+        questionsPanel.add(yourPointsPanel);
+        questionsPanel.add(opponentPointsPanel);
+
+        for (int i = 0; i < totalPoints.size(); i++) {
+            JPanel yourPointsPanelItem = new JPanel();
+            yourPointsPanelItem.setBackground(new Color(121, 197, 173));
+            yourPointsPanelItem.setLayout(new BorderLayout());
+
             JLabel yourPoints = new JLabel(String.valueOf(totalPoints.get(i)));
-            yourPoints.setHorizontalTextPosition(SwingConstants.CENTER);
             yourPoints.setHorizontalAlignment(SwingConstants.CENTER);
+            yourPoints.setFont(new Font("Arial", Font.BOLD, 25));
+
+
+            yourPointsPanelItem.add(yourPoints, BorderLayout.NORTH);
+
+            questionsPanel.add(yourPointsPanelItem);
+
+            JPanel opponentPointsPanelItem = new JPanel();
+            opponentPointsPanelItem.setBackground(new Color(121, 197, 173));
+            opponentPointsPanelItem.setLayout(new BorderLayout());
+
             JLabel theirPoints;
-            if(opponentPoints.size() > i) {
+            if (opponentPoints.size() > i) {
                 theirPoints = new JLabel(String.valueOf(opponentPoints.get(i)));
-            }else{
+            } else {
                 theirPoints = new JLabel("?");
             }
-            theirPoints.setHorizontalTextPosition(SwingConstants.CENTER);
             theirPoints.setHorizontalAlignment(SwingConstants.CENTER);
-            questionsPanel.add(yourPoints);
-            questionsPanel.add(theirPoints);
+            theirPoints.setFont(new Font("Arial", Font.BOLD, 25));
+
+
+            opponentPointsPanelItem.add(theirPoints, BorderLayout.NORTH);
+
+
+            questionsPanel.add(opponentPointsPanelItem);
         }
+
+
         revalidate();
         repaint();
     }
+
+
+
     public void addPointsToOpponent(int points){
         this.opponentPoints.add(points);
     }
