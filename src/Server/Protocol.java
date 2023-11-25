@@ -36,7 +36,8 @@ public class Protocol {
     }
 
     public void processUserInput(Object userInput, ObjectInputStream in,
-                                 ObjectOutputStream out, Player p, GameCoordinator gameCoordinator) throws IOException, ClassNotFoundException {
+                                 ObjectOutputStream out, Player p, GameCoordinator gameCoordinator)
+                                    throws IOException, ClassNotFoundException {
 
         Player secondPlayer = null;
 

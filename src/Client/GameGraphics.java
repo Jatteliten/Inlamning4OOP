@@ -238,7 +238,7 @@ public class GameGraphics extends JFrame {
 
         return pointsPanel;
 
-}
+    }
     private JPanel createScorePanel(int points, boolean isOpponent) {
         JPanel scorePanel = new JPanel();
         scorePanel.setBackground(new Color(121, 197, 173));
