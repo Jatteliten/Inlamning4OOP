@@ -5,7 +5,6 @@ import java.io.*;
 import java.net.Socket;
 import Utilities.Category;
 import Utilities.Question;
-import Utilities.Answers;
 
 public class Client {
     int port = 12344;
@@ -27,16 +26,14 @@ public class Client {
                 try {
                     obj = in.readObject();
                     if (obj == null || obj.equals(END_GAME)) {
-                        System.out.println("EOFException fångad eller slutet av spelet. Avslutar loopen.");
                         break;
                     } else if (obj instanceof Question q) {
                         g.addQuestions(q);
                         if (g.getQuestions().size() == numberOfQuestions) {
-                            g.questions(g.getQuestions(), out);
+                            g.displayQuestions(g.getQuestions(), out);
                         }
                     } else if (obj instanceof Category c) {
-                        System.out.println("Fick kategorierna!");
-                        g.categoryChoice(c, (Category) in.readObject(), (Category) in.readObject(), out);
+                        g.displayCategoryChoice(c, (Category) in.readObject(), (Category) in.readObject(), out);
                     } else if (obj.equals(WELCOME)) {
                         numberOfQuestions = Integer.parseInt((String) in.readObject());
                         numberOfRounds = Integer.parseInt((String) in.readObject());
@@ -55,12 +52,11 @@ public class Client {
             while (true) {
                 try {
                     obj = in.readObject();
-                    if (obj == null || obj instanceof Integer s) {
+                    if (obj == null) {
                         System.out.println("EOFException fångad eller sista poängen. Avslutar loopen.");
                         break;
                     }
                     if (obj instanceof Integer s) {
-                        System.out.println("Sista poängen");
                         g.addPointsToOpponent(s);
                         g.waiting();
                     }

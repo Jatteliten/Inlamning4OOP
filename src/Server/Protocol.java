@@ -36,11 +36,12 @@ public class Protocol {
     }
 
     public void processUserInput(Object userInput, ObjectInputStream in,
-                                 ObjectOutputStream out, Player p, GameCoordinator gameCoordinator) throws IOException, ClassNotFoundException {
+                                 ObjectOutputStream out, Player p, GameCoordinator gameCoordinator)
+                                    throws IOException, ClassNotFoundException {
 
         Player secondPlayer = null;
 
-        if(gameCoordinator.getPlayers().size() != 1) {
+        if(gameCoordinator.getPlayers().size() % 2 == 0) {
             secondPlayer = checkForSecondPlayer(p, gameCoordinator);
         }
 
@@ -56,6 +57,16 @@ public class Protocol {
             }
 
         } else if (userInput instanceof Integer i) {
+            while(secondPlayer == null){
+                if(gameCoordinator.getPlayers().size() % 2 == 0) {
+                    secondPlayer = checkForSecondPlayer(p, gameCoordinator);
+                }
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             counter++;
             secondPlayer.getObjectOutputStream().writeObject(i);
             for (Question q : currentQuestions) {
