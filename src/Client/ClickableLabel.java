@@ -1,4 +1,4 @@
-package Client.images;
+package Client;
 
 import javax.swing.*;
 import java.awt.*;
