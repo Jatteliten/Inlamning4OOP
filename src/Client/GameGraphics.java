@@ -160,7 +160,8 @@ public class GameGraphics extends JFrame {
                     j.setIcon(wrongAnswerIcon);
                 }
                 revalidate();
-                repaint();            Timer timer = new Timer(1000, new ActionListener() {
+                repaint();
+                Timer timer = new Timer(1000, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent evt) {
                         counter++;
