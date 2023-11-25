@@ -21,7 +21,6 @@ public class GameGraphics extends JFrame {
     JPanel gamePieces = new JPanel();
     JPanel questionsPanel = new JPanel();
     JLabel question = new JLabel();
-    ImageIcon questionIcon = new ImageIcon("src/Client/images/Question2.png");
     ImageIcon answerIcon = new ImageIcon("src/Client/images/Answer.png");
     ArrayList<Question> questions = new ArrayList<>();
 
@@ -33,10 +32,7 @@ public class GameGraphics extends JFrame {
         setLocationRelativeTo(null);
         gamePieces.setLayout(new BorderLayout());
         add(gamePieces);
-        question.setFont(new Font("Arial", Font.BOLD, 15));
-        question.setOpaque(true);
-        question.setBackground(new Color(88, 168, 134));
-        question.setHorizontalAlignment(SwingConstants.CENTER);
+        initializeQuestionDisplay();
         questionsPanel.setOpaque(true);
         questionsPanel.setBackground(new Color(88, 168, 134));
         gamePieces.add(questionsPanel, BorderLayout.CENTER);
@@ -45,6 +41,19 @@ public class GameGraphics extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Sets attributes for panel that displays question above answers
+     */
+    private void initializeQuestionDisplay() {
+        question.setFont(new Font("Arial", Font.BOLD, 15));
+        question.setOpaque(true);
+        question.setBackground(new Color(88, 168, 134));
+        question.setHorizontalAlignment(SwingConstants.CENTER);
+    }
+
+    /**
+     * Sets title image
+     */
     private void setTitle(){
         ImageIcon image = new ImageIcon("src/Client/images/Title.png");
         title.setIcon(image);
@@ -54,6 +63,9 @@ public class GameGraphics extends JFrame {
         add(title, BorderLayout.NORTH);
     }
 
+    /**
+     * Displays categories and adds mouseListeners to those categories
+     */
     public void displayCategoryChoice(Category c1, Category c2, Category c3, ObjectOutputStream out) {
         questionsPanel.removeAll();
         questionsPanel.setLayout(new GridLayout(3, 1));
@@ -72,6 +84,10 @@ public class GameGraphics extends JFrame {
         repaint();
     }
 
+    /**
+     * Adds mouse listener to category label.
+     * Each category sends itself to the server.
+     */
     private void addCategoryMouseListener(ClickableLabel j, Category c, ObjectOutputStream out){
         j.addMouseListener(new MouseAdapter() {
             @Override
@@ -93,6 +109,11 @@ public class GameGraphics extends JFrame {
         return questions;
     }
 
+    /**
+     * Displays questions on the frame.
+     * Changes the question text displayed and adds four answer alternatives.
+     * First answer created is always correct. Shuffles the answers before displaying them.
+     */
     public void displayQuestions(ArrayList<Question> ql, ObjectOutputStream out)  {
         questionsPanel.removeAll();
         questionsPanel.setLayout(new GridLayout(2, 2));
@@ -121,6 +142,10 @@ public class GameGraphics extends JFrame {
         repaint();
     }
 
+    /**
+     * Adds mouse listener to answers.
+     * When the correct amount of questions has been answered, moves to waiting(), which displays results.
+     */
     private void addQuestionMouseListener(ArrayList<Question> ql, ObjectOutputStream out,
                                           JLabel j, ClickableLabel answerOne) {
         j.addMouseListener(new MouseAdapter() {
@@ -149,6 +174,9 @@ public class GameGraphics extends JFrame {
         });
     }
 
+    /**
+     * Displays results.
+     */
     public void waiting() {
         questionsPanel.removeAll();
         questionsPanel.setLayout(new GridLayout(totalPoints.size() + 1, 2));
@@ -175,13 +203,13 @@ public class GameGraphics extends JFrame {
         JLabel pointsLabel = new JLabel(labelText);
         pointsLabel.setFont(new Font("Arial", Font.BOLD, 26));
 
-        JPanel poinstPanel = new JPanel();
-        poinstPanel.setBackground(new Color(121,197,173));
-        poinstPanel.setLayout(new BorderLayout());
+        JPanel pointsPanel = new JPanel();
+        pointsPanel.setBackground(new Color(121,197,173));
+        pointsPanel.setLayout(new BorderLayout());
         pointsLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        poinstPanel.add(pointsLabel, BorderLayout.CENTER);
+        pointsPanel.add(pointsLabel, BorderLayout.CENTER);
 
-        return poinstPanel;
+        return pointsPanel;
 
 }
     private JPanel createScorePanel(int points, boolean isOpponent) {
