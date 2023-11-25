@@ -18,8 +18,11 @@ public class GameGraphics extends JFrame {
     Integer points = 0;
     int counter = 0;
     JLabel title = new JLabel();
+    JPanel gamePieces = new JPanel();
     JPanel questionsPanel = new JPanel();
-    ImageIcon icon = new ImageIcon("src/Client/images/Answer.png");
+    JLabel question = new JLabel();
+    ImageIcon questionIcon = new ImageIcon("src/Client/images/Question2.png");
+    ImageIcon answerIcon = new ImageIcon("src/Client/images/Answer.png");
     ArrayList<Question> questions = new ArrayList<>();
 
     GameGraphics(){
@@ -28,9 +31,15 @@ public class GameGraphics extends JFrame {
         setTitle("Quizkampen");
         setLayout(new BorderLayout());
         setLocationRelativeTo(null);
+        gamePieces.setLayout(new BorderLayout());
+        add(gamePieces);
+        question.setFont(new Font("Arial", Font.BOLD, 15));
+        question.setOpaque(true);
+        question.setBackground(new Color(88, 168, 134));
+        question.setHorizontalAlignment(SwingConstants.CENTER);
         questionsPanel.setOpaque(true);
         questionsPanel.setBackground(new Color(88, 168, 134));
-        add(questionsPanel);
+        gamePieces.add(questionsPanel, BorderLayout.CENTER);
         setTitle();
 
         setVisible(true);
@@ -49,11 +58,11 @@ public class GameGraphics extends JFrame {
         questionsPanel.removeAll();
         questionsPanel.setLayout(new GridLayout(3, 1));
 
-        ClickableLabel categoryOne = new ClickableLabel(c1.getCategoryText(), icon);
+        ClickableLabel categoryOne = new ClickableLabel(c1.getCategoryText(), answerIcon);
         addCategoryMouseListener(categoryOne, c1, out);
-        ClickableLabel categoryTwo = new ClickableLabel(c2.getCategoryText(), icon);
+        ClickableLabel categoryTwo = new ClickableLabel(c2.getCategoryText(), answerIcon);
         addCategoryMouseListener(categoryTwo, c2, out);
-        ClickableLabel categoryThree = new ClickableLabel(c3.getCategoryText(), icon);
+        ClickableLabel categoryThree = new ClickableLabel(c3.getCategoryText(), answerIcon);
         addCategoryMouseListener(categoryThree, c3, out);
 
         questionsPanel.add(categoryOne);
@@ -89,10 +98,13 @@ public class GameGraphics extends JFrame {
         questionsPanel.setLayout(new GridLayout(2, 2));
         ArrayList<ClickableLabel> answers = new ArrayList<>();
 
-        ClickableLabel answerOne = new ClickableLabel(ql.get(counter).getAnswer(0).getAnswerText(), icon);
+        question.setText(ql.get(counter).getQuestionText());
+        gamePieces.add(question, BorderLayout.NORTH);
+
+        ClickableLabel answerOne = new ClickableLabel(ql.get(counter).getAnswer(0).getAnswerText(), answerIcon);
         answers.add(answerOne);
         for(int i = 1; i < 4; i++){
-            ClickableLabel answer = new ClickableLabel(ql.get(counter).getAnswer(i).getAnswerText(), icon);
+            ClickableLabel answer = new ClickableLabel(ql.get(counter).getAnswer(i).getAnswerText(), answerIcon);
             answers.add(answer);
         }
 
@@ -121,6 +133,7 @@ public class GameGraphics extends JFrame {
                 if(counter == ql.size()){
                     counter = 0;
                     totalPoints.add(points);
+                    gamePieces.remove(question);
                     try {
                         waiting();
                         out.writeObject(points);
