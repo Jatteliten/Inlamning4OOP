@@ -21,7 +21,7 @@ public class GameGraphics extends JFrame {
     JPanel gamePieces = new JPanel();
     JPanel questionsPanel = new JPanel();
     JLabel question = new JLabel();
-    ImageIcon answerIcon = new ImageIcon("src/Client/images/Answer.png");
+    ImageIcon answerIcon = new ImageIcon("src/Client/images/Question.png");
     ArrayList<Question> questions = new ArrayList<>();
 
     GameGraphics(){
