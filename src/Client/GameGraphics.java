@@ -7,9 +7,10 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import Client.images.ClickableLabel;
 import Utilities.Category;
 import Utilities.Question;
-import Utilities.Answers;
 
 public class GameGraphics extends JFrame {
     ArrayList<Integer> totalPoints = new ArrayList<>();
@@ -44,27 +45,17 @@ public class GameGraphics extends JFrame {
         add(title, BorderLayout.NORTH);
     }
 
-    public void categoryChoice(Category c1, Category c2, Category c3, ObjectOutputStream out) {
-        ArrayList<JLabel> categories = new ArrayList<>();
+    public void displayCategoryChoice(Category c1, Category c2, Category c3, ObjectOutputStream out) {
         questionsPanel.removeAll();
         questionsPanel.setLayout(new GridLayout(3, 1));
 
-        JLabel categoryOne = new JLabel(c1.getCategoryText());
-        addMouseListener(categoryOne, c1, out);
-        JLabel categoryTwo = new JLabel(c2.getCategoryText());
-        addMouseListener(categoryTwo, c2, out);
-        JLabel categoryThree = new JLabel(c3.getCategoryText());
-        addMouseListener(categoryThree, c3, out);
+        ClickableLabel categoryOne = new ClickableLabel(c1.getCategoryText(), icon);
+        addCategoryMouseListener(categoryOne, c1, out);
+        ClickableLabel categoryTwo = new ClickableLabel(c2.getCategoryText(), icon);
+        addCategoryMouseListener(categoryTwo, c2, out);
+        ClickableLabel categoryThree = new ClickableLabel(c3.getCategoryText(), icon);
+        addCategoryMouseListener(categoryThree, c3, out);
 
-        categories.add(categoryOne);
-        categories.add(categoryTwo);
-        categories.add(categoryThree);
-
-        for(JLabel j: categories){
-            j.setIcon(icon);
-            j.setHorizontalTextPosition(SwingConstants.CENTER);
-            j.setHorizontalAlignment(SwingConstants.CENTER);
-        }
         questionsPanel.add(categoryOne);
         questionsPanel.add(categoryTwo);
         questionsPanel.add(categoryThree);
@@ -72,7 +63,7 @@ public class GameGraphics extends JFrame {
         repaint();
     }
 
-    private void addMouseListener(JLabel j, Category c, ObjectOutputStream out){
+    private void addCategoryMouseListener(ClickableLabel j, Category c, ObjectOutputStream out){
         j.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -93,58 +84,56 @@ public class GameGraphics extends JFrame {
         return questions;
     }
 
-    public void questions(ArrayList<Question> ql, ObjectOutputStream out)  {
+    public void displayQuestions(ArrayList<Question> ql, ObjectOutputStream out)  {
         questionsPanel.removeAll();
         questionsPanel.setLayout(new GridLayout(2, 2));
-        ArrayList<JLabel> answers = new ArrayList<>();
+        ArrayList<ClickableLabel> answers = new ArrayList<>();
 
-        JLabel answerOne = new JLabel(ql.get(counter).getAnswer(0).getAnswerText());
+        ClickableLabel answerOne = new ClickableLabel(ql.get(counter).getAnswer(0).getAnswerText(), icon);
         answers.add(answerOne);
         for(int i = 1; i < 4; i++){
-            JLabel answer = new JLabel(ql.get(counter).getAnswer(i).getAnswerText());
+            ClickableLabel answer = new ClickableLabel(ql.get(counter).getAnswer(i).getAnswerText(), icon);
             answers.add(answer);
         }
 
         for (JLabel j : answers) {
-            j.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    if (e.getSource() == answerOne) {
-                        points++;
-                    }
-                    counter++;
-                    if(counter == ql.size()){
-                        counter = 0;
-                        totalPoints.add(points);
-                        try {
-                            waiting();
-                            out.writeObject(points);
-                            points = 0;
-                            questions.clear();
-                            System.out.println("mina poäng");
-                            for (int i = 0; i < totalPoints.size(); i++) {
-                                System.out.println(totalPoints.get(i));
-                            }
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        }
-                    }else{
-                        questions(ql, out);
-                    }
-                }
-            });
+            addQuestionMouseListener(ql, out, j, answerOne);
         }
 
         Collections.shuffle(answers);
 
         for (JLabel j : answers) {
-            j.setIcon(icon);
-            j.setHorizontalTextPosition(SwingConstants.CENTER);
-            j.setHorizontalAlignment(SwingConstants.CENTER);
             questionsPanel.add(j);
         }
         revalidate();
         repaint();
+    }
+
+    private void addQuestionMouseListener(ArrayList<Question> ql, ObjectOutputStream out,
+                                          JLabel j, ClickableLabel answerOne) {
+        j.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getSource() == answerOne) {
+                    points++;
+                }
+                counter++;
+                if(counter == ql.size()){
+                    counter = 0;
+                    totalPoints.add(points);
+                    try {
+                        waiting();
+                        out.writeObject(points);
+                        points = 0;
+                        questions.clear();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }else{
+                    displayQuestions(ql, out);
+                }
+            }
+        });
     }
 
     public void waiting() {

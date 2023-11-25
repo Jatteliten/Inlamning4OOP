@@ -5,7 +5,6 @@ import java.io.*;
 import java.net.Socket;
 import Utilities.Category;
 import Utilities.Question;
-import Utilities.Answers;
 
 public class Client {
     int port = 12344;
@@ -32,11 +31,11 @@ public class Client {
                     } else if (obj instanceof Question q) {
                         g.addQuestions(q);
                         if (g.getQuestions().size() == numberOfQuestions) {
-                            g.questions(g.getQuestions(), out);
+                            g.displayQuestions(g.getQuestions(), out);
                         }
                     } else if (obj instanceof Category c) {
                         System.out.println("Fick kategorierna!");
-                        g.categoryChoice(c, (Category) in.readObject(), (Category) in.readObject(), out);
+                        g.displayCategoryChoice(c, (Category) in.readObject(), (Category) in.readObject(), out);
                     } else if (obj.equals(WELCOME)) {
                         numberOfQuestions = Integer.parseInt((String) in.readObject());
                         numberOfRounds = Integer.parseInt((String) in.readObject());
