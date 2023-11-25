@@ -26,7 +26,6 @@ public class Client {
                 try {
                     obj = in.readObject();
                     if (obj == null || obj.equals(END_GAME)) {
-                        System.out.println("EOFException fångad eller slutet av spelet. Avslutar loopen.");
                         break;
                     } else if (obj instanceof Question q) {
                         g.addQuestions(q);
