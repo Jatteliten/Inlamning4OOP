@@ -34,7 +34,6 @@ public class Client {
                             g.displayQuestions(g.getQuestions(), out);
                         }
                     } else if (obj instanceof Category c) {
-                        System.out.println("Fick kategorierna!");
                         g.displayCategoryChoice(c, (Category) in.readObject(), (Category) in.readObject(), out);
                     } else if (obj.equals(WELCOME)) {
                         numberOfQuestions = Integer.parseInt((String) in.readObject());
@@ -54,12 +53,11 @@ public class Client {
             while (true) {
                 try {
                     obj = in.readObject();
-                    if (obj == null || obj instanceof Integer s) {
+                    if (obj == null) {
                         System.out.println("EOFException fångad eller sista poängen. Avslutar loopen.");
                         break;
                     }
                     if (obj instanceof Integer s) {
-                        System.out.println("Sista poängen");
                         g.addPointsToOpponent(s);
                         g.waiting();
                     }
