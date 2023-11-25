@@ -21,6 +21,7 @@ public class Client {
              ObjectInputStream in = new ObjectInputStream(socketToServer.getInputStream())) {
 
             GameGraphics g = new GameGraphics();
+            g.setObjectOutputStream(out);
 
             while (true) {
                 try {

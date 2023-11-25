@@ -25,6 +25,11 @@ public class GameGraphics extends JFrame {
     ImageIcon correctAnswerIcon = new ImageIcon("src/Client/images/QuestionCorrectAnswer.png");
     ArrayList<Question> questions = new ArrayList<>();
     boolean timerActive = false;
+    private ObjectOutputStream out;
+
+    public void setObjectOutputStream(ObjectOutputStream out) {
+        this.out = out;
+    }
 
     GameGraphics(){
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -39,8 +44,40 @@ public class GameGraphics extends JFrame {
         questionsPanel.setBackground(new Color(88, 168, 134));
         gamePieces.add(questionsPanel, BorderLayout.CENTER);
         setTitle();
+        JButton giveUpButton = new JButton("Ge upp");
+        giveUpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!questions.isEmpty() && counter < questions.size()) {
+                    Question currentQuestion = questions.get(counter);
+                    int correctAnswerIndex = 0;
+
+                    String correctAnswer = currentQuestion.getAnswer(correctAnswerIndex).getAnswerText();
+
+
+                    JOptionPane.showMessageDialog(null, "Rätt svar är: " + correctAnswer);
+
+
+                    endRoundForPlayer(true, out);
+                }
+            }
+        });
+        gamePieces.add(giveUpButton, BorderLayout.SOUTH);
 
         setVisible(true);
+    }
+
+    public void endRoundForPlayer(boolean gaveUp, ObjectOutputStream out) {
+        if (gaveUp) {
+            try {
+                this.out.writeObject(0); // Skicka 0 poäng till motståndaren
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+
+        waiting();
     }
 
     /**
@@ -262,5 +299,6 @@ public class GameGraphics extends JFrame {
     public void addPointsToOpponent(int points){
         this.opponentPoints.add(points);
     }
+
 
 }

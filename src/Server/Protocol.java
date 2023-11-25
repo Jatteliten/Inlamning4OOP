@@ -85,9 +85,12 @@ public class Protocol {
                 }
 
             }
-
+        } else if (userInput instanceof Integer gaveUpPoints) {
+            // Spelaren gav upp, hantera detta här (t.ex. uppdatera motståndarens poäng)
+            gameCoordinator.playerScored(); // Du behöver implementera playerScored-metoden i GameCoordinator
         }
     }
+
 
     public Properties getProperties() {
         return properties;
