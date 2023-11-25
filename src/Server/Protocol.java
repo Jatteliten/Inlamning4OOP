@@ -40,7 +40,7 @@ public class Protocol {
 
         Player secondPlayer = null;
 
-        if(gameCoordinator.getPlayers().size() != 1) {
+        if(gameCoordinator.getPlayers().size() % 2 == 0) {
             secondPlayer = checkForSecondPlayer(p, gameCoordinator);
         }
 
@@ -56,6 +56,11 @@ public class Protocol {
             }
 
         } else if (userInput instanceof Integer i) {
+            while(secondPlayer == null){
+                if(gameCoordinator.getPlayers().size() % 2 == 0) {
+                    secondPlayer = checkForSecondPlayer(p, gameCoordinator);
+                }
+            }
             counter++;
             secondPlayer.getObjectOutputStream().writeObject(i);
             for (Question q : currentQuestions) {
