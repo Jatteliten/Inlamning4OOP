@@ -24,6 +24,7 @@ public class GameGraphics extends JFrame {
     ImageIcon wrongAnswerIcon = new ImageIcon("src/Client/images/QuestionWrongAnswer.png");
     ImageIcon correctAnswerIcon = new ImageIcon("src/Client/images/QuestionCorrectAnswer.png");
     ArrayList<Question> questions = new ArrayList<>();
+    boolean timerActive = false;
 
     GameGraphics(){
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -46,10 +47,12 @@ public class GameGraphics extends JFrame {
      * Sets attributes for panel that displays question above answers
      */
     private void initializeQuestionDisplay() {
+        question.setIcon(new ImageIcon("src/Client/images/QuestionTitle.png"));
         question.setFont(new Font("Arial", Font.BOLD, 15));
         question.setOpaque(true);
         question.setBackground(new Color(88, 168, 134));
         question.setHorizontalAlignment(SwingConstants.CENTER);
+        question.setHorizontalTextPosition(SwingConstants.CENTER);
     }
 
     /**
@@ -147,46 +150,53 @@ public class GameGraphics extends JFrame {
      * Adds mouse listener to answers.
      * When the correct amount of questions has been answered, moves to waiting(), which displays results.
      */
+
     private void addAnswerMouseListener(ArrayList<Question> ql, ObjectOutputStream out,
                                         ClickableLabel j, ClickableLabel answerOne) {
         j.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getSource() == answerOne) {
-                    points++;
-                    j.setIcon(correctAnswerIcon);
-                }else{
-                    j.setIcon(wrongAnswerIcon);
-                }
-                revalidate();
-                repaint();
-                Timer timer = new Timer(1000, new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent evt) {
-                        counter++;
-                        if (counter == ql.size()) {
-                            counter = 0;
-                            totalPoints.add(points);
+                if (!timerActive) {
+                    timerActive = true;
 
-                            gamePieces.remove(question);
-                            try {
-                                waiting();
-                                out.writeObject(points);
-                                points = 0;
-                                questions.clear();
-                            } catch (IOException ex) {
-                                throw new RuntimeException(ex);
-                            }
-                        } else {
-                            displayQuestions(ql, out);
-                        }
-
-                        ((Timer) evt.getSource()).stop();
+                    if (e.getSource() == answerOne) {
+                        points++;
+                        j.setIcon(correctAnswerIcon);
+                    } else {
+                        j.setIcon(wrongAnswerIcon);
                     }
-                });
+                    revalidate();
+                    repaint();
+                    Timer timer = new Timer(1000, new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent evt) {
+                            timerActive = false;
 
-                timer.setRepeats(false);
-                timer.start();
+                            counter++;
+                            if (counter == ql.size()) {
+                                counter = 0;
+                                totalPoints.add(points);
+
+                                gamePieces.remove(question);
+                                try {
+                                    waiting();
+                                    out.writeObject(points);
+                                    points = 0;
+                                    questions.clear();
+                                } catch (IOException ex) {
+                                    throw new RuntimeException(ex);
+                                }
+                            } else {
+                                displayQuestions(ql, out);
+                            }
+
+                            ((Timer) evt.getSource()).stop();
+                        }
+                    });
+
+                    timer.setRepeats(false);
+                    timer.start();
+                }
             }
         });
     }
