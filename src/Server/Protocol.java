@@ -60,6 +60,11 @@ public class Protocol {
                 if(gameCoordinator.getPlayers().size() % 2 == 0) {
                     secondPlayer = checkForSecondPlayer(p, gameCoordinator);
                 }
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
             counter++;
             secondPlayer.getObjectOutputStream().writeObject(i);
