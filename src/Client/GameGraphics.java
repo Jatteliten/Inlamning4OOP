@@ -22,6 +22,8 @@ public class GameGraphics extends JFrame {
     JPanel questionsPanel = new JPanel();
     JLabel question = new JLabel();
     ImageIcon answerIcon = new ImageIcon("src/Client/images/Question.png");
+    ImageIcon wrongAnswerIcon = new ImageIcon("src/Client/images/QuestionWrongAnswer.png");
+    ImageIcon correctAnswerIcon = new ImageIcon("src/Client/images/QuestionCorrectAnswer.png");
     ArrayList<Question> questions = new ArrayList<>();
 
     GameGraphics(){
@@ -129,7 +131,7 @@ public class GameGraphics extends JFrame {
             answers.add(answer);
         }
 
-        for (JLabel j : answers) {
+        for (ClickableLabel j : answers) {
             addAnswerMouseListener(ql, out, j, answerOne);
         }
 
@@ -147,29 +149,46 @@ public class GameGraphics extends JFrame {
      * When the correct amount of questions has been answered, moves to waiting(), which displays results.
      */
     private void addAnswerMouseListener(ArrayList<Question> ql, ObjectOutputStream out,
-                                        JLabel j, ClickableLabel answerOne) {
+                                        ClickableLabel j, ClickableLabel answerOne) {
         j.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getSource() == answerOne) {
                     points++;
-                }
-                counter++;
-                if(counter == ql.size()){
-                    counter = 0;
-                    totalPoints.add(points);
-                    gamePieces.remove(question);
-                    try {
-                        waiting();
-                        out.writeObject(points);
-                        points = 0;
-                        questions.clear();
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
+                    j.setIcon(correctAnswerIcon);
                 }else{
-                    displayQuestions(ql, out);
+                    j.setIcon(wrongAnswerIcon);
                 }
+                revalidate();
+                repaint();            Timer timer = new Timer(1000, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        counter++;
+                        if (counter == ql.size()) {
+                            counter = 0;
+                            totalPoints.add(points);
+
+                            gamePieces.remove(question);
+                            try {
+                                waiting();
+                                out.writeObject(points);
+                                points = 0;
+                                questions.clear();
+                            } catch (IOException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                        } else {
+                            displayQuestions(ql, out);
+                        }
+
+                        // Stop the timer after one execution
+                        ((Timer) evt.getSource()).stop();
+                    }
+                });
+
+                // Start the timer
+                timer.setRepeats(false);
+                timer.start();
             }
         });
     }
