@@ -36,14 +36,13 @@ public class Protocol {
     }
 
     public void processUserInput(Object userInput, ObjectInputStream in,
-                                 ObjectOutputStream out, Player p, GameCoordinator gameCoordinator) throws IOException, ClassNotFoundException, InterruptedException {
+                                 ObjectOutputStream out, Player p, GameCoordinator gameCoordinator)
+                                    throws IOException, ClassNotFoundException {
+
         Player secondPlayer = null;
 
-        if(gameCoordinator.getPlayers().size() != 1) {
+        if(gameCoordinator.getPlayers().size() % 2 == 0) {
             secondPlayer = checkForSecondPlayer(p, gameCoordinator);
-        }
-        if (gameCoordinator.isTwoPlayers){
-            notify();
         }
 
         if (userInput instanceof Category q) {
@@ -57,24 +56,19 @@ public class Protocol {
 
             }
 
-
         } else if (userInput instanceof Integer i) {
-            counter++;
-            synchronized (this) {
-                while (!gameCoordinator.isTwoPlayers) {
-                    try {
-                        wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace(); // Handle the exception appropriately
-                    }
+            while(secondPlayer == null){
+                if(gameCoordinator.getPlayers().size() % 2 == 0) {
+                    secondPlayer = checkForSecondPlayer(p, gameCoordinator);
+                }
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
             }
-            /*synchronized (this) {
-                secondPlayer = checkForSecondPlayer(p, gameCoordinator);
-                notify(); // Notify the waiting thread that secondPlayer is now available
-            }*/
+            counter++;
             secondPlayer.getObjectOutputStream().writeObject(i);
-            System.out.println(secondPlayer.getName() + "här är jag");
             for (Question q : currentQuestions) {
                 secondPlayer.getObjectOutputStream().writeObject(q);
             }
@@ -91,7 +85,6 @@ public class Protocol {
                 }
 
             }
-
 
         }
     }

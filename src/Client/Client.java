@@ -5,7 +5,6 @@ import java.io.*;
 import java.net.Socket;
 import Utilities.Category;
 import Utilities.Question;
-import Utilities.Answers;
 
 public class Client {
     int port = 12344;
@@ -23,33 +22,52 @@ public class Client {
 
             GameGraphics g = new GameGraphics();
 
-            while ((obj = in.readObject()) != null) {
-                if (obj.equals(END_GAME)) {
-                    break;
-                } else if (obj instanceof Question q) {
-                    g.addQuestions(q);
-                    if(g.getQuestions().size() == numberOfQuestions) {
-                        g.questions(g.getQuestions(), out);
+            while (true) {
+                try {
+                    obj = in.readObject();
+                    if (obj == null || obj.equals(END_GAME)) {
+                        break;
+                    } else if (obj instanceof Question q) {
+                        g.addQuestions(q);
+                        if (g.getQuestions().size() == numberOfQuestions) {
+                            g.displayQuestions(g.getQuestions(), out);
+                        }
+                    } else if (obj instanceof Category c) {
+                        g.displayCategoryChoice(c, (Category) in.readObject(), (Category) in.readObject(), out);
+                    } else if (obj.equals(WELCOME)) {
+                        numberOfQuestions = Integer.parseInt((String) in.readObject());
+                        numberOfRounds = Integer.parseInt((String) in.readObject());
+                        out.writeObject(JOptionPane.showInputDialog(null, "What is your name?"));
+                    } else if (obj instanceof Integer s) {
+                        g.addPointsToOpponent(s);
                     }
-                } else if (obj instanceof Category c) {
-                    System.out.println("fick categorierna!");
-                    g.categoryChoice(c, (Category) in.readObject(), (Category) in.readObject(), out);
-                } else if (obj.equals(WELCOME)) {
-                    numberOfQuestions = Integer.parseInt((String) in.readObject());
-                    numberOfRounds = Integer.parseInt((String) in.readObject());
-                    out.writeObject(JOptionPane.showInputDialog(null, "What is your name?"));
-                } else if (obj instanceof Integer s) {
-                    g.addPointsToOpponent(s);
+                } catch (EOFException e) {
+                    System.out.println("EOFException fångad. Avslutar loopen.");
+                    break;
+                } catch (IOException | ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
                 }
             }
-            while ((obj = in.readObject()) != null) {
-                if (obj instanceof Integer s) {
-                    System.out.println("sista poängen");
-                    g.addPointsToOpponent(s);
-                    g.waiting();
+
+            while (true) {
+                try {
+                    obj = in.readObject();
+                    if (obj == null) {
+                        System.out.println("EOFException fångad eller sista poängen. Avslutar loopen.");
+                        break;
+                    }
+                    if (obj instanceof Integer s) {
+                        g.addPointsToOpponent(s);
+                        g.waiting();
+                    }
+                } catch (EOFException e) {
+                    System.out.println("EOFException fångad. Avslutar loopen.");
+                    break;
+                } catch (IOException | ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
                 }
             }
-        } catch (IOException | ClassNotFoundException ex) {
+        } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
     }
