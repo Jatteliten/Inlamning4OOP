@@ -258,6 +258,62 @@ public class GameGraphics extends JFrame {
 
         return scorePanel;
     }
+    public void finalResult() {
+        questionsPanel.removeAll();
+        questionsPanel.setLayout(new GridLayout(totalPoints.size() + 3, 3));
+
+        JPanel playerNamePanel = createPointsPanel("ditt namn");
+        JPanel winLoseOrTiePanel = createPointsPanel(winnerOrLoser());
+        JPanel opponentNamePanel = createPointsPanel("motståndares namn");
+        questionsPanel.add(playerNamePanel);
+        questionsPanel.add(winLoseOrTiePanel);
+        questionsPanel.add(opponentNamePanel);
+
+        JPanel yourPointsPanel = createPointsPanel("Dina poäng");
+        JPanel TotalPointsPanel = createPointsPanel(totalPlayerPoints(totalPoints) + " - " + totalPlayerPoints(opponentPoints));
+        JPanel opponentPointsPanel = createPointsPanel("Motståndarens poäng");
+
+        questionsPanel.add(yourPointsPanel);
+        questionsPanel.add(TotalPointsPanel);
+        questionsPanel.add(opponentPointsPanel);
+
+        for (int i = 0; i < totalPoints.size(); i++) {
+            JPanel yourPointsPanelItem = createScorePanel(i, false);
+            JPanel opponentPointsPanelItem = createScorePanel(i, true);
+            JPanel gameRoundPanel = createPointsPanel("Runda " + (i + 1));
+            questionsPanel.add(yourPointsPanelItem);
+            questionsPanel.add(gameRoundPanel);
+            questionsPanel.add(opponentPointsPanelItem);
+        }
+        JButton playAgainButton = new JButton("Spela igen?");
+        JPanel emptyPanel = createPointsPanel("");
+        JButton exitButton = new JButton("Avsluta");
+
+        questionsPanel.add(playAgainButton);
+        questionsPanel.add(emptyPanel);
+        questionsPanel.add(exitButton);
+
+        revalidate();
+        repaint();
+    }
+
+    public String winnerOrLoser(){
+        if (totalPlayerPoints(totalPoints) > totalPlayerPoints(opponentPoints)){
+            return "Du vann!";
+        } else if (totalPlayerPoints(totalPoints) == totalPlayerPoints(opponentPoints)) {
+            return "Oavgjort";
+        }
+        return "Du förlorade";
+    }
+
+
+    public int totalPlayerPoints(ArrayList<Integer> playerPoints){
+        int totalPoints = 0;
+        for (int i = 0; i < playerPoints.size(); i++) {
+           totalPoints = totalPoints + playerPoints.get(i);
+        }
+        return totalPoints;
+    }
 
     public void addPointsToOpponent(int points){
         this.opponentPoints.add(points);

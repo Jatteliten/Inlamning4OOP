@@ -50,7 +50,11 @@ public class Client {
             }
 
             while (true) {
+                System.out.println("kom hit");
                 try {
+                    if (g.opponentPoints.size() == numberOfRounds){
+                        g.finalResult();
+                    }
                     obj = in.readObject();
                     if (obj == null) {
                         System.out.println("EOFException fångad eller sista poängen. Avslutar loopen.");
@@ -58,7 +62,7 @@ public class Client {
                     }
                     if (obj instanceof Integer s) {
                         g.addPointsToOpponent(s);
-                        g.waiting();
+                        g.finalResult();
                     }
                 } catch (EOFException e) {
                     System.out.println("EOFException fångad. Avslutar loopen.");
@@ -70,6 +74,10 @@ public class Client {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    public int getNumberOfRounds() {
+        return numberOfRounds;
     }
 
     public static void main(String[] args) {

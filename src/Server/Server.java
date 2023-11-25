@@ -48,7 +48,7 @@ public class Server extends Thread {
                p.processUserInput(in.readObject(), in, out, player, gameCoordinator);
            }
 
-        } catch (IOException | ClassNotFoundException | InterruptedException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
    }
