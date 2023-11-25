@@ -182,12 +182,10 @@ public class GameGraphics extends JFrame {
                             displayQuestions(ql, out);
                         }
 
-                        // Stop the timer after one execution
                         ((Timer) evt.getSource()).stop();
                     }
                 });
 
-                // Start the timer
                 timer.setRepeats(false);
                 timer.start();
             }
