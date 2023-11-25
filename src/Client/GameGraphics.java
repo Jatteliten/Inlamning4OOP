@@ -130,7 +130,7 @@ public class GameGraphics extends JFrame {
         }
 
         for (JLabel j : answers) {
-            addQuestionMouseListener(ql, out, j, answerOne);
+            addAnswerMouseListener(ql, out, j, answerOne);
         }
 
         Collections.shuffle(answers);
@@ -146,8 +146,8 @@ public class GameGraphics extends JFrame {
      * Adds mouse listener to answers.
      * When the correct amount of questions has been answered, moves to waiting(), which displays results.
      */
-    private void addQuestionMouseListener(ArrayList<Question> ql, ObjectOutputStream out,
-                                          JLabel j, ClickableLabel answerOne) {
+    private void addAnswerMouseListener(ArrayList<Question> ql, ObjectOutputStream out,
+                                        JLabel j, ClickableLabel answerOne) {
         j.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
