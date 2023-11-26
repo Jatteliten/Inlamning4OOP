@@ -1,6 +1,6 @@
 package Server;
 
-import Utilities.Avatar;
+import Utilities.AvatarProperties;
 
 import java.io.ObjectOutputStream;
 
@@ -9,9 +9,9 @@ public class Player {
     int score = 0;
     ObjectOutputStream objectOutputStream;
     boolean picksCurrentCategory;
-    Avatar avatar;
+    AvatarProperties avatar;
 
-    public Player(ObjectOutputStream os, Avatar avatar, String name){
+    public Player(ObjectOutputStream os, AvatarProperties avatar, String name){
         this.objectOutputStream = os;
         this.avatar = avatar;
         this.name = name;
@@ -48,11 +48,7 @@ public class Player {
         this.objectOutputStream = objectOutputStream;
     }
 
-    public Avatar getAvatar() {
+    public AvatarProperties getAvatar() {
         return avatar;
-    }
-
-    public void setAvatar(Avatar avatar) {
-        this.avatar = avatar;
     }
 }

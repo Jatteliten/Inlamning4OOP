@@ -3,7 +3,7 @@ package Client;
 import java.io.*;
 import java.net.Socket;
 
-import Utilities.Avatar;
+import Utilities.AvatarProperties;
 import Utilities.Category;
 import Utilities.Question;
 
@@ -41,9 +41,8 @@ public class Client {
                         g.nameAndAvatarEntry(out);
                     } else if (obj instanceof Integer s) {
                         g.addPointsToOpponent(s);
-                    } else if(obj instanceof Avatar a){
-                        a.shrinkImage();
-                        g.setOpponentAvatar(a);
+                    } else if(obj instanceof AvatarProperties a){
+                        initializeOpponentAvatar(a, g);
                     }
                 } catch (EOFException e) {
                     System.out.println("EOFException fångad. Avslutar loopen.");
@@ -74,6 +73,18 @@ public class Client {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    private static void initializeOpponentAvatar(AvatarProperties a, GameGraphics g) {
+        Avatar opponentAvatar = new Avatar();
+        opponentAvatar.setCat(a.getCat());
+        opponentAvatar.setAccessory(a.getAccessory());
+        opponentAvatar.setEyes(a.getEyes());
+        opponentAvatar.setPattern(a.getPattern());
+        opponentAvatar.setMouth(a.getMouth());
+        opponentAvatar.setHeadWear(a.getHeadWear());
+        opponentAvatar.shrinkImage();
+        g.setOpponentAvatar(opponentAvatar);
     }
 
     public static void main(String[] args) {

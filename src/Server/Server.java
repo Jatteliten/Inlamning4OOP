@@ -1,7 +1,7 @@
 package Server;
 
 import Utilities.Answers;
-import Utilities.Avatar;
+import Utilities.AvatarProperties;
 import Utilities.Category;
 import Utilities.Question;
 
@@ -34,7 +34,7 @@ public class Server extends Thread {
            out.writeObject(WELCOME);
            out.writeObject(p.getProperties().getProperty("numberOfQuestions","2"));
            out.writeObject(p.getProperties().getProperty("numberOfRounds", "3"));
-           Player player = new Player(out, (Avatar) in.readObject(), (String) in.readObject());
+           Player player = new Player(out, (AvatarProperties) in.readObject(), (String) in.readObject());
            gameCoordinator.addPlayer(player);
            gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
            if(!gameCoordinator.isTwoPlayers){

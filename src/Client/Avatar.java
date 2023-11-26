@@ -1,4 +1,4 @@
-package Utilities;
+package Client;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,7 +8,7 @@ public class Avatar extends JLayeredPane{
     int eyes = 0;
     int mouth = 0;
     int pattern = 0;
-    int accessory= 0;
+    int accessory = 0;
     int headWear = 0;
     JLabel catLabel = new JLabel(new ImageIcon("src/Client/Layers/Cat/0.png"));
     JLabel eyesLabel = new JLabel(new ImageIcon("src/Client/Layers/Eyes or eyewear/0.png"));
@@ -38,6 +38,54 @@ public class Avatar extends JLayeredPane{
         add(patternLabel);
         add(accessoryLabel);
         add(headWearLabel);
+    }
+
+    public int getCat() {
+        return cat;
+    }
+
+    public int getEyes() {
+        return eyes;
+    }
+
+    public int getMouth() {
+        return mouth;
+    }
+
+    public int getPattern() {
+        return pattern;
+    }
+
+    public int getAccessory() {
+        return accessory;
+    }
+
+    public int getHeadWear() {
+        return headWear;
+    }
+
+    public void setCat(int cat) {
+        this.cat = cat;
+    }
+
+    public void setEyes(int eyes) {
+        this.eyes = eyes;
+    }
+
+    public void setMouth(int mouth) {
+        this.mouth = mouth;
+    }
+
+    public void setPattern(int pattern) {
+        this.pattern = pattern;
+    }
+
+    public void setAccessory(int accessory) {
+        this.accessory = accessory;
+    }
+
+    public void setHeadWear(int headWear) {
+        this.headWear = headWear;
     }
 
     public void changeCat(){

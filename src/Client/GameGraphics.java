@@ -8,7 +8,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import Utilities.Avatar;
+import Utilities.AvatarProperties;
 import Utilities.Category;
 import Utilities.Question;
 
@@ -110,7 +110,9 @@ public class GameGraphics extends JFrame {
         });
         nameEntry.addActionListener(e -> {
             try {
-                out.writeObject(avatar);
+                AvatarProperties avatarProperties = new AvatarProperties(avatar.getCat(), avatar.getEyes(), avatar.getMouth(),
+                        avatar.getPattern(),avatar.getAccessory(), avatar.getHeadWear());
+                out.writeObject(avatarProperties);
                 out.writeObject(nameEntry.getText());
                 questionsPanel.removeAll();
                 questionsPanel.add(waitingForOpponent);
