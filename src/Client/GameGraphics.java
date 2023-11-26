@@ -85,6 +85,16 @@ public class GameGraphics extends JFrame {
 
         JPanel buttons = implementButtons();
 
+        JTextField nameEntry = implementTextField(out, waitingForOpponent);
+
+        questionsPanel.add(avatar);
+        questionsPanel.add(buttons);
+        questionsPanel.add(nameEntry);
+        revalidate();
+        repaint();
+    }
+
+    private JTextField implementTextField(ObjectOutputStream out, JLabel waitingForOpponent) {
         JTextField nameEntry = new JTextField("Enter name", 15);
         nameEntry.setFont(new Font("Arial", Font.BOLD, 20));
         nameEntry.setForeground(Color.GRAY);
@@ -111,12 +121,7 @@ public class GameGraphics extends JFrame {
                 throw new RuntimeException(ex);
             }
         });
-
-        questionsPanel.add(avatar);
-        questionsPanel.add(buttons);
-        questionsPanel.add(nameEntry);
-        revalidate();
-        repaint();
+        return nameEntry;
     }
 
     private JPanel implementButtons() {
