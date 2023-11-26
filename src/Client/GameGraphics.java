@@ -83,27 +83,7 @@ public class GameGraphics extends JFrame {
         JLabel waitingForOpponent = new JLabel("Waiting...");
         waitingForOpponent.setFont(new Font("Arial", Font.BOLD, 40));
 
-        JPanel buttons = new JPanel();
-        buttons.setLayout(new GridLayout(7, 1));
-        buttons.setBackground(new Color(88, 168, 134));
-        JButton changeCat = new JButton("Cat color");
-        changeCat.addActionListener(e -> avatar.changeCat());
-        JButton changeEyes = new JButton("Eyes");
-        changeEyes.addActionListener(e -> avatar.changeEyes());
-        JButton changeMouth = new JButton("Mouth");
-        changeMouth.addActionListener(e -> avatar.changeMouth());
-        JButton changePattern = new JButton("Pattern");
-        changePattern.addActionListener(e -> avatar.changePattern());
-        JButton changeAccessory = new JButton("Accessory");
-        changeAccessory.addActionListener(e -> avatar.changeAccessory());
-        JButton changeHeadWear = new JButton("Hat");
-        changeHeadWear.addActionListener(e -> avatar.changeHeadWear());
-        buttons.add(changeCat);
-        buttons.add(changeEyes);
-        buttons.add(changeMouth);
-        buttons.add(changePattern);
-        buttons.add(changeAccessory);
-        buttons.add(changeHeadWear);
+        JPanel buttons = implementButtons();
 
         JTextField nameEntry = new JTextField("Enter name", 15);
         nameEntry.setFont(new Font("Arial", Font.BOLD, 20));
@@ -137,6 +117,31 @@ public class GameGraphics extends JFrame {
         questionsPanel.add(nameEntry);
         revalidate();
         repaint();
+    }
+
+    private JPanel implementButtons() {
+        JPanel buttons = new JPanel();
+        buttons.setLayout(new GridLayout(7, 1));
+        buttons.setBackground(new Color(88, 168, 134));
+        JButton changeCat = new JButton("Cat color");
+        changeCat.addActionListener(e -> avatar.changeCat());
+        JButton changeEyes = new JButton("Eyes");
+        changeEyes.addActionListener(e -> avatar.changeEyes());
+        JButton changeMouth = new JButton("Mouth");
+        changeMouth.addActionListener(e -> avatar.changeMouth());
+        JButton changePattern = new JButton("Pattern");
+        changePattern.addActionListener(e -> avatar.changePattern());
+        JButton changeAccessory = new JButton("Accessory");
+        changeAccessory.addActionListener(e -> avatar.changeAccessory());
+        JButton changeHeadWear = new JButton("Hat");
+        changeHeadWear.addActionListener(e -> avatar.changeHeadWear());
+        buttons.add(changeCat);
+        buttons.add(changeEyes);
+        buttons.add(changeMouth);
+        buttons.add(changePattern);
+        buttons.add(changeAccessory);
+        buttons.add(changeHeadWear);
+        return buttons;
     }
 
     /**
