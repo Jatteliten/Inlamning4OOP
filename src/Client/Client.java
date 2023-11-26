@@ -37,7 +37,7 @@ public class Client {
                     } else if (obj.equals(WELCOME)) {
                         numberOfQuestions = Integer.parseInt((String) in.readObject());
                         numberOfRounds = Integer.parseInt((String) in.readObject());
-                        out.writeObject(JOptionPane.showInputDialog(null, "What is your name?"));
+                        g.nameAndAvatarEntry(out);
                     } else if (obj instanceof Integer s) {
                         g.addPointsToOpponent(s);
                     }

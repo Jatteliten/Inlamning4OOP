@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import Utilities.Avatar;
 import Utilities.Category;
 import Utilities.Question;
 
@@ -65,6 +66,62 @@ public class GameGraphics extends JFrame {
         title.setOpaque(true);
         title.setBackground(new Color(121, 197, 173));
         add(title, BorderLayout.NORTH);
+    }
+
+    /**
+     * asks for name and avatar
+     */
+    public void nameAndAvatarEntry(ObjectOutputStream out){
+        questionsPanel.setLayout(new GridBagLayout());
+
+        Avatar avatarDisplay = new Avatar();
+
+        JPanel buttons = new JPanel();
+        buttons.setLayout(new GridLayout(7, 1));
+        buttons.setBackground(new Color(88, 168, 134));
+        JButton changeCat = new JButton("Cat color");
+        changeCat.addActionListener(e -> avatarDisplay.changeCat());
+        JButton changeEyes = new JButton("Eyes");
+        changeEyes.addActionListener(e -> avatarDisplay.changeEyes());
+        JButton changeMouth = new JButton("Mouth");
+        changeMouth.addActionListener(e -> avatarDisplay.changeMouth());
+        JButton changePattern = new JButton("Pattern");
+        changePattern.addActionListener(e -> avatarDisplay.changePattern());
+        JButton changeAccessory = new JButton("Accessory");
+        changeAccessory.addActionListener(e -> avatarDisplay.changeAccessory());
+        JButton changeHeadWear = new JButton("Hat");
+        changeHeadWear.addActionListener(e -> avatarDisplay.changeHeadWear());
+        buttons.add(changeCat);
+        buttons.add(changeEyes);
+        buttons.add(changeMouth);
+        buttons.add(changePattern);
+        buttons.add(changeAccessory);
+        buttons.add(changeHeadWear);
+
+        JTextField nameEntry = new JTextField("Enter name", 15);
+        nameEntry.setFont(new Font("Arial", Font.BOLD, 20));
+        nameEntry.setForeground(Color.GRAY);
+        nameEntry.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                nameEntry.setText("");
+                nameEntry.setForeground(Color.BLACK);
+            }
+        });
+        nameEntry.addActionListener(e -> {
+            try {
+                out.writeObject(avatarDisplay);
+                out.writeObject(nameEntry.getText());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        questionsPanel.add(avatarDisplay);
+        questionsPanel.add(buttons);
+        questionsPanel.add(nameEntry);
+        revalidate();
+        repaint();
     }
 
     /**
