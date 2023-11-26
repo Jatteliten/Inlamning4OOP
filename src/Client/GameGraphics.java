@@ -28,6 +28,7 @@ public class GameGraphics extends JFrame {
     ImageIcon correctAnswerIcon = new ImageIcon("src/Client/images/QuestionCorrectAnswer.png");
     ArrayList<Question> questions = new ArrayList<>();
     boolean timerActive = false;
+    boolean textInputIsEmpty = true;
 
     GameGraphics(){
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -110,8 +111,11 @@ public class GameGraphics extends JFrame {
         nameEntry.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
-                nameEntry.setText("");
-                nameEntry.setForeground(Color.BLACK);
+                if(textInputIsEmpty) {
+                    nameEntry.setText("");
+                    nameEntry.setForeground(Color.BLACK);
+                    textInputIsEmpty = false;
+                }
             }
         });
         nameEntry.addActionListener(e -> {
