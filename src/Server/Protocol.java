@@ -19,6 +19,7 @@ public class Protocol {
     ArrayList<Question> currentQuestions = new ArrayList<>();
     Properties properties;
     int counter = 0;
+    boolean avatarSent = false;
 
     static final String END_GAME = "END_GAME_FROM_SERVER_XXX";
 
@@ -69,6 +70,10 @@ public class Protocol {
             }
             counter++;
             secondPlayer.getObjectOutputStream().writeObject(i);
+            if(!avatarSent) {
+                secondPlayer.getObjectOutputStream().writeObject(p.getAvatar());
+                avatarSent = true;
+            }
             for (Question q : currentQuestions) {
                 secondPlayer.getObjectOutputStream().writeObject(q);
             }

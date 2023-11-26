@@ -47,4 +47,12 @@ public class Player {
     public void setObjectOutputStream(ObjectOutputStream objectOutputStream) {
         this.objectOutputStream = objectOutputStream;
     }
+
+    public Avatar getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(Avatar avatar) {
+        this.avatar = avatar;
+    }
 }

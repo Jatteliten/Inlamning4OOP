@@ -1,8 +1,9 @@
 package Client;
 
-import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
+
+import Utilities.Avatar;
 import Utilities.Category;
 import Utilities.Question;
 
@@ -40,6 +41,9 @@ public class Client {
                         g.nameAndAvatarEntry(out);
                     } else if (obj instanceof Integer s) {
                         g.addPointsToOpponent(s);
+                    } else if(obj instanceof Avatar a){
+                        a.shrinkImage();
+                        g.setOpponentAvatar(a);
                     }
                 } catch (EOFException e) {
                     System.out.println("EOFException fångad. Avslutar loopen.");

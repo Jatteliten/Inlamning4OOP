@@ -13,6 +13,8 @@ import Utilities.Category;
 import Utilities.Question;
 
 public class GameGraphics extends JFrame {
+    Avatar avatar;
+    Avatar opponentAvatar = new Avatar();
     ArrayList<Integer> totalPoints = new ArrayList<>();
     ArrayList<Integer> opponentPoints = new ArrayList<>();
     Integer points = 0;
@@ -74,23 +76,27 @@ public class GameGraphics extends JFrame {
     public void nameAndAvatarEntry(ObjectOutputStream out){
         questionsPanel.setLayout(new GridBagLayout());
 
-        Avatar avatarDisplay = new Avatar();
+        avatar = new Avatar();
+        opponentAvatar.shrinkImage();
+
+        JLabel waitingForOpponent = new JLabel("Waiting...");
+        waitingForOpponent.setFont(new Font("Arial", Font.BOLD, 40));
 
         JPanel buttons = new JPanel();
         buttons.setLayout(new GridLayout(7, 1));
         buttons.setBackground(new Color(88, 168, 134));
         JButton changeCat = new JButton("Cat color");
-        changeCat.addActionListener(e -> avatarDisplay.changeCat());
+        changeCat.addActionListener(e -> avatar.changeCat());
         JButton changeEyes = new JButton("Eyes");
-        changeEyes.addActionListener(e -> avatarDisplay.changeEyes());
+        changeEyes.addActionListener(e -> avatar.changeEyes());
         JButton changeMouth = new JButton("Mouth");
-        changeMouth.addActionListener(e -> avatarDisplay.changeMouth());
+        changeMouth.addActionListener(e -> avatar.changeMouth());
         JButton changePattern = new JButton("Pattern");
-        changePattern.addActionListener(e -> avatarDisplay.changePattern());
+        changePattern.addActionListener(e -> avatar.changePattern());
         JButton changeAccessory = new JButton("Accessory");
-        changeAccessory.addActionListener(e -> avatarDisplay.changeAccessory());
+        changeAccessory.addActionListener(e -> avatar.changeAccessory());
         JButton changeHeadWear = new JButton("Hat");
-        changeHeadWear.addActionListener(e -> avatarDisplay.changeHeadWear());
+        changeHeadWear.addActionListener(e -> avatar.changeHeadWear());
         buttons.add(changeCat);
         buttons.add(changeEyes);
         buttons.add(changeMouth);
@@ -110,14 +116,19 @@ public class GameGraphics extends JFrame {
         });
         nameEntry.addActionListener(e -> {
             try {
-                out.writeObject(avatarDisplay);
+                out.writeObject(avatar);
                 out.writeObject(nameEntry.getText());
+                questionsPanel.removeAll();
+                questionsPanel.add(waitingForOpponent);
+                avatar.shrinkImage();
+                revalidate();
+                repaint();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         });
 
-        questionsPanel.add(avatarDisplay);
+        questionsPanel.add(avatar);
         questionsPanel.add(buttons);
         questionsPanel.add(nameEntry);
         revalidate();
@@ -263,13 +274,16 @@ public class GameGraphics extends JFrame {
      */
     public void waiting() {
         questionsPanel.removeAll();
-        questionsPanel.setLayout(new GridLayout(totalPoints.size() + 1, 2));
+        questionsPanel.setLayout(new GridLayout(totalPoints.size() + 2, 2));
 
         JPanel yourPointsPanel = createPointsPanel("Dina poäng");
         JPanel opponentPointsPanel = createPointsPanel("Motståndarens poäng");
 
         questionsPanel.add(yourPointsPanel);
         questionsPanel.add(opponentPointsPanel);
+        setBackGroundForAvatars();
+        questionsPanel.add(avatar);
+        questionsPanel.add(opponentAvatar);
 
         for (int i = 0; i < totalPoints.size(); i++) {
             JPanel yourPointsPanelItem = createScorePanel(i, false);
@@ -281,6 +295,13 @@ public class GameGraphics extends JFrame {
 
         revalidate();
         repaint();
+    }
+
+    private void setBackGroundForAvatars() {
+        avatar.setOpaque(true);
+        avatar.setBackground(new Color(121, 197, 173));
+        opponentAvatar.setOpaque(true);
+        opponentAvatar.setBackground(new Color(121, 197, 173));
     }
 
     private JPanel createPointsPanel (String labelText){
@@ -320,4 +341,7 @@ public class GameGraphics extends JFrame {
         this.opponentPoints.add(points);
     }
 
+    public void setOpponentAvatar(Avatar opponentAvatar) {
+        this.opponentAvatar = opponentAvatar;
+    }
 }
