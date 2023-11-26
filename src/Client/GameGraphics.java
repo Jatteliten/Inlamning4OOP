@@ -258,7 +258,7 @@ public class GameGraphics extends JFrame {
 
         return scorePanel;
     }
-    public void finalResult() {
+    public void finalResult(ObjectOutputStream out) {
         questionsPanel.removeAll();
         questionsPanel.setLayout(new GridLayout(totalPoints.size() + 3, 3));
 
@@ -319,4 +319,8 @@ public class GameGraphics extends JFrame {
         this.opponentPoints.add(points);
     }
 
+    public void clearAllPointArrays(){
+        this.totalPoints.clear();
+        this.opponentPoints.clear();
+    }
 }

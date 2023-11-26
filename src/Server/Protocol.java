@@ -21,6 +21,7 @@ public class Protocol {
     int counter = 0;
 
     static final String END_GAME = "END_GAME_FROM_SERVER_XXX";
+    static final String NEW_GAME = "NEW_GAME_FROM_SERVER_XXX";
 
     public Protocol(ArrayList<Category> categories){
         this.properties = new Properties();
@@ -86,6 +87,20 @@ public class Protocol {
 
             }
 
+        } else if (userInput.equals(NEW_GAME)) {
+            if (!gameCoordinator.playNewGame()){
+                secondPlayer.getObjectOutputStream().writeObject(NEW_GAME);
+                System.out.println("skickade new game");
+                gameCoordinator.setPlayNewGame(true);
+                counter = 0;
+            }
+            p.getObjectOutputStream().writeObject("NEW_GAME_START");
+            Collections.shuffle(categories);
+            for(int i = 0; i < 3; i++){
+                out.writeObject(categories.get(i));
+                gameCoordinator.setPlayNewGame(false);
+                System.out.println("skickade kategorier");
+            }
         }
     }
 
