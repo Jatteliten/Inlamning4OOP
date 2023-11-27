@@ -7,6 +7,8 @@ import Utilities.AvatarProperties;
 import Utilities.Category;
 import Utilities.Question;
 
+import javax.swing.*;
+
 public class Client {
     private static final int PORT = 12344;
     private static final String IP = "127.0.0.1";
