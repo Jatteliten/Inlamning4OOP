@@ -42,7 +42,7 @@ public class Protocol {
 
         Player secondPlayer = null;
 
-        if(gameCoordinator.getPlayers().size() % 2 == 0) {
+        if (gameCoordinator.getPlayers().size() % 2 == 0) {
             secondPlayer = checkForSecondPlayer(p, gameCoordinator);
         }
 
@@ -53,13 +53,14 @@ public class Protocol {
                 currentQuestions.add(q.getQuestionsList().get(i));
                 if (p.isPicksCurrentCategory()) {
                     p.getObjectOutputStream().writeObject(q.getQuestionsList().get(i));
+                    System.out.println("skickade frågor");
                 }
 
             }
 
         } else if (userInput instanceof Integer i) {
-            while(secondPlayer == null){
-                if(gameCoordinator.getPlayers().size() % 2 == 0) {
+            while (secondPlayer == null) {
+                if (gameCoordinator.getPlayers().size() % 2 == 0) {
                     secondPlayer = checkForSecondPlayer(p, gameCoordinator);
                 }
                 try {
@@ -72,34 +73,38 @@ public class Protocol {
             secondPlayer.getObjectOutputStream().writeObject(i);
             for (Question q : currentQuestions) {
                 secondPlayer.getObjectOutputStream().writeObject(q);
+                System.out.println("skickade frågor");
             }
             currentQuestions.clear();
 
             p.setPicksCurrentCategory(!p.isPicksCurrentCategory());
             p.addScore(i);
-            if (counter == numberOfRounds){
-                    p.getObjectOutputStream().writeObject(END_GAME);
-                } else if (p.isPicksCurrentCategory()) {
+            if (counter == numberOfRounds) {
+                p.getObjectOutputStream().writeObject(END_GAME);
+            } else if (p.isPicksCurrentCategory()) {
                 Collections.shuffle(categories);
                 for (int j = 0; j < 3; j++) {
                     out.writeObject(categories.get(j));
+                    System.out.println("skickade kategori");
                 }
 
             }
 
         } else if (userInput.equals(NEW_GAME)) {
-            if (!gameCoordinator.playNewGame()){
+            if (gameCoordinator.playNewGame()) {
+                out.writeObject("NEW_GAME_START");
+                secondPlayer.getObjectOutputStream().writeObject("NEW_GAME_START");
+                gameCoordinator.setPlayNewGame(false);
+                Collections.shuffle(categories);
+                for (int i = 0; i < 3; i++) {
+                    out.writeObject(categories.get(i));
+                    System.out.println("skickade kategorier");
+                }
+            } else if (!gameCoordinator.playNewGame()) {
                 secondPlayer.getObjectOutputStream().writeObject(NEW_GAME);
                 System.out.println("skickade new game");
                 gameCoordinator.setPlayNewGame(true);
                 counter = 0;
-            }
-            p.getObjectOutputStream().writeObject("NEW_GAME_START");
-            Collections.shuffle(categories);
-            for(int i = 0; i < 3; i++){
-                out.writeObject(categories.get(i));
-                gameCoordinator.setPlayNewGame(false);
-                System.out.println("skickade kategorier");
             }
         }
     }

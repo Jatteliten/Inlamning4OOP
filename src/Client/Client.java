@@ -23,9 +23,12 @@ public class Client {
 
             GameGraphics g = new GameGraphics();
             while (true) {
+                System.out.println("tillbaka i starten");
                 while (true) {
                     try {
+                        System.out.println("obj nu " + obj);
                         obj = in.readObject();
+                        System.out.println("obj sen " + obj);
                         if (obj == null || obj.equals(END_GAME)) {
                             break;
                         } else if (obj instanceof Question q) {
@@ -55,12 +58,9 @@ public class Client {
                     out.writeObject(NEW_GAME);
                     System.out.println("skickade new game");
                     g.clearAllPointArrays();
-                    obj = 0;
-
                 }
                 while (true) {
                     try {
-
                     obj = in.readObject();
                         if (obj == null) {
                             System.out.println("EOFException fångad eller sista poängen. Avslutar loopen.");
@@ -75,21 +75,20 @@ public class Client {
                             System.out.println("tog emot new game");
                             int result = JOptionPane.showConfirmDialog(
                                     null,
-                                    "Do you want to proceed?",
-                                    "Confirmation",
+                                    "Motståndare frågar om du vill spela igen?",
+                                    "Spela igen?",
                                     JOptionPane.YES_NO_OPTION
                             );
                             if (result == JOptionPane.YES_OPTION) {
                                 System.out.println("User clicked Yes");
+                                out.writeObject(NEW_GAME);
                                 g.clearAllPointArrays();
-                                obj = 0;
-                                g.waiting();
-                                break;
                             } else {
-                                System.out.println("User clicked No or closed the dialog");
+                                System.out.println("User clicked No");
                             }
                         }
                         if (obj.equals("NEW_GAME_START")){
+                            System.out.println("tog emot NEW_GAME_START");
                             g.waiting();
                             break;
                         }
