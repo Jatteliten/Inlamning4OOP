@@ -20,38 +20,40 @@ public class Client {
     int numberOfQuestions = 0;
     int numberOfRounds = 0;
 
-    public Client() {
+    public Client() throws IOException {
         try (Socket socketToServer = new Socket(IP, PORT);
              ObjectOutputStream out = new ObjectOutputStream(socketToServer.getOutputStream());
              ObjectInputStream in = new ObjectInputStream(socketToServer.getInputStream())) {
 
             GameGraphics g = new GameGraphics();
             while (true) {
-                try {
-                    obj = in.readObject();
-                    if (obj == null || obj.equals(END_GAME)) {
-                        break;
-                    } else if (obj instanceof Question q) {
-                        g.addQuestions(q);
-                        if (g.getQuestions().size() == numberOfQuestions) {
-                            g.displayQuestions(g.getQuestions(), out);
+                while (true) {
+                    try {
+                        obj = in.readObject();
+                        if (obj == null || obj.equals(END_GAME)) {
+                            break;
+                        } else if (obj instanceof Question q) {
+                            g.addQuestions(q);
+                            if (g.getQuestions().size() == numberOfQuestions) {
+                                g.displayQuestions(g.getQuestions(), out);
+                            }
+                        } else if (obj instanceof Category c) {
+                            g.displayCategoryChoice(c, (Category) in.readObject(), (Category) in.readObject(), out);
+                        } else if (obj.equals(WELCOME)) {
+                            numberOfQuestions = Integer.parseInt((String) in.readObject());
+                            numberOfRounds = Integer.parseInt((String) in.readObject());
+                            g.nameAndAvatarEntry(out);
+                        } else if (obj instanceof Integer s) {
+                            g.addPointsToOpponent(s);
+                        } else if (obj instanceof AvatarProperties a) {
+                            initializeOpponentAvatar(a, g);
                         }
-                    } else if (obj instanceof Category c) {
-                        g.displayCategoryChoice(c, (Category) in.readObject(), (Category) in.readObject(), out);
-                    } else if (obj.equals(WELCOME)) {
-                        numberOfQuestions = Integer.parseInt((String) in.readObject());
-                        numberOfRounds = Integer.parseInt((String) in.readObject());
-                        g.nameAndAvatarEntry(out);
-                    } else if (obj instanceof Integer s) {
-                        g.addPointsToOpponent(s);
-                    } else if(obj instanceof AvatarProperties a){
-                        initializeOpponentAvatar(a, g);
+                    } catch (EOFException e) {
+                        System.out.println("EOFException fångad. Avslutar loopen.");
+                        break;
+                    } catch (IOException | ClassNotFoundException ex) {
+                        throw new RuntimeException(ex);
                     }
-                } catch (EOFException e) {
-                    System.out.println("EOFException fångad. Avslutar loopen.");
-                    break;
-                } catch (IOException | ClassNotFoundException ex) {
-                    throw new RuntimeException(ex);
                 }
                 if (g.opponentPoints.size() == numberOfRounds) {
                     System.out.println("är här");
@@ -62,7 +64,7 @@ public class Client {
                 }
                 while (true) {
                     try {
-                    obj = in.readObject();
+                        obj = in.readObject();
                         if (obj == null) {
                             System.out.println("EOFException fångad eller sista poängen. Avslutar loopen.");
                             break;
@@ -87,7 +89,7 @@ public class Client {
                                 System.out.println("User clicked No");
                             }
                         }
-                        if (obj.equals(NEW_GAME_START)){
+                        if (obj.equals(NEW_GAME_START)) {
                             System.out.println("tog emot NEW_GAME_START");
                             g.waiting();
                             break;
@@ -100,10 +102,8 @@ public class Client {
                     }
                 }
             }
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
+            }
         }
-    }
 
     private static void initializeOpponentAvatar(AvatarProperties avatarProperties, GameGraphics g) {
         Avatar opponentAvatar = new Avatar();
@@ -121,7 +121,7 @@ public class Client {
         return numberOfRounds;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         new Client();
     }
 }
