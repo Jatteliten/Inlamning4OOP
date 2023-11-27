@@ -5,7 +5,6 @@ import Utilities.Question;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,7 +49,7 @@ public class Protocol {
             currentQuestions = new ArrayList<>();
             for (int i = 0; i < numberOfQuestions; i++) {
                 currentQuestions.add(q.getQuestionsList().get(i));
-                if (p.isPicksCurrentCategory()) {
+                if (p.isPickingCurrentCategory()) {
                     p.getObjectOutputStream().writeObject(q.getQuestionsList().get(i));
                 }
 
@@ -78,11 +77,11 @@ public class Protocol {
             }
             currentQuestions.clear();
 
-            p.setPicksCurrentCategory(!p.isPicksCurrentCategory());
+            p.setPicksCurrentCategory(!p.isPickingCurrentCategory());
             p.addScore(i);
             if (counter == numberOfRounds){
                     p.getObjectOutputStream().writeObject(END_GAME);
-                } else if (p.isPicksCurrentCategory()) {
+                } else if (p.isPickingCurrentCategory()) {
                 Collections.shuffle(categories);
                 for (int j = 0; j < 3; j++) {
                     out.writeObject(categories.get(j));

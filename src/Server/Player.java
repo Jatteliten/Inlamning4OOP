@@ -38,7 +38,7 @@ public class Player {
     public void setName(String name) {
         this.name = name;
     }
-    public boolean isPicksCurrentCategory() {
+    public boolean isPickingCurrentCategory() {
         return picksCurrentCategory;
     }
     public void setPicksCurrentCategory(boolean picksCurrentCategory) {

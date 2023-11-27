@@ -8,16 +8,16 @@ import Utilities.Category;
 import Utilities.Question;
 
 public class Client {
-    static final int port = 12344;
-    static final String ip = "127.0.0.1";
-    static final String WELCOME = "START_GAME_FROM_CLIENT_XXX";
-    static final String END_GAME = "END_GAME_FROM_SERVER_XXX";
+    private static final int PORT = 12344;
+    private static final String IP = "127.0.0.1";
+    private static final String WELCOME = "START_GAME_FROM_CLIENT_XXX";
+    private static final String END_GAME = "END_GAME_FROM_SERVER_XXX";
     Object obj;
     int numberOfQuestions;
     int numberOfRounds;
 
     public Client() {
-        try (Socket socketToServer = new Socket(ip, port);
+        try (Socket socketToServer = new Socket(IP, PORT);
              ObjectOutputStream out = new ObjectOutputStream(socketToServer.getOutputStream());
              ObjectInputStream in = new ObjectInputStream(socketToServer.getInputStream())) {
 
