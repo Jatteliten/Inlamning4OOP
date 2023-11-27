@@ -8,13 +8,13 @@ import Utilities.Category;
 import Utilities.Question;
 
 public class Client {
-    int port = 12344;
-    String ip = "127.0.0.1";
-    Object obj;
+    static final int port = 12344;
+    static final String ip = "127.0.0.1";
     static final String WELCOME = "START_GAME_FROM_CLIENT_XXX";
     static final String END_GAME = "END_GAME_FROM_SERVER_XXX";
-    int numberOfQuestions = 0;
-    int numberOfRounds = 0;
+    Object obj;
+    int numberOfQuestions;
+    int numberOfRounds;
 
     public Client() {
         try (Socket socketToServer = new Socket(ip, port);
@@ -75,14 +75,14 @@ public class Client {
         }
     }
 
-    private static void initializeOpponentAvatar(AvatarProperties a, GameGraphics g) {
+    private static void initializeOpponentAvatar(AvatarProperties avatarProperties, GameGraphics g) {
         Avatar opponentAvatar = new Avatar();
-        opponentAvatar.setCat(a.getCat());
-        opponentAvatar.setAccessory(a.getAccessory());
-        opponentAvatar.setEyes(a.getEyes());
-        opponentAvatar.setPattern(a.getPattern());
-        opponentAvatar.setMouth(a.getMouth());
-        opponentAvatar.setHeadWear(a.getHeadWear());
+        opponentAvatar.setCat(avatarProperties.cat());
+        opponentAvatar.setAccessory(avatarProperties.accessory());
+        opponentAvatar.setEyes(avatarProperties.eyes());
+        opponentAvatar.setPattern(avatarProperties.pattern());
+        opponentAvatar.setMouth(avatarProperties.mouth());
+        opponentAvatar.setHeadWear(avatarProperties.headWear());
         opponentAvatar.shrinkImage();
         g.setOpponentAvatar(opponentAvatar);
     }

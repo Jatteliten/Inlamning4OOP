@@ -36,8 +36,7 @@ public class Protocol {
         this.categories = categories;
     }
 
-    public void processUserInput(Object userInput, ObjectInputStream in,
-                                 ObjectOutputStream out, Player p, GameCoordinator gameCoordinator)
+    public void processUserInput(Object userInput, ObjectOutputStream out, Player p, GameCoordinator gameCoordinator)
                                     throws IOException, ClassNotFoundException {
 
         Player secondPlayer = null;

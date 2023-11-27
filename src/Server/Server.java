@@ -46,7 +46,7 @@ public class Server extends Thread {
            }
 
            while (true){
-               p.processUserInput(in.readObject(), in, out, player, gameCoordinator);
+               p.processUserInput(in.readObject(), out, player, gameCoordinator);
            }
 
         } catch (IOException | ClassNotFoundException e) {

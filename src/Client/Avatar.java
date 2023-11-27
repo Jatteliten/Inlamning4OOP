@@ -4,34 +4,37 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Avatar extends JLayeredPane{
-    int cat = 0;
-    int eyes = 0;
-    int mouth = 0;
-    int pattern = 0;
-    int accessory = 0;
-    int headWear = 0;
-    JLabel catLabel = new JLabel(new ImageIcon("src/Client/Layers/Cat/0.png"));
-    JLabel eyesLabel = new JLabel(new ImageIcon("src/Client/Layers/Eyes or eyewear/0.png"));
-    JLabel mouthLabel = new JLabel(new ImageIcon("src/Client/Layers/Mouth/0.png"));
-    JLabel patternLabel = new JLabel(new ImageIcon("src/Client/Layers/Pattern/0.png"));
-    JLabel accessoryLabel = new JLabel(new ImageIcon("src/Client/Layers/Accessories/0.png"));
-    JLabel headWearLabel = new JLabel(new ImageIcon("src/Client/Layers/Headwear/0.png"));
+    private final static int IMAGE_SIZE = 300;
+    private int cat = 0;
+    private int eyes = 0;
+    private int mouth = 0;
+    private int pattern = 0;
+    private int accessory = 0;
+    private int headWear = 0;
+    private final JLabel catLabel = new JLabel(new ImageIcon("src/Client/Layers/Cat/0.png"));
+    private final JLabel eyesLabel = new JLabel(new ImageIcon("src/Client/Layers/Eyes or eyewear/0.png"));
+    private final JLabel mouthLabel = new JLabel(new ImageIcon("src/Client/Layers/Mouth/0.png"));
+    private final JLabel patternLabel = new JLabel(new ImageIcon("src/Client/Layers/Pattern/0.png"));
+    private final JLabel accessoryLabel = new JLabel(new ImageIcon("src/Client/Layers/Accessories/0.png"));
+    private final JLabel headWearLabel = new JLabel(new ImageIcon("src/Client/Layers/Headwear/0.png"));
 
     public Avatar(){
-        setPreferredSize(new Dimension(300,300));
-        catLabel.setBounds(0, 0, 300, 300);
-        accessoryLabel.setBounds(0, 0, 300, 300);
-        eyesLabel.setBounds(0, 0, 300, 300);
-        headWearLabel.setBounds(0, 0, 300, 300);
-        mouthLabel.setBounds(0, 0, 300, 300);
-        patternLabel.setBounds(0, 0, 300, 300);
+        setPreferredSize(new Dimension(IMAGE_SIZE,IMAGE_SIZE));
 
-        setLayer(catLabel, 1);
-        setLayer(accessoryLabel, 2);
-        setLayer(eyesLabel, 2);
-        setLayer(headWearLabel, 2);
-        setLayer(mouthLabel, 2);
-        setLayer(patternLabel, 2);
+        catLabel.setBounds(0, 0, IMAGE_SIZE, IMAGE_SIZE);
+        accessoryLabel.setBounds(0, 0, IMAGE_SIZE, IMAGE_SIZE);
+        eyesLabel.setBounds(0, 0, IMAGE_SIZE, IMAGE_SIZE);
+        headWearLabel.setBounds(0, 0, IMAGE_SIZE, IMAGE_SIZE);
+        mouthLabel.setBounds(0, 0, IMAGE_SIZE, IMAGE_SIZE);
+        patternLabel.setBounds(0, 0, IMAGE_SIZE, IMAGE_SIZE);
+
+        setLayer(catLabel, 0);
+        setLayer(accessoryLabel, 1);
+        setLayer(eyesLabel, 1);
+        setLayer(headWearLabel, 1);
+        setLayer(mouthLabel, 1);
+        setLayer(patternLabel, 1);
+
         add(catLabel);
         add(eyesLabel);
         add(mouthLabel);
@@ -125,19 +128,19 @@ public class Avatar extends JLayeredPane{
     }
 
     public void shrinkImage() {
-        setPreferredSize(new Dimension(100,100));
-        resizeImageForLabel(catLabel, "src/Client/Layers/Cat/" + cat % 8 + ".png");
-        resizeImageForLabel(accessoryLabel, "src/Client/Layers/Accessories/" + accessory % 30 + ".png");
-        resizeImageForLabel(eyesLabel, "src/Client/Layers/Eyes or eyeWear/" + eyes % 26 + ".png");
-        resizeImageForLabel(headWearLabel, "src/Client/Layers/Headwear/" + headWear % 27 + ".png");
-        resizeImageForLabel(mouthLabel, "src/Client/Layers/Mouth/" + mouth % 5 + ".png");
-        resizeImageForLabel(patternLabel, "src/Client/Layers/Pattern/" + pattern % 4 + ".png");
+        setPreferredSize(new Dimension(IMAGE_SIZE / 3,IMAGE_SIZE / 3));
+        resizeLabelImage(catLabel, "src/Client/Layers/Cat/" + cat % 8 + ".png");
+        resizeLabelImage(accessoryLabel, "src/Client/Layers/Accessories/" + accessory % 30 + ".png");
+        resizeLabelImage(eyesLabel, "src/Client/Layers/Eyes or eyeWear/" + eyes % 26 + ".png");
+        resizeLabelImage(headWearLabel, "src/Client/Layers/Headwear/" + headWear % 27 + ".png");
+        resizeLabelImage(mouthLabel, "src/Client/Layers/Mouth/" + mouth % 5 + ".png");
+        resizeLabelImage(patternLabel, "src/Client/Layers/Pattern/" + pattern % 4 + ".png");
         revalidateAndRepaint();
     }
-    private void resizeImageForLabel(JLabel label, String imagePath) {
+    private void resizeLabelImage(JLabel label, String imagePath) {
         ImageIcon icon = new ImageIcon(imagePath);
-        Image image = icon.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
-        label.setBounds(125,0, 100, 100);
+        Image image = icon.getImage().getScaledInstance(IMAGE_SIZE / 3, IMAGE_SIZE / 3, Image.SCALE_DEFAULT);
+        label.setBounds(125,0, IMAGE_SIZE / 3, IMAGE_SIZE / 3);
         label.setIcon(new ImageIcon(image));
     }
 
