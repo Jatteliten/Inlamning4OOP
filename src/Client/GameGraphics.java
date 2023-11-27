@@ -389,7 +389,7 @@ public class GameGraphics extends JFrame {
         });
         JPanel emptyPanel = createPointsPanel("");
         JButton exitButton = new JButton("Avsluta");
-
+        exitButton.addActionListener(e -> System.exit(0));
         questionsPanel.add(playAgainButton);
         questionsPanel.add(emptyPanel);
         questionsPanel.add(exitButton);
