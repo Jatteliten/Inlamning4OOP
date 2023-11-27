@@ -95,6 +95,34 @@ public class GameGraphics extends JFrame {
         revalidate();
         repaint();
     }
+    public void loginOrRegister(ObjectOutputStream out){
+        questionsPanel.setLayout(new GridBagLayout());
+        JLabel usernameLabel = new JLabel("Användarnamn:");
+        JTextField usernameTextField = new JTextField("användarnamn", 15);
+        JLabel passwordLabel = new JLabel("Lösenord:");
+        JTextField passwordTextField = new JTextField("Lösenord", 15);
+        JButton loginButton = new JButton("Logga in");
+        loginButton.addActionListener(e ->
+        {
+            try {
+                out.writeObject(usernameTextField.getText()+passwordTextField.getText());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        JButton registerButton = new JButton("Registrera");
+        registerButton.addActionListener(e ->
+                nameAndAvatarEntry(out));
+
+        questionsPanel.add(usernameLabel);
+        questionsPanel.add(usernameTextField);
+        questionsPanel.add(passwordLabel);
+        questionsPanel.add(passwordTextField);
+        questionsPanel.add(loginButton);
+        questionsPanel.add(registerButton);
+        revalidate();
+        repaint();
+    }
 
     private JTextField implementTextField(ObjectOutputStream out, JLabel waitingForOpponent) {
         JTextField nameEntry = new JTextField("Enter name", 15);

@@ -42,7 +42,8 @@ public class Client {
                         } else if (obj.equals(WELCOME)) {
                             numberOfQuestions = Integer.parseInt((String) in.readObject());
                             numberOfRounds = Integer.parseInt((String) in.readObject());
-                            g.nameAndAvatarEntry(out);
+                            //g.nameAndAvatarEntry(out);
+                            g.loginOrRegister(out);
                         } else if (obj instanceof Integer s) {
                             g.addPointsToOpponent(s);
                         } else if (obj instanceof AvatarProperties a) {
