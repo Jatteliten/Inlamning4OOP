@@ -29,6 +29,8 @@ public class GameGraphics extends JFrame {
     ArrayList<Question> questions = new ArrayList<>();
     boolean timerActive = false;
     boolean textInputIsEmpty = true;
+    Color lighterGreen = new Color(121, 197, 173);
+    Color darkerGreen = new Color(88, 168, 134);
 
     GameGraphics(){
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -40,7 +42,7 @@ public class GameGraphics extends JFrame {
         add(gamePieces);
         initializeQuestionDisplay();
         questionsPanel.setOpaque(true);
-        questionsPanel.setBackground(new Color(88, 168, 134));
+        questionsPanel.setBackground(darkerGreen);
         gamePieces.add(questionsPanel, BorderLayout.CENTER);
         setTitle();
 
@@ -54,7 +56,7 @@ public class GameGraphics extends JFrame {
         question.setIcon(new ImageIcon("src/Client/images/QuestionTitle.png"));
         question.setFont(new Font("Arial", Font.BOLD, 15));
         question.setOpaque(true);
-        question.setBackground(new Color(88, 168, 134));
+        question.setBackground(darkerGreen);
         question.setHorizontalAlignment(SwingConstants.CENTER);
         question.setHorizontalTextPosition(SwingConstants.CENTER);
     }
@@ -67,7 +69,7 @@ public class GameGraphics extends JFrame {
         title.setIcon(image);
         title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setOpaque(true);
-        title.setBackground(new Color(121, 197, 173));
+        title.setBackground(lighterGreen);
         add(title, BorderLayout.NORTH);
     }
 
@@ -129,7 +131,7 @@ public class GameGraphics extends JFrame {
     private JPanel implementButtons() {
         JPanel buttons = new JPanel();
         buttons.setLayout(new GridLayout(7, 1));
-        buttons.setBackground(new Color(88, 168, 134));
+        buttons.setBackground(darkerGreen);
         JButton changeCat = new JButton("Cat color");
         changeCat.addActionListener(e -> avatar.changeCat());
         JButton changeEyes = new JButton("Eyes");
@@ -315,9 +317,9 @@ public class GameGraphics extends JFrame {
 
     private void setBackGroundForAvatars() {
         avatar.setOpaque(true);
-        avatar.setBackground(new Color(121, 197, 173));
+        avatar.setBackground(lighterGreen);
         opponentAvatar.setOpaque(true);
-        opponentAvatar.setBackground(new Color(121, 197, 173));
+        opponentAvatar.setBackground(lighterGreen);
     }
 
     private JPanel createPointsPanel (String labelText){
@@ -325,7 +327,7 @@ public class GameGraphics extends JFrame {
         pointsLabel.setFont(new Font("Arial", Font.BOLD, 26));
 
         JPanel pointsPanel = new JPanel();
-        pointsPanel.setBackground(new Color(121,197,173));
+        pointsPanel.setBackground(lighterGreen);
         pointsPanel.setLayout(new BorderLayout());
         pointsLabel.setHorizontalAlignment(SwingConstants.CENTER);
         pointsPanel.add(pointsLabel, BorderLayout.CENTER);
@@ -335,7 +337,7 @@ public class GameGraphics extends JFrame {
     }
     private JPanel createScorePanel(int points, boolean isOpponent) {
         JPanel scorePanel = new JPanel();
-        scorePanel.setBackground(new Color(121, 197, 173));
+        scorePanel.setBackground(lighterGreen);
         scorePanel.setLayout(new BorderLayout());
 
         JLabel scoreLabel;
