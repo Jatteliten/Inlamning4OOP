@@ -79,12 +79,12 @@ public class Client {
                             );
                             if (result == JOptionPane.YES_OPTION) {
                                 out.writeObject(NEW_GAME_REQUEST);
-                                g.clearAllPointArrays();
                             } else {
                                 System.out.println("User clicked No");
                             }
                         }
                         if (obj.equals(NEW_GAME_START)) {
+                            g.clearAllPointArrays();
                             g.waiting();
                             break;
                         }
