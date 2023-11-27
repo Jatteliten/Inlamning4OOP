@@ -95,6 +95,7 @@ public class Protocol {
                 out.writeObject("NEW_GAME_START");
                 secondPlayer.getObjectOutputStream().writeObject("NEW_GAME_START");
                 gameCoordinator.setPlayNewGame(false);
+                p.setPicksCurrentCategory(!p.isPicksCurrentCategory());
                 Collections.shuffle(categories);
                 for (int i = 0; i < 3; i++) {
                     out.writeObject(categories.get(i));
@@ -104,7 +105,7 @@ public class Protocol {
                 secondPlayer.getObjectOutputStream().writeObject(NEW_GAME);
                 System.out.println("skickade new game");
                 gameCoordinator.setPlayNewGame(true);
-                counter = 0;
+                counter = 1;
             }
         }
     }
