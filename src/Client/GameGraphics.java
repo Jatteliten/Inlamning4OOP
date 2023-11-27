@@ -181,6 +181,7 @@ public class GameGraphics extends JFrame {
                                 try {
                                     waiting();
                                     out.writeObject(points);
+                                    System.out.println("skicka poäng");
                                     points = 0;
                                     questions.clear();
                                 } catch (IOException ex) {

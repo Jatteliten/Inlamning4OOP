@@ -12,7 +12,8 @@ public class Client {
     Object obj;
     static final String WELCOME = "START_GAME_FROM_CLIENT_XXX";
     static final String END_GAME = "END_GAME_FROM_SERVER_XXX";
-    static final String NEW_GAME = "NEW_GAME_FROM_SERVER_XXX";
+    static final String NEW_GAME_REQUEST = "NEW_GAME_REQUEST_FROM_SERVER_XXX";
+    static final String NEW_GAME_START = "NEW_GAME_START_FROM_SERVER_XXX";
     int numberOfQuestions = 0;
     int numberOfRounds = 0;
 
@@ -55,7 +56,7 @@ public class Client {
                 if (g.opponentPoints.size() == numberOfRounds) {
                     System.out.println("är här");
                     g.finalResult(out);
-                    out.writeObject(NEW_GAME);
+                    out.writeObject(NEW_GAME_REQUEST);
                     System.out.println("skickade new game");
                     g.clearAllPointArrays();
                 }
@@ -71,7 +72,7 @@ public class Client {
                             g.addPointsToOpponent(s);
                             g.finalResult(out);
                         }
-                        if (obj.equals(NEW_GAME)) {
+                        if (obj.equals(NEW_GAME_REQUEST)) {
                             System.out.println("tog emot new game");
                             int result = JOptionPane.showConfirmDialog(
                                     null,
@@ -80,14 +81,13 @@ public class Client {
                                     JOptionPane.YES_NO_OPTION
                             );
                             if (result == JOptionPane.YES_OPTION) {
-                                System.out.println("User clicked Yes");
-                                out.writeObject(NEW_GAME);
+                                out.writeObject(NEW_GAME_REQUEST);
                                 g.clearAllPointArrays();
                             } else {
                                 System.out.println("User clicked No");
                             }
                         }
-                        if (obj.equals("NEW_GAME_START")){
+                        if (obj.equals(NEW_GAME_START)){
                             System.out.println("tog emot NEW_GAME_START");
                             g.waiting();
                             break;

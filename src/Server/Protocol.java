@@ -21,7 +21,8 @@ public class Protocol {
     int counter = 0;
 
     static final String END_GAME = "END_GAME_FROM_SERVER_XXX";
-    static final String NEW_GAME = "NEW_GAME_FROM_SERVER_XXX";
+    static final String NEW_GAME_REQUEST = "NEW_GAME_REQUEST_FROM_SERVER_XXX";
+    static final String NEW_GAME_START = "NEW_GAME_START_FROM_SERVER_XXX";
 
     public Protocol(ArrayList<Category> categories){
         this.properties = new Properties();
@@ -59,6 +60,7 @@ public class Protocol {
             }
 
         } else if (userInput instanceof Integer i) {
+            System.out.println("fick int");
             while (secondPlayer == null) {
                 if (gameCoordinator.getPlayers().size() % 2 == 0) {
                     secondPlayer = checkForSecondPlayer(p, gameCoordinator);
@@ -70,6 +72,7 @@ public class Protocol {
                 }
             }
             counter++;
+            System.out.println(counter);
             secondPlayer.getObjectOutputStream().writeObject(i);
             for (Question q : currentQuestions) {
                 secondPlayer.getObjectOutputStream().writeObject(q);
@@ -80,6 +83,7 @@ public class Protocol {
             p.setPicksCurrentCategory(!p.isPicksCurrentCategory());
             p.addScore(i);
             if (counter == numberOfRounds) {
+                System.out.println("skicka end game");
                 p.getObjectOutputStream().writeObject(END_GAME);
             } else if (p.isPicksCurrentCategory()) {
                 Collections.shuffle(categories);
@@ -90,22 +94,23 @@ public class Protocol {
 
             }
 
-        } else if (userInput.equals(NEW_GAME)) {
+        } else if (userInput.equals(NEW_GAME_REQUEST)) {
+            counter = 0;
             if (gameCoordinator.playNewGame()) {
-                out.writeObject("NEW_GAME_START");
-                secondPlayer.getObjectOutputStream().writeObject("NEW_GAME_START");
+                secondPlayer.setScore(0);
+                p.setScore(0);
+                out.writeObject(NEW_GAME_START);
+                secondPlayer.getObjectOutputStream().writeObject(NEW_GAME_START);
                 gameCoordinator.setPlayNewGame(false);
-                p.setPicksCurrentCategory(!p.isPicksCurrentCategory());
+                p.setPicksCurrentCategory(true);
+                secondPlayer.setPicksCurrentCategory(false);
                 Collections.shuffle(categories);
                 for (int i = 0; i < 3; i++) {
                     out.writeObject(categories.get(i));
-                    System.out.println("skickade kategorier");
                 }
             } else if (!gameCoordinator.playNewGame()) {
-                secondPlayer.getObjectOutputStream().writeObject(NEW_GAME);
-                System.out.println("skickade new game");
+                secondPlayer.getObjectOutputStream().writeObject(NEW_GAME_REQUEST);
                 gameCoordinator.setPlayNewGame(true);
-                counter = 1;
             }
         }
     }
