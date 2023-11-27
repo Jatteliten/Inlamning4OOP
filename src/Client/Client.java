@@ -56,10 +56,7 @@ public class Client {
                     }
                 }
                 if (g.opponentPoints.size() == numberOfRounds) {
-                    System.out.println("är här");
                     g.finalResult(out);
-                    out.writeObject(NEW_GAME_REQUEST);
-                    System.out.println("skickade new game");
                     g.clearAllPointArrays();
                 }
                 while (true) {
@@ -70,12 +67,10 @@ public class Client {
                             break;
                         }
                         if (obj instanceof Integer s) {
-                            System.out.println("är här 2");
                             g.addPointsToOpponent(s);
                             g.finalResult(out);
                         }
                         if (obj.equals(NEW_GAME_REQUEST)) {
-                            System.out.println("tog emot new game");
                             int result = JOptionPane.showConfirmDialog(
                                     null,
                                     "Motståndare frågar om du vill spela igen?",
@@ -90,7 +85,6 @@ public class Client {
                             }
                         }
                         if (obj.equals(NEW_GAME_START)) {
-                            System.out.println("tog emot NEW_GAME_START");
                             g.waiting();
                             break;
                         }

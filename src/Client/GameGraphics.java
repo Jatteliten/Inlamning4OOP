@@ -358,12 +358,10 @@ public class GameGraphics extends JFrame {
         questionsPanel.removeAll();
         questionsPanel.setLayout(new GridLayout(totalPoints.size() + 3, 3));
 
-        JPanel playerNamePanel = createPointsPanel("ditt namn");
         JPanel winLoseOrTiePanel = createPointsPanel(winnerOrLoser());
-        JPanel opponentNamePanel = createPointsPanel("motståndares namn");
-        questionsPanel.add(playerNamePanel);
+        questionsPanel.add(avatar);
         questionsPanel.add(winLoseOrTiePanel);
-        questionsPanel.add(opponentNamePanel);
+        questionsPanel.add(opponentAvatar);
 
         JPanel yourPointsPanel = createPointsPanel("Dina poäng");
         JPanel TotalPointsPanel = createPointsPanel(totalPlayerPoints(totalPoints) + " - " + totalPlayerPoints(opponentPoints));
@@ -382,6 +380,13 @@ public class GameGraphics extends JFrame {
             questionsPanel.add(opponentPointsPanelItem);
         }
         JButton playAgainButton = new JButton("Spela igen?");
+        playAgainButton.addActionListener(e -> {
+            try {
+                out.writeObject(Client.NEW_GAME_REQUEST);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         JPanel emptyPanel = createPointsPanel("");
         JButton exitButton = new JButton("Avsluta");
 
