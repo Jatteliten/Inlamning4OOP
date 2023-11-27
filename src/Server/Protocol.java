@@ -5,7 +5,6 @@ import Utilities.Question;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,6 +18,7 @@ public class Protocol {
     ArrayList<Question> currentQuestions = new ArrayList<>();
     Properties properties;
     int counter = 0;
+    boolean avatarSent = false;
 
     static final String END_GAME = "END_GAME_FROM_SERVER_XXX";
 
@@ -35,8 +35,7 @@ public class Protocol {
         this.categories = categories;
     }
 
-    public void processUserInput(Object userInput, ObjectInputStream in,
-                                 ObjectOutputStream out, Player p, GameCoordinator gameCoordinator)
+    public void processUserInput(Object userInput, ObjectOutputStream out, Player p, GameCoordinator gameCoordinator)
                                     throws IOException, ClassNotFoundException {
 
         Player secondPlayer = null;
@@ -50,7 +49,7 @@ public class Protocol {
             currentQuestions = new ArrayList<>();
             for (int i = 0; i < numberOfQuestions; i++) {
                 currentQuestions.add(q.getQuestionsList().get(i));
-                if (p.isPicksCurrentCategory()) {
+                if (p.isPickingCurrentCategory()) {
                     p.getObjectOutputStream().writeObject(q.getQuestionsList().get(i));
                 }
 
@@ -69,16 +68,20 @@ public class Protocol {
             }
             counter++;
             secondPlayer.getObjectOutputStream().writeObject(i);
+            if(!avatarSent) {
+                secondPlayer.getObjectOutputStream().writeObject(p.getAvatar());
+                avatarSent = true;
+            }
             for (Question q : currentQuestions) {
                 secondPlayer.getObjectOutputStream().writeObject(q);
             }
             currentQuestions.clear();
 
-            p.setPicksCurrentCategory(!p.isPicksCurrentCategory());
+            p.setPicksCurrentCategory(!p.isPickingCurrentCategory());
             p.addScore(i);
             if (counter == numberOfRounds){
                     p.getObjectOutputStream().writeObject(END_GAME);
-                } else if (p.isPicksCurrentCategory()) {
+                } else if (p.isPickingCurrentCategory()) {
                 Collections.shuffle(categories);
                 for (int j = 0; j < 3; j++) {
                     out.writeObject(categories.get(j));

@@ -1,6 +1,7 @@
 package Server;
 
 import Utilities.Answers;
+import Utilities.AvatarProperties;
 import Utilities.Category;
 import Utilities.Question;
 
@@ -16,7 +17,7 @@ public class Server extends Thread {
    Socket serverSocket;
    ArrayList<Category> categories = new ArrayList<>();
    GameCoordinator gameCoordinator;
-   static final String WELCOME = "START_GAME_FROM_CLIENT_XXX";
+   private static final String WELCOME = "START_GAME_FROM_CLIENT_XXX";
 
    public Server(Socket s, GameCoordinator g){
         this.serverSocket = s;
@@ -33,7 +34,7 @@ public class Server extends Thread {
            out.writeObject(WELCOME);
            out.writeObject(p.getProperties().getProperty("numberOfQuestions","2"));
            out.writeObject(p.getProperties().getProperty("numberOfRounds", "3"));
-           Player player = new Player(out, (String) in.readObject());
+           Player player = new Player(out, (AvatarProperties) in.readObject(), (String) in.readObject());
            gameCoordinator.addPlayer(player);
            gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
            if(!gameCoordinator.isTwoPlayers){
@@ -45,7 +46,7 @@ public class Server extends Thread {
            }
 
            while (true){
-               p.processUserInput(in.readObject(), in, out, player, gameCoordinator);
+               p.processUserInput(in.readObject(), out, player, gameCoordinator);
            }
 
         } catch (IOException | ClassNotFoundException e) {
