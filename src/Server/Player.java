@@ -34,18 +34,11 @@ public class Player {
     public String getName() {
         return name;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
     public boolean isPickingCurrentCategory() {
         return picksCurrentCategory;
     }
     public void setPicksCurrentCategory(boolean picksCurrentCategory) {
         this.picksCurrentCategory = picksCurrentCategory;
-    }
-    public void setObjectOutputStream(ObjectOutputStream objectOutputStream) {
-        this.objectOutputStream = objectOutputStream;
     }
 
     public AvatarProperties getAvatar() {

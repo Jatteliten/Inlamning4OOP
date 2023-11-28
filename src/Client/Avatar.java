@@ -2,21 +2,27 @@ package Client;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 
 public class Avatar extends JLayeredPane{
     private final static int IMAGE_SIZE = 300;
     private int cat = 0;
+    private static final int AMOUNT_OF_CATS = 8;
     private int eyes = 0;
+    private static final int AMOUNT_OF_EYES = 26;
     private int mouth = 0;
+    private static final int AMOUNT_OF_MOUTHS = 5;
     private int pattern = 0;
+    private static final int AMOUNT_OF_PATTERNS = 4;
     private int accessory = 0;
+    private static final int AMOUNT_OF_ACCESSORIES = 30;
     private int headWear = 0;
-    private final JLabel catLabel = new JLabel(new ImageIcon("src/Client/Layers/Cat/0.png"));
-    private final JLabel eyesLabel = new JLabel(new ImageIcon("src/Client/Layers/Eyes or eyewear/0.png"));
-    private final JLabel mouthLabel = new JLabel(new ImageIcon("src/Client/Layers/Mouth/0.png"));
-    private final JLabel patternLabel = new JLabel(new ImageIcon("src/Client/Layers/Pattern/0.png"));
-    private final JLabel accessoryLabel = new JLabel(new ImageIcon("src/Client/Layers/Accessories/0.png"));
-    private final JLabel headWearLabel = new JLabel(new ImageIcon("src/Client/Layers/Headwear/0.png"));
+    private final JLabel catLabel = new JLabel(new ImageIcon("src/Client/CatLayers/Cat/0.png"));
+    private final JLabel eyesLabel = new JLabel(new ImageIcon("src/Client/CatLayers/Eyes or eyewear/0.png"));
+    private final JLabel mouthLabel = new JLabel(new ImageIcon("src/Client/CatLayers/Mouth/0.png"));
+    private final JLabel patternLabel = new JLabel(new ImageIcon("src/Client/CatLayers/Pattern/0.png"));
+    private final JLabel accessoryLabel = new JLabel(new ImageIcon("src/Client/CatLayers/Accessories/0.png"));
+    private final JLabel headWearLabel = new JLabel(new ImageIcon("src/Client/CatLayers/Headwear/0.png"));
 
     public Avatar(){
         setPreferredSize(new Dimension(IMAGE_SIZE,IMAGE_SIZE));
@@ -91,34 +97,57 @@ public class Avatar extends JLayeredPane{
         this.headWear = headWear;
     }
 
-    public void changeCat(){
-        cat++;
-        catLabel.setIcon(new ImageIcon("src/Client/Layers/Cat/" + cat % 8 + ".png"));
+    public void changeCat(int increment){
+        cat += increment;
+        catLabel.setIcon(new ImageIcon("src/Client/CatLayers/Cat/" +
+                cat % AMOUNT_OF_CATS + ".png"));
         revalidateAndRepaint();
     }
-    public void changeEyes(){
-        eyes++;
-        eyesLabel.setIcon(new ImageIcon("src/Client/Layers/Eyes or eyeWear/" + eyes % 26 + ".png"));
+    public void changeEyes(int increment){
+        eyes += increment;
+        eyesLabel.setIcon(new ImageIcon("src/Client/CatLayers/Eyes or eyeWear/" +
+                eyes % AMOUNT_OF_EYES + ".png"));
         revalidateAndRepaint();
     }
-    public void changeMouth(){
-        mouth++;
-        mouthLabel.setIcon(new ImageIcon("src/Client/Layers/Mouth/" + mouth % 5 + ".png"));
+    public void changeMouth(int increment){
+        mouth += increment;
+        mouthLabel.setIcon(new ImageIcon("src/Client/CatLayers/Mouth/" +
+                mouth % AMOUNT_OF_MOUTHS + ".png"));
         revalidateAndRepaint();
     }
-    public void changePattern(){
-        pattern++;
-        patternLabel.setIcon(new ImageIcon("src/Client/Layers/Pattern/" + pattern % 4 + ".png"));
+    public void changePattern(int increment){
+        pattern += increment;
+        patternLabel.setIcon(new ImageIcon("src/Client/CatLayers/Pattern/" +
+                pattern % AMOUNT_OF_PATTERNS + ".png"));
         revalidateAndRepaint();
     }
-    public void changeAccessory(){
-        accessory++;
-        accessoryLabel.setIcon(new ImageIcon("src/Client/Layers/Accessories/" + accessory % 30 + ".png"));
+    public void changeAccessory(int increment){
+        accessory += increment;
+        accessoryLabel.setIcon(new ImageIcon("src/Client/CatLayers/Accessories/" +
+                accessory % AMOUNT_OF_ACCESSORIES + ".png"));
         revalidateAndRepaint();
     }
-    public void changeHeadWear(){
-        headWear++;
-        headWearLabel.setIcon(new ImageIcon("src/Client/Layers/Headwear/" + headWear % 27 + ".png"));
+    public void changeHeadWear(int increment){
+        headWear += increment;
+        headWearLabel.setIcon(new ImageIcon("src/Client/CatLayers/Headwear/" +
+                headWear % AMOUNT_OF_ACCESSORIES + ".png"));
+        revalidateAndRepaint();
+    }
+    public void randomizeCat(){
+        Random rand = new Random();
+        cat = rand.nextInt(AMOUNT_OF_CATS);
+        eyes = rand.nextInt(AMOUNT_OF_EYES);
+        mouth = rand.nextInt(AMOUNT_OF_MOUTHS);
+        pattern = rand.nextInt(AMOUNT_OF_PATTERNS);
+        accessory = rand.nextInt(AMOUNT_OF_ACCESSORIES);
+        int AMOUNT_OF_HEAD_WEAR = 27;
+        headWear = rand.nextInt(AMOUNT_OF_HEAD_WEAR);
+        changeCat(0);
+        changeEyes(0);
+        changeMouth(0);
+        changePattern(0);
+        changeAccessory(0);
+        changeHeadWear(0);
         revalidateAndRepaint();
     }
 
@@ -127,20 +156,21 @@ public class Avatar extends JLayeredPane{
         repaint();
     }
 
+
     public void shrinkImage() {
         setPreferredSize(new Dimension(IMAGE_SIZE / 3,IMAGE_SIZE / 3));
-        resizeLabelImage(catLabel, "src/Client/Layers/Cat/" + cat % 8 + ".png");
-        resizeLabelImage(accessoryLabel, "src/Client/Layers/Accessories/" + accessory % 30 + ".png");
-        resizeLabelImage(eyesLabel, "src/Client/Layers/Eyes or eyeWear/" + eyes % 26 + ".png");
-        resizeLabelImage(headWearLabel, "src/Client/Layers/Headwear/" + headWear % 27 + ".png");
-        resizeLabelImage(mouthLabel, "src/Client/Layers/Mouth/" + mouth % 5 + ".png");
-        resizeLabelImage(patternLabel, "src/Client/Layers/Pattern/" + pattern % 4 + ".png");
+        resizeLabelImage(catLabel, "src/Client/CatLayers/Cat/" + cat % 8 + ".png");
+        resizeLabelImage(accessoryLabel, "src/Client/CatLayers/Accessories/" + accessory % 30 + ".png");
+        resizeLabelImage(eyesLabel, "src/Client/CatLayers/Eyes or eyeWear/" + eyes % 26 + ".png");
+        resizeLabelImage(headWearLabel, "src/Client/CatLayers/Headwear/" + headWear % 27 + ".png");
+        resizeLabelImage(mouthLabel, "src/Client/CatLayers/Mouth/" + mouth % 5 + ".png");
+        resizeLabelImage(patternLabel, "src/Client/CatLayers/Pattern/" + pattern % 4 + ".png");
         revalidateAndRepaint();
     }
     private void resizeLabelImage(JLabel label, String imagePath) {
         ImageIcon icon = new ImageIcon(imagePath);
         Image image = icon.getImage().getScaledInstance(IMAGE_SIZE / 3, IMAGE_SIZE / 3, Image.SCALE_DEFAULT);
-        label.setBounds(125,0, IMAGE_SIZE / 3, IMAGE_SIZE / 3);
+        label.setBounds(67,0, IMAGE_SIZE / 3, IMAGE_SIZE / 3);
         label.setIcon(new ImageIcon(image));
     }
 

@@ -76,9 +76,9 @@ public class Server extends Thread {
                String answerFour = bf.readLine();
 
                Category c = new Category(category);
-               Question q = new Question(question, new Answers(true, answerOne),
-                       new Answers(false, answerTwo), new Answers(false, answerThree),
-                       new Answers(false, answerFour));
+               Question q = new Question(question, new Answers(answerOne),
+                       new Answers(answerTwo), new Answers(answerThree),
+                       new Answers(answerFour));
 
                if(!categories.isEmpty()){
                    for(Category ca: categories){
