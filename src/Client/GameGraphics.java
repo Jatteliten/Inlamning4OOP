@@ -145,7 +145,7 @@ public class GameGraphics extends JFrame {
      */
     private JPanel implementButtons() {
         JPanel buttons = new JPanel();
-        buttons.setLayout(new GridLayout(7, 1));
+        buttons.setLayout(new GridLayout(8, 1));
         buttons.setBackground(darkerGreen);
         JButton changeCat = new JButton("Cat color");
         changeCat.addActionListener(e -> avatar.changeCat(1));
