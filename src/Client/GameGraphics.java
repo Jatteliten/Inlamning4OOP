@@ -49,6 +49,14 @@ public class GameGraphics extends JFrame {
         setVisible(true);
     }
 
+    public void addQuestions(Question q){
+        questions.add(q);
+    }
+
+    public ArrayList<Question> getQuestions() {
+        return questions;
+    }
+
     /**
      * Sets attributes for panel that displays question above answers
      */
@@ -96,6 +104,10 @@ public class GameGraphics extends JFrame {
         repaint();
     }
 
+    /**
+     * Asks player for a name.
+     * Sends player avatar to server when name has been given.
+     */
     private JTextField implementTextField(ObjectOutputStream out, JLabel waitingForOpponent) {
         JTextField nameEntry = new JTextField("Enter name", 15);
         nameEntry.setFont(new Font("Arial", Font.BOLD, 20));
@@ -128,28 +140,34 @@ public class GameGraphics extends JFrame {
         return nameEntry;
     }
 
+    /**
+     * Buttons for controlling avatar appearance
+     */
     private JPanel implementButtons() {
         JPanel buttons = new JPanel();
         buttons.setLayout(new GridLayout(7, 1));
         buttons.setBackground(darkerGreen);
         JButton changeCat = new JButton("Cat color");
-        changeCat.addActionListener(e -> avatar.changeCat());
+        changeCat.addActionListener(e -> avatar.changeCat(1));
         JButton changeEyes = new JButton("Eyes");
-        changeEyes.addActionListener(e -> avatar.changeEyes());
+        changeEyes.addActionListener(e -> avatar.changeEyes(1));
         JButton changeMouth = new JButton("Mouth");
-        changeMouth.addActionListener(e -> avatar.changeMouth());
+        changeMouth.addActionListener(e -> avatar.changeMouth(1));
         JButton changePattern = new JButton("Pattern");
-        changePattern.addActionListener(e -> avatar.changePattern());
+        changePattern.addActionListener(e -> avatar.changePattern(1));
         JButton changeAccessory = new JButton("Accessory");
-        changeAccessory.addActionListener(e -> avatar.changeAccessory());
+        changeAccessory.addActionListener(e -> avatar.changeAccessory(1));
         JButton changeHeadWear = new JButton("Hat");
-        changeHeadWear.addActionListener(e -> avatar.changeHeadWear());
+        changeHeadWear.addActionListener(e -> avatar.changeHeadWear(1));
+        JButton randomize = new JButton("Randomize");
+        randomize.addActionListener(e -> avatar.randomizeCat());
         buttons.add(changeCat);
         buttons.add(changeEyes);
         buttons.add(changeMouth);
         buttons.add(changePattern);
         buttons.add(changeAccessory);
         buttons.add(changeHeadWear);
+        buttons.add(randomize);
         return buttons;
     }
 
@@ -191,13 +209,6 @@ public class GameGraphics extends JFrame {
         });
     }
 
-    public void addQuestions(Question q){
-        questions.add(q);
-    }
-
-    public ArrayList<Question> getQuestions() {
-        return questions;
-    }
 
     /**
      * Displays questions on the frame.
@@ -350,7 +361,7 @@ public class GameGraphics extends JFrame {
         scoreLabel.setHorizontalAlignment(SwingConstants.CENTER);
         scoreLabel.setFont(new Font("Arial", Font.BOLD, 25));
 
-        scorePanel.add(scoreLabel, BorderLayout.NORTH);
+        scorePanel.add(scoreLabel, BorderLayout.CENTER);
 
         return scorePanel;
     }
@@ -410,8 +421,8 @@ public class GameGraphics extends JFrame {
 
     public int totalPlayerPoints(ArrayList<Integer> playerPoints){
         int totalPoints = 0;
-        for (int i = 0; i < playerPoints.size(); i++) {
-           totalPoints = totalPoints + playerPoints.get(i);
+        for (Integer playerPoint : playerPoints) {
+            totalPoints += playerPoint;
         }
         return totalPoints;
     }

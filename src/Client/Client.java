@@ -45,8 +45,10 @@ public class Client {
                             g.nameAndAvatarEntry(out);
                         } else if (obj instanceof Integer s) {
                             g.addPointsToOpponent(s);
+                            g.waiting();
                         } else if (obj instanceof AvatarProperties a) {
                             initializeOpponentAvatar(a, g);
+                            g.waiting();
                         }
                     } catch (EOFException e) {
                         System.out.println("EOFException fångad. Avslutar loopen.");
@@ -109,10 +111,6 @@ public class Client {
         opponentAvatar.setHeadWear(avatarProperties.headWear());
         opponentAvatar.shrinkImage();
         g.setOpponentAvatar(opponentAvatar);
-    }
-
-    public int getNumberOfRounds() {
-        return numberOfRounds;
     }
 
     public static void main(String[] args) throws IOException {
