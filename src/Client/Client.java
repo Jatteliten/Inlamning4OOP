@@ -95,7 +95,7 @@ public class Client {
                             break;
                         }
                         if (obj.equals(NEW_GAME_DENIED)) {
-                            g.showCustomOptionDialog("Din förfrågan blev nekad", "spela igen svar", "Avsluta");
+                            g.showCustomOptionDialog("Din förfrågan blev nekad", "Spela igen svar", "Avsluta");
                             System.exit(0);
                         }
                     } catch (EOFException e) {
