@@ -334,6 +334,7 @@ public class GameGraphics extends JFrame {
             questionsPanel.add(gameRoundPanel);
             questionsPanel.add(opponentPointsPanelItem);
         }
+
         if(numberOfRounds == opponentPoints.size()){
             JButton playAgainButton = new JButton("Spela igen?");
             playAgainButton.addActionListener(e -> {
