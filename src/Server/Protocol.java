@@ -23,6 +23,7 @@ public class Protocol {
     static final String END_GAME = "END_GAME_FROM_SERVER_XXX";
     static final String NEW_GAME_REQUEST = "NEW_GAME_REQUEST_FROM_SERVER_XXX";
     static final String NEW_GAME_START = "NEW_GAME_START_FROM_SERVER_XXX";
+    static final String NEW_GAME_DENIED = "NEW_GAME_DENIED_FROM_SERVER_XXX";
 
     public Protocol(ArrayList<Category> categories){
         this.properties = new Properties();
@@ -109,6 +110,8 @@ public class Protocol {
                 secondPlayer.getObjectOutputStream().writeObject(NEW_GAME_REQUEST);
                 gameCoordinator.setPlayNewGame(true);
             }
+        } else if (userInput.equals(NEW_GAME_DENIED)) {
+            secondPlayer.getObjectOutputStream().writeObject(NEW_GAME_DENIED);
         }
     }
 

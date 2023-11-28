@@ -16,6 +16,7 @@ public class Client {
     static final String WELCOME = "START_GAME_FROM_CLIENT_XXX";
     static final String END_GAME = "END_GAME_FROM_SERVER_XXX";
     static final String NEW_GAME_REQUEST = "NEW_GAME_REQUEST_FROM_SERVER_XXX";
+    static final String NEW_GAME_DENIED = "NEW_GAME_DENIED_FROM_SERVER_XXX";
     static final String NEW_GAME_START = "NEW_GAME_START_FROM_SERVER_XXX";
     int numberOfQuestions = 0;
     int numberOfRounds = 0;
@@ -42,8 +43,7 @@ public class Client {
                         } else if (obj.equals(WELCOME)) {
                             numberOfQuestions = Integer.parseInt((String) in.readObject());
                             numberOfRounds = Integer.parseInt((String) in.readObject());
-                            //g.nameAndAvatarEntry(out);
-                            g.loginOrRegister(out);
+                            g.nameAndAvatarEntry(out);
                         } else if (obj instanceof Integer s) {
                             g.addPointsToOpponent(s);
                         } else if (obj instanceof AvatarProperties a) {
@@ -82,12 +82,15 @@ public class Client {
                                 out.writeObject(NEW_GAME_REQUEST);
                                 g.clearAllPointArrays();
                             } else {
-                                System.out.println("User clicked No");
+                                out.writeObject(NEW_GAME_DENIED);
                             }
                         }
                         if (obj.equals(NEW_GAME_START)) {
                             g.waiting();
                             break;
+                        }
+                        if (obj.equals(NEW_GAME_DENIED)) {
+                            JOptionPane.showMessageDialog(null,"Förfrågan nekad");
                         }
                     } catch (EOFException e) {
                         System.out.println("EOFException fångad. Avslutar loopen.");
