@@ -170,7 +170,7 @@ public class Avatar extends JLayeredPane{
     private void resizeLabelImage(JLabel label, String imagePath) {
         ImageIcon icon = new ImageIcon(imagePath);
         Image image = icon.getImage().getScaledInstance(IMAGE_SIZE / 3, IMAGE_SIZE / 3, Image.SCALE_DEFAULT);
-        label.setBounds(125,0, IMAGE_SIZE / 3, IMAGE_SIZE / 3);
+        label.setBounds(67,0, IMAGE_SIZE / 3, IMAGE_SIZE / 3);
         label.setIcon(new ImageIcon(image));
     }
 

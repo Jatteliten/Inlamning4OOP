@@ -26,6 +26,7 @@ public class Client {
              ObjectInputStream in = new ObjectInputStream(socketToServer.getInputStream())) {
 
             GameGraphics g = new GameGraphics();
+            g.setOut(out);
             while (true) {
                 while (true) {
                     try {
@@ -35,14 +36,15 @@ public class Client {
                         } else if (obj instanceof Question q) {
                             g.addQuestions(q);
                             if (g.getQuestions().size() == numberOfQuestions) {
-                                g.displayQuestions(g.getQuestions(), out);
+                                g.displayQuestions(g.getQuestions());
                             }
                         } else if (obj instanceof Category c) {
-                            g.displayCategoryChoice(c, (Category) in.readObject(), (Category) in.readObject(), out);
+                            g.displayCategoryChoice(c, (Category) in.readObject(), (Category) in.readObject());
                         } else if (obj.equals(WELCOME)) {
                             numberOfQuestions = Integer.parseInt((String) in.readObject());
                             numberOfRounds = Integer.parseInt((String) in.readObject());
-                            g.nameAndAvatarEntry(out);
+                            g.setNumberOfRounds(numberOfRounds);
+                            g.nameAndAvatarEntry();
                         } else if (obj instanceof Integer s) {
                             g.addPointsToOpponent(s);
                             g.waiting();
@@ -58,7 +60,7 @@ public class Client {
                     }
                 }
                 if (g.opponentPoints.size() == numberOfRounds) {
-                    g.finalResult(out);
+                    g.waiting();
                     g.clearAllPointArrays();
                 }
                 while (true) {
@@ -70,7 +72,7 @@ public class Client {
                         }
                         if (obj instanceof Integer s) {
                             g.addPointsToOpponent(s);
-                            g.finalResult(out);
+                            g.waiting();
                         }
                         if (obj.equals(NEW_GAME_REQUEST)) {
                             int result = JOptionPane.showConfirmDialog(
@@ -111,6 +113,10 @@ public class Client {
         opponentAvatar.setHeadWear(avatarProperties.headWear());
         opponentAvatar.shrinkImage();
         g.setOpponentAvatar(opponentAvatar);
+    }
+
+    public int getNumberOfRounds() {
+        return numberOfRounds;
     }
 
     public static void main(String[] args) throws IOException {
