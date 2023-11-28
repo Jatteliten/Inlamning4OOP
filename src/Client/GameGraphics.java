@@ -356,13 +356,6 @@ public class GameGraphics extends JFrame {
         repaint();
     }
 
-    private void setBackGroundForAvatars() {
-        avatar.setOpaque(true);
-        avatar.setBackground(lighterGreen);
-        opponentAvatar.setOpaque(true);
-        opponentAvatar.setBackground(lighterGreen);
-    }
-
     private JPanel createPointsPanel (String labelText){
         JLabel pointsLabel = new JLabel(labelText);
         pointsLabel.setFont(new Font("Arial", Font.BOLD, 26));
