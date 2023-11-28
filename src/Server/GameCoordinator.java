@@ -6,6 +6,15 @@ public class GameCoordinator {
     ArrayList<Player> players = new ArrayList<>();
     boolean isTwoPlayers = true;
 
+    public boolean playNewGame() {
+        return playNewGame;
+    }
+
+    public void setPlayNewGame(boolean playNewGame) {
+        this.playNewGame = playNewGame;
+    }
+
+    boolean playNewGame = false;
     public GameCoordinator() {
     }
 

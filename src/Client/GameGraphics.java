@@ -31,6 +31,8 @@ public class GameGraphics extends JFrame {
     boolean textInputIsEmpty = true;
     Color lighterGreen = new Color(121, 197, 173);
     Color darkerGreen = new Color(88, 168, 134);
+    int numberOfRounds;
+    ObjectOutputStream out;
 
     GameGraphics(){
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -47,6 +49,14 @@ public class GameGraphics extends JFrame {
         setTitle();
 
         setVisible(true);
+    }
+
+    public void addQuestions(Question q){
+        questions.add(q);
+    }
+
+    public ArrayList<Question> getQuestions() {
+        return questions;
     }
 
     /**
@@ -76,7 +86,7 @@ public class GameGraphics extends JFrame {
     /**
      * asks for name and avatar
      */
-    public void nameAndAvatarEntry(ObjectOutputStream out){
+    public void nameAndAvatarEntry(){
         questionsPanel.setLayout(new GridBagLayout());
 
         avatar = new Avatar();
@@ -87,7 +97,7 @@ public class GameGraphics extends JFrame {
 
         JPanel buttons = implementButtons();
 
-        JTextField nameEntry = implementTextField(out, waitingForOpponent);
+        JTextField nameEntry = implementTextField(waitingForOpponent);
 
         questionsPanel.add(avatar);
         questionsPanel.add(buttons);
@@ -96,7 +106,11 @@ public class GameGraphics extends JFrame {
         repaint();
     }
 
-    private JTextField implementTextField(ObjectOutputStream out, JLabel waitingForOpponent) {
+    /**
+     * Asks player for a name.
+     * Sends player avatar to server when name has been given.
+     */
+    private JTextField implementTextField(JLabel waitingForOpponent) {
         JTextField nameEntry = new JTextField("Enter name", 15);
         nameEntry.setFont(new Font("Arial", Font.BOLD, 20));
         nameEntry.setForeground(Color.GRAY);
@@ -128,44 +142,50 @@ public class GameGraphics extends JFrame {
         return nameEntry;
     }
 
+    /**
+     * Buttons for controlling avatar appearance
+     */
     private JPanel implementButtons() {
         JPanel buttons = new JPanel();
-        buttons.setLayout(new GridLayout(7, 1));
+        buttons.setLayout(new GridLayout(8, 1));
         buttons.setBackground(darkerGreen);
         JButton changeCat = new JButton("Cat color");
-        changeCat.addActionListener(e -> avatar.changeCat());
+        changeCat.addActionListener(e -> avatar.changeCat(1));
         JButton changeEyes = new JButton("Eyes");
-        changeEyes.addActionListener(e -> avatar.changeEyes());
+        changeEyes.addActionListener(e -> avatar.changeEyes(1));
         JButton changeMouth = new JButton("Mouth");
-        changeMouth.addActionListener(e -> avatar.changeMouth());
+        changeMouth.addActionListener(e -> avatar.changeMouth(1));
         JButton changePattern = new JButton("Pattern");
-        changePattern.addActionListener(e -> avatar.changePattern());
+        changePattern.addActionListener(e -> avatar.changePattern(1));
         JButton changeAccessory = new JButton("Accessory");
-        changeAccessory.addActionListener(e -> avatar.changeAccessory());
+        changeAccessory.addActionListener(e -> avatar.changeAccessory(1));
         JButton changeHeadWear = new JButton("Hat");
-        changeHeadWear.addActionListener(e -> avatar.changeHeadWear());
+        changeHeadWear.addActionListener(e -> avatar.changeHeadWear(1));
+        JButton randomize = new JButton("Randomize");
+        randomize.addActionListener(e -> avatar.randomizeCat());
         buttons.add(changeCat);
         buttons.add(changeEyes);
         buttons.add(changeMouth);
         buttons.add(changePattern);
         buttons.add(changeAccessory);
         buttons.add(changeHeadWear);
+        buttons.add(randomize);
         return buttons;
     }
 
     /**
      * Displays categories and adds mouseListeners to those categories
      */
-    public void displayCategoryChoice(Category c1, Category c2, Category c3, ObjectOutputStream out) {
+    public void displayCategoryChoice(Category c1, Category c2, Category c3) {
         questionsPanel.removeAll();
         questionsPanel.setLayout(new GridLayout(3, 1));
 
         ClickableLabel categoryOne = new ClickableLabel(c1.getCategoryText(), answerIcon);
-        addCategoryMouseListener(categoryOne, c1, out);
+        addCategoryMouseListener(categoryOne, c1);
         ClickableLabel categoryTwo = new ClickableLabel(c2.getCategoryText(), answerIcon);
-        addCategoryMouseListener(categoryTwo, c2, out);
+        addCategoryMouseListener(categoryTwo, c2);
         ClickableLabel categoryThree = new ClickableLabel(c3.getCategoryText(), answerIcon);
-        addCategoryMouseListener(categoryThree, c3, out);
+        addCategoryMouseListener(categoryThree, c3);
 
         questionsPanel.add(categoryOne);
         questionsPanel.add(categoryTwo);
@@ -178,7 +198,7 @@ public class GameGraphics extends JFrame {
      * Adds mouse listener to category label.
      * Each category sends itself to the server.
      */
-    private void addCategoryMouseListener(ClickableLabel j, Category c, ObjectOutputStream out){
+    private void addCategoryMouseListener(ClickableLabel j, Category c){
         j.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -191,20 +211,13 @@ public class GameGraphics extends JFrame {
         });
     }
 
-    public void addQuestions(Question q){
-        questions.add(q);
-    }
-
-    public ArrayList<Question> getQuestions() {
-        return questions;
-    }
 
     /**
      * Displays questions on the frame.
      * Changes the question text displayed and adds four answer alternatives.
      * First answer created is always correct. Shuffles the answers before displaying them.
      */
-    public void displayQuestions(ArrayList<Question> ql, ObjectOutputStream out)  {
+    public void displayQuestions(ArrayList<Question> ql)  {
         questionsPanel.removeAll();
         questionsPanel.setLayout(new GridLayout(2, 2));
         ArrayList<ClickableLabel> answers = new ArrayList<>();
@@ -220,7 +233,7 @@ public class GameGraphics extends JFrame {
         }
 
         for (ClickableLabel j : answers) {
-            addAnswerMouseListener(ql, out, j, answerOne);
+            addAnswerMouseListener(ql, j, answerOne);
         }
 
         Collections.shuffle(answers);
@@ -237,8 +250,7 @@ public class GameGraphics extends JFrame {
      * When the correct amount of questions has been answered, moves to waiting(), which displays results.
      */
 
-    private void addAnswerMouseListener(ArrayList<Question> ql, ObjectOutputStream out,
-                                        ClickableLabel j, ClickableLabel answerOne) {
+    private void addAnswerMouseListener(ArrayList<Question> ql,ClickableLabel j, ClickableLabel answerOne) {
         j.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -273,7 +285,7 @@ public class GameGraphics extends JFrame {
                                     throw new RuntimeException(ex);
                                 }
                             } else {
-                                displayQuestions(ql, out);
+                                displayQuestions(ql);
                             }
 
                             ((Timer) evt.getSource()).stop();
@@ -291,35 +303,57 @@ public class GameGraphics extends JFrame {
      * Displays results.
      */
     public void waiting() {
+        System.out.println(opponentPoints.size());
         questionsPanel.removeAll();
-        questionsPanel.setLayout(new GridLayout(totalPoints.size() + 2, 2));
+        questionsPanel.setLayout(new GridLayout(totalPoints.size() + 3, 3));
+
+        JPanel winLoseOrTiePanel;
+        if(numberOfRounds == opponentPoints.size()) {
+            winLoseOrTiePanel = createPointsPanel(winnerOrLoser());
+        }else{
+            winLoseOrTiePanel = createPointsPanel("");
+        }
+        winLoseOrTiePanel.setBackground(darkerGreen);
+        questionsPanel.add(avatar);
+        questionsPanel.add(winLoseOrTiePanel);
+        questionsPanel.add(opponentAvatar);
 
         JPanel yourPointsPanel = createPointsPanel("Dina poäng");
+        JPanel TotalPointsPanel = createPointsPanel(totalPlayerPoints(totalPoints) + " - " + totalPlayerPoints(opponentPoints));
         JPanel opponentPointsPanel = createPointsPanel("Motståndarens poäng");
 
         questionsPanel.add(yourPointsPanel);
+        questionsPanel.add(TotalPointsPanel);
         questionsPanel.add(opponentPointsPanel);
-        setBackGroundForAvatars();
-        questionsPanel.add(avatar);
-        questionsPanel.add(opponentAvatar);
 
         for (int i = 0; i < totalPoints.size(); i++) {
             JPanel yourPointsPanelItem = createScorePanel(i, false);
             JPanel opponentPointsPanelItem = createScorePanel(i, true);
-
+            JPanel gameRoundPanel = createPointsPanel("Runda " + (i + 1));
             questionsPanel.add(yourPointsPanelItem);
+            questionsPanel.add(gameRoundPanel);
             questionsPanel.add(opponentPointsPanelItem);
+        }
+
+        if(numberOfRounds == opponentPoints.size()){
+            JButton playAgainButton = new JButton("Spela igen?");
+            playAgainButton.addActionListener(e -> {
+                try {
+                    out.writeObject(Client.NEW_GAME_REQUEST);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+            JPanel emptyPanel = createPointsPanel("");
+            JButton exitButton = new JButton("Avsluta");
+            exitButton.addActionListener(e -> System.exit(0));
+            questionsPanel.add(playAgainButton);
+            questionsPanel.add(emptyPanel);
+            questionsPanel.add(exitButton);
         }
 
         revalidate();
         repaint();
-    }
-
-    private void setBackGroundForAvatars() {
-        avatar.setOpaque(true);
-        avatar.setBackground(lighterGreen);
-        opponentAvatar.setOpaque(true);
-        opponentAvatar.setBackground(lighterGreen);
     }
 
     private JPanel createPointsPanel (String labelText){
@@ -350,9 +384,49 @@ public class GameGraphics extends JFrame {
         scoreLabel.setHorizontalAlignment(SwingConstants.CENTER);
         scoreLabel.setFont(new Font("Arial", Font.BOLD, 25));
 
-        scorePanel.add(scoreLabel, BorderLayout.NORTH);
+        scorePanel.add(scoreLabel, BorderLayout.CENTER);
 
         return scorePanel;
+    }
+    public void showCustomOptionDialog(String message, String title, String buttonLabel) {
+        JOptionPane.showOptionDialog(
+                null,
+                message,
+                title,
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.ERROR_MESSAGE,
+                null,
+                new Object[]{buttonLabel},
+                buttonLabel
+        );
+    }
+    public int showCustomYesNoOptionDialog(String message, String title, String yesLabel, String noLabel) {
+        return JOptionPane.showOptionDialog(
+                null,
+                message,
+                title,
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                new Object[]{yesLabel, noLabel},
+                yesLabel
+        );
+    }
+    public String winnerOrLoser(){
+        if (totalPlayerPoints(totalPoints) > totalPlayerPoints(opponentPoints)){
+            return "Du vann!";
+        } else if (totalPlayerPoints(totalPoints) == totalPlayerPoints(opponentPoints)) {
+            return "Oavgjort";
+        }
+        return "Du förlorade";
+    }
+
+    public int totalPlayerPoints(ArrayList<Integer> playerPoints){
+        int totalPoints = 0;
+        for (Integer playerPoint : playerPoints) {
+            totalPoints += playerPoint;
+        }
+        return totalPoints;
     }
 
     public void addPointsToOpponent(int points){
@@ -361,5 +435,17 @@ public class GameGraphics extends JFrame {
 
     public void setOpponentAvatar(Avatar opponentAvatar) {
         this.opponentAvatar = opponentAvatar;
+    }
+    public void clearAllPointArrays(){
+        this.totalPoints.clear();
+        this.opponentPoints.clear();
+    }
+
+    public void setNumberOfRounds(int numberOfRounds) {
+        this.numberOfRounds = numberOfRounds;
+    }
+
+    public void setOut(ObjectOutputStream out) {
+        this.out = out;
     }
 }

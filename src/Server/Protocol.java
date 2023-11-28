@@ -21,6 +21,9 @@ public class Protocol {
     boolean avatarSent = false;
 
     static final String END_GAME = "END_GAME_FROM_SERVER_XXX";
+    static final String NEW_GAME_REQUEST = "NEW_GAME_REQUEST_FROM_SERVER_XXX";
+    static final String NEW_GAME_START = "NEW_GAME_START_FROM_SERVER_XXX";
+    static final String NEW_GAME_DENIED = "NEW_GAME_DENIED_FROM_SERVER_XXX";
 
     public Protocol(ArrayList<Category> categories){
         this.properties = new Properties();
@@ -40,7 +43,7 @@ public class Protocol {
 
         Player secondPlayer = null;
 
-        if(gameCoordinator.getPlayers().size() % 2 == 0) {
+        if (gameCoordinator.getPlayers().size() % 2 == 0) {
             secondPlayer = checkForSecondPlayer(p, gameCoordinator);
         }
 
@@ -88,12 +91,29 @@ public class Protocol {
                 }
 
             }
-        } else if (userInput instanceof Integer gaveUpPoints) {
-            // Spelaren gav upp, hantera detta här (t.ex. uppdatera motståndarens poäng)
-            gameCoordinator.playerScored(); // Du behöver implementera playerScored-metoden i GameCoordinator
+
+        } else if (userInput.equals(NEW_GAME_REQUEST)) {
+            counter = 0;
+            if (gameCoordinator.playNewGame()) {
+                secondPlayer.setScore(0);
+                p.setScore(0);
+                out.writeObject(NEW_GAME_START);
+                secondPlayer.getObjectOutputStream().writeObject(NEW_GAME_START);
+                gameCoordinator.setPlayNewGame(false);
+                p.setPicksCurrentCategory(true);
+                secondPlayer.setPicksCurrentCategory(false);
+                Collections.shuffle(categories);
+                for (int i = 0; i < 3; i++) {
+                    out.writeObject(categories.get(i));
+                }
+            } else if (!gameCoordinator.playNewGame()) {
+                secondPlayer.getObjectOutputStream().writeObject(NEW_GAME_REQUEST);
+                gameCoordinator.setPlayNewGame(true);
+            }
+        } else if (userInput.equals(NEW_GAME_DENIED)) {
+            secondPlayer.getObjectOutputStream().writeObject(NEW_GAME_DENIED);
         }
     }
-
 
     public Properties getProperties() {
         return properties;

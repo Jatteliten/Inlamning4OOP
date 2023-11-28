@@ -28,30 +28,38 @@ public class Server extends Thread {
        createQuestionsAndCategoriesFromFile();
        Protocol p = new Protocol(categories);
 
+
        try (ObjectOutputStream out = new ObjectOutputStream(serverSocket.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(serverSocket.getInputStream())) {
 
            out.writeObject(WELCOME);
            out.writeObject(p.getProperties().getProperty("numberOfQuestions", "2"));
            out.writeObject(p.getProperties().getProperty("numberOfRounds", "3"));
-           Player player = new Player(out, (AvatarProperties) in.readObject(), (String) in.readObject());
-           gameCoordinator.addPlayer(player);
-           gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
-           if (!gameCoordinator.isTwoPlayers) {
-               player.setPicksCurrentCategory(true);
-               Collections.shuffle(categories);
-               for (int i = 0; i < 3; i++) {
-                   out.writeObject(categories.get(i));
+
+           try {
+               Player player = new Player(out, (AvatarProperties) in.readObject(), (String) in.readObject());
+
+               gameCoordinator.addPlayer(player);
+               gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
+               if (!gameCoordinator.isTwoPlayers) {
+                   player.setPicksCurrentCategory(true);
+                   Collections.shuffle(categories);
+                   for (int i = 0; i < 3; i++) {
+                       out.writeObject(categories.get(i));
+                   }
                }
+
+               while (true) {
+                   p.processUserInput(in.readObject(), out, player, gameCoordinator);
+               }
+           } catch (IOException e) {
+
            }
 
-           while (true) {
-               p.processUserInput(in.readObject(), out, player, gameCoordinator);
-           }
+
 
        } catch (IOException | ClassNotFoundException e) {
            e.printStackTrace();
-           throw new RuntimeException(e);
        } finally {
            try {
                serverSocket.close();
@@ -83,9 +91,9 @@ public class Server extends Thread {
                String answerFour = bf.readLine();
 
                Category c = new Category(category);
-               Question q = new Question(question, new Answers(true, answerOne),
-                       new Answers(false, answerTwo), new Answers(false, answerThree),
-                       new Answers(false, answerFour));
+               Question q = new Question(question, new Answers(answerOne),
+                       new Answers(answerTwo), new Answers(answerThree),
+                       new Answers(answerFour));
 
                if(!categories.isEmpty()){
                    for(Category ca: categories){
