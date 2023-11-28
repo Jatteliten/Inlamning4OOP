@@ -8,10 +8,13 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import Utilities.AvatarProperties;
 import Utilities.Category;
 import Utilities.Question;
 
 public class GameGraphics extends JFrame {
+    Avatar avatar;
+    Avatar opponentAvatar = new Avatar();
     ArrayList<Integer> totalPoints = new ArrayList<>();
     ArrayList<Integer> opponentPoints = new ArrayList<>();
     Integer points = 0;
@@ -25,11 +28,9 @@ public class GameGraphics extends JFrame {
     ImageIcon correctAnswerIcon = new ImageIcon("src/Client/images/QuestionCorrectAnswer.png");
     ArrayList<Question> questions = new ArrayList<>();
     boolean timerActive = false;
-    private ObjectOutputStream out;
-
-    public void setObjectOutputStream(ObjectOutputStream out) {
-        this.out = out;
-    }
+    boolean textInputIsEmpty = true;
+    Color lighterGreen = new Color(121, 197, 173);
+    Color darkerGreen = new Color(88, 168, 134);
 
     GameGraphics(){
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -41,43 +42,11 @@ public class GameGraphics extends JFrame {
         add(gamePieces);
         initializeQuestionDisplay();
         questionsPanel.setOpaque(true);
-        questionsPanel.setBackground(new Color(88, 168, 134));
+        questionsPanel.setBackground(darkerGreen);
         gamePieces.add(questionsPanel, BorderLayout.CENTER);
         setTitle();
-        JButton giveUpButton = new JButton("Ge upp");
-        giveUpButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!questions.isEmpty() && counter < questions.size()) {
-                    Question currentQuestion = questions.get(counter);
-                    int correctAnswerIndex = 0;
-
-                    String correctAnswer = currentQuestion.getAnswer(correctAnswerIndex).getAnswerText();
-
-
-                    JOptionPane.showMessageDialog(null, "Rätt svar är: " + correctAnswer);
-
-
-                    endRoundForPlayer(true, out);
-                }
-            }
-        });
-        gamePieces.add(giveUpButton, BorderLayout.SOUTH);
 
         setVisible(true);
-    }
-
-    public void endRoundForPlayer(boolean gaveUp, ObjectOutputStream out) {
-        if (gaveUp) {
-            try {
-                this.out.writeObject(0); // Skicka 0 poäng till motståndaren
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-
-        waiting();
     }
 
     /**
@@ -87,7 +56,7 @@ public class GameGraphics extends JFrame {
         question.setIcon(new ImageIcon("src/Client/images/QuestionTitle.png"));
         question.setFont(new Font("Arial", Font.BOLD, 15));
         question.setOpaque(true);
-        question.setBackground(new Color(88, 168, 134));
+        question.setBackground(darkerGreen);
         question.setHorizontalAlignment(SwingConstants.CENTER);
         question.setHorizontalTextPosition(SwingConstants.CENTER);
     }
@@ -100,8 +69,88 @@ public class GameGraphics extends JFrame {
         title.setIcon(image);
         title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setOpaque(true);
-        title.setBackground(new Color(121, 197, 173));
+        title.setBackground(lighterGreen);
         add(title, BorderLayout.NORTH);
+    }
+
+    /**
+     * asks for name and avatar
+     */
+    public void nameAndAvatarEntry(ObjectOutputStream out){
+        questionsPanel.setLayout(new GridBagLayout());
+
+        avatar = new Avatar();
+        opponentAvatar.shrinkImage();
+
+        JLabel waitingForOpponent = new JLabel("Waiting...");
+        waitingForOpponent.setFont(new Font("Arial", Font.BOLD, 40));
+
+        JPanel buttons = implementButtons();
+
+        JTextField nameEntry = implementTextField(out, waitingForOpponent);
+
+        questionsPanel.add(avatar);
+        questionsPanel.add(buttons);
+        questionsPanel.add(nameEntry);
+        revalidate();
+        repaint();
+    }
+
+    private JTextField implementTextField(ObjectOutputStream out, JLabel waitingForOpponent) {
+        JTextField nameEntry = new JTextField("Enter name", 15);
+        nameEntry.setFont(new Font("Arial", Font.BOLD, 20));
+        nameEntry.setForeground(Color.GRAY);
+        nameEntry.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if(textInputIsEmpty) {
+                    nameEntry.setText("");
+                    nameEntry.setForeground(Color.BLACK);
+                    textInputIsEmpty = false;
+                }
+            }
+        });
+        nameEntry.addActionListener(e -> {
+            try {
+                AvatarProperties avatarProperties = new AvatarProperties(avatar.getCat(), avatar.getEyes(), avatar.getMouth(),
+                        avatar.getPattern(),avatar.getAccessory(), avatar.getHeadWear());
+                out.writeObject(avatarProperties);
+                out.writeObject(nameEntry.getText());
+                questionsPanel.removeAll();
+                questionsPanel.add(waitingForOpponent);
+                avatar.shrinkImage();
+                revalidate();
+                repaint();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        return nameEntry;
+    }
+
+    private JPanel implementButtons() {
+        JPanel buttons = new JPanel();
+        buttons.setLayout(new GridLayout(7, 1));
+        buttons.setBackground(darkerGreen);
+        JButton changeCat = new JButton("Cat color");
+        changeCat.addActionListener(e -> avatar.changeCat());
+        JButton changeEyes = new JButton("Eyes");
+        changeEyes.addActionListener(e -> avatar.changeEyes());
+        JButton changeMouth = new JButton("Mouth");
+        changeMouth.addActionListener(e -> avatar.changeMouth());
+        JButton changePattern = new JButton("Pattern");
+        changePattern.addActionListener(e -> avatar.changePattern());
+        JButton changeAccessory = new JButton("Accessory");
+        changeAccessory.addActionListener(e -> avatar.changeAccessory());
+        JButton changeHeadWear = new JButton("Hat");
+        changeHeadWear.addActionListener(e -> avatar.changeHeadWear());
+        buttons.add(changeCat);
+        buttons.add(changeEyes);
+        buttons.add(changeMouth);
+        buttons.add(changePattern);
+        buttons.add(changeAccessory);
+        buttons.add(changeHeadWear);
+        return buttons;
     }
 
     /**
@@ -243,13 +292,16 @@ public class GameGraphics extends JFrame {
      */
     public void waiting() {
         questionsPanel.removeAll();
-        questionsPanel.setLayout(new GridLayout(totalPoints.size() + 1, 2));
+        questionsPanel.setLayout(new GridLayout(totalPoints.size() + 2, 2));
 
         JPanel yourPointsPanel = createPointsPanel("Dina poäng");
         JPanel opponentPointsPanel = createPointsPanel("Motståndarens poäng");
 
         questionsPanel.add(yourPointsPanel);
         questionsPanel.add(opponentPointsPanel);
+        setBackGroundForAvatars();
+        questionsPanel.add(avatar);
+        questionsPanel.add(opponentAvatar);
 
         for (int i = 0; i < totalPoints.size(); i++) {
             JPanel yourPointsPanelItem = createScorePanel(i, false);
@@ -263,12 +315,19 @@ public class GameGraphics extends JFrame {
         repaint();
     }
 
+    private void setBackGroundForAvatars() {
+        avatar.setOpaque(true);
+        avatar.setBackground(lighterGreen);
+        opponentAvatar.setOpaque(true);
+        opponentAvatar.setBackground(lighterGreen);
+    }
+
     private JPanel createPointsPanel (String labelText){
         JLabel pointsLabel = new JLabel(labelText);
         pointsLabel.setFont(new Font("Arial", Font.BOLD, 26));
 
         JPanel pointsPanel = new JPanel();
-        pointsPanel.setBackground(new Color(121,197,173));
+        pointsPanel.setBackground(lighterGreen);
         pointsPanel.setLayout(new BorderLayout());
         pointsLabel.setHorizontalAlignment(SwingConstants.CENTER);
         pointsPanel.add(pointsLabel, BorderLayout.CENTER);
@@ -278,7 +337,7 @@ public class GameGraphics extends JFrame {
     }
     private JPanel createScorePanel(int points, boolean isOpponent) {
         JPanel scorePanel = new JPanel();
-        scorePanel.setBackground(new Color(121, 197, 173));
+        scorePanel.setBackground(lighterGreen);
         scorePanel.setLayout(new BorderLayout());
 
         JLabel scoreLabel;
@@ -300,5 +359,7 @@ public class GameGraphics extends JFrame {
         this.opponentPoints.add(points);
     }
 
-
+    public void setOpponentAvatar(Avatar opponentAvatar) {
+        this.opponentAvatar = opponentAvatar;
+    }
 }

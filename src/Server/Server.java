@@ -1,6 +1,7 @@
 package Server;
 
 import Utilities.Answers;
+import Utilities.AvatarProperties;
 import Utilities.Category;
 import Utilities.Question;
 
@@ -16,41 +17,48 @@ public class Server extends Thread {
    Socket serverSocket;
    ArrayList<Category> categories = new ArrayList<>();
    GameCoordinator gameCoordinator;
-   static final String WELCOME = "START_GAME_FROM_CLIENT_XXX";
+   private static final String WELCOME = "START_GAME_FROM_CLIENT_XXX";
 
    public Server(Socket s, GameCoordinator g){
         this.serverSocket = s;
         this.gameCoordinator = g;
     }
    @Override
-   public void run(){
-            createQuestionsAndCategoriesFromFile();
-            Protocol p = new Protocol(categories);
+   public void run() {
+       createQuestionsAndCategoriesFromFile();
+       Protocol p = new Protocol(categories);
 
-       try(ObjectOutputStream out = new ObjectOutputStream(serverSocket.getOutputStream());
-           ObjectInputStream in = new ObjectInputStream(serverSocket.getInputStream())){
+       try (ObjectOutputStream out = new ObjectOutputStream(serverSocket.getOutputStream());
+            ObjectInputStream in = new ObjectInputStream(serverSocket.getInputStream())) {
 
            out.writeObject(WELCOME);
-           out.writeObject(p.getProperties().getProperty("numberOfQuestions","2"));
+           out.writeObject(p.getProperties().getProperty("numberOfQuestions", "2"));
            out.writeObject(p.getProperties().getProperty("numberOfRounds", "3"));
-           Player player = new Player(out, (String) in.readObject());
+           Player player = new Player(out, (AvatarProperties) in.readObject(), (String) in.readObject());
            gameCoordinator.addPlayer(player);
            gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
-           if(!gameCoordinator.isTwoPlayers){
+           if (!gameCoordinator.isTwoPlayers) {
                player.setPicksCurrentCategory(true);
                Collections.shuffle(categories);
-               for(int i = 0; i < 3; i++){
+               for (int i = 0; i < 3; i++) {
                    out.writeObject(categories.get(i));
                }
            }
 
-           while (true){
-               p.processUserInput(in.readObject(), in, out, player, gameCoordinator);
+           while (true) {
+               p.processUserInput(in.readObject(), out, player, gameCoordinator);
            }
 
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+       } catch (IOException | ClassNotFoundException e) {
+           e.printStackTrace();
+           throw new RuntimeException(e);
+       } finally {
+           try {
+               serverSocket.close();
+           } catch (IOException e) {
+               e.printStackTrace();
+           }
+       }
    }
 
     /**
