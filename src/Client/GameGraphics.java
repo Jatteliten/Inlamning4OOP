@@ -388,7 +388,30 @@ public class GameGraphics extends JFrame {
 
         return scorePanel;
     }
-
+    public void showCustomOptionDialog(String message, String title, String buttonLabel) {
+        JOptionPane.showOptionDialog(
+                null,
+                message,
+                title,
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.ERROR_MESSAGE,
+                null,
+                new Object[]{buttonLabel},
+                buttonLabel
+        );
+    }
+    public int showCustomYesNoOptionDialog(String message, String title, String yesLabel, String noLabel) {
+        return JOptionPane.showOptionDialog(
+                null,
+                message,
+                title,
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                new Object[]{yesLabel, noLabel},
+                yesLabel
+        );
+    }
     public String winnerOrLoser(){
         if (totalPlayerPoints(totalPoints) > totalPlayerPoints(opponentPoints)){
             return "Du vann!";

@@ -76,16 +76,17 @@ public class Client {
                             g.waiting();
                         }
                         if (obj.equals(NEW_GAME_REQUEST)) {
-                            int result = JOptionPane.showConfirmDialog(
-                                    null,
+                            int result = g.showCustomYesNoOptionDialog(
                                     "Motståndare frågar om du vill spela igen?",
                                     "Spela igen?",
-                                    JOptionPane.YES_NO_OPTION
+                                    "Ja, starta spel",
+                                    "Nej och avsluta"
                             );
                             if (result == JOptionPane.YES_OPTION) {
                                 out.writeObject(NEW_GAME_REQUEST);
                             } else {
                                 out.writeObject(NEW_GAME_DENIED);
+                                System.exit(0);
                             }
                         }
                         if (obj.equals(NEW_GAME_START)) {
@@ -94,7 +95,8 @@ public class Client {
                             break;
                         }
                         if (obj.equals(NEW_GAME_DENIED)) {
-                            JOptionPane.showMessageDialog(null,"Förfrågan nekad");
+                            g.showCustomOptionDialog("Din förfrågan blev nekad", "spela igen svar", "Avsluta");
+                            System.exit(0);
                         }
                     } catch (EOFException e) {
                         System.out.println("EOFException fångad. Avslutar loopen.");
