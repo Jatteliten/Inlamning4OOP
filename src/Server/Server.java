@@ -42,7 +42,6 @@ public class Server extends Thread {
 
                gameCoordinator.addPlayer(player);
                gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
-               System.out.println(gameCoordinator.getPlayers().size());
                if (!gameCoordinator.isTwoPlayers) {
                    player.setPicksCurrentCategory(true);
                    Collections.shuffle(categories);
