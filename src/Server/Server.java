@@ -42,6 +42,7 @@ public class Server extends Thread {
 
                gameCoordinator.addPlayer(player);
                gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
+               System.out.println(gameCoordinator.getPlayers().size());
                if (!gameCoordinator.isTwoPlayers) {
                    player.setPicksCurrentCategory(true);
                    Collections.shuffle(categories);
@@ -54,12 +55,7 @@ public class Server extends Thread {
                    p.processUserInput(in.readObject(), out, player, gameCoordinator);
                }
            } catch (IOException e) {
-               if(gameCoordinator.getPlayers().contains(player) && gameCoordinator.isTwoPlayers) {
-                   p.userHasQuitGame(gameCoordinator, player);
-               }else{
-                   gameCoordinator.getPlayers().remove(player);
-                   gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
-               }
+               //Expected error. Handled in finally-block
            }
 
 
@@ -68,6 +64,12 @@ public class Server extends Thread {
            e.printStackTrace();
        } finally {
            try {
+               if(gameCoordinator.getPlayers().contains(player) && gameCoordinator.isTwoPlayers) {
+                   p.userHasQuitGame(gameCoordinator, player);
+               }else{
+                   gameCoordinator.getPlayers().remove(player);
+                   gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
+               }
                serverSocket.close();
            } catch (IOException e) {
                e.printStackTrace();

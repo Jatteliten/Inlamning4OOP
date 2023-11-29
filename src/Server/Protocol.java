@@ -49,7 +49,7 @@ public class Protocol {
 
         Player secondPlayer = null;
 
-        if (gameCoordinator.getPlayers().size() % 2 == 0) {
+        if (gameCoordinator.isTwoPlayers) {
             secondPlayer = checkForSecondPlayer(p, gameCoordinator);
         }
 
@@ -66,7 +66,7 @@ public class Protocol {
 
         } else if (userInput instanceof Integer i) {
             while(secondPlayer == null){
-                if(gameCoordinator.getPlayers().size() % 2 == 0) {
+                if(gameCoordinator.isTwoPlayers) {
                     secondPlayer = checkForSecondPlayer(p, gameCoordinator);
                 }
                 try {
@@ -124,7 +124,7 @@ public class Protocol {
 
 
     public void userHasQuitGame(GameCoordinator gameCoordinator, Player p) throws IOException {
-        if (gameCoordinator.getPlayers().size() % 2 == 0) {
+        if (gameCoordinator.isTwoPlayers) {
             Player secondPlayer = checkForSecondPlayer(p, gameCoordinator);
             secondPlayer.getObjectOutputStream().writeObject(PLAYER_HAS_QUIT_GAME);
             gameCoordinator.getPlayers().remove(secondPlayer);
