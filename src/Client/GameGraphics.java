@@ -327,7 +327,7 @@ public class GameGraphics extends JFrame {
 
         JPanel yourPointsPanel = createPointsPanel("Dina poäng");
         JPanel TotalPointsPanel = createPointsPanel(totalPlayerPoints(totalPoints) + " - " + totalPlayerPoints(opponentPoints));
-        JPanel opponentPointsPanel = createPointsPanel("Motståndarens poäng");
+        JPanel opponentPointsPanel = createPointsPanel("Deras poäng");
 
         questionsPanel.add(yourPointsPanel);
         questionsPanel.add(TotalPointsPanel);
