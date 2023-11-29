@@ -40,6 +40,7 @@ public class GameGraphics extends JFrame {
         setTitle("Quizkampen");
         setLayout(new BorderLayout());
         setLocationRelativeTo(null);
+        setResizable(false);
         gamePieces.setLayout(new BorderLayout());
         add(gamePieces);
         initializeQuestionDisplay();
@@ -140,7 +141,7 @@ public class GameGraphics extends JFrame {
      * Shows waiting message if opponent is currently answering questions
      */
     public void displayWaitingMessage() {
-        JLabel waitingForOpponent = new JLabel("Väntar på motståndare");
+        JLabel waitingForOpponent = new JLabel("Väntar på motståndare...");
         waitingForOpponent.setFont(new Font("Arial", Font.BOLD, 38));
         questionsPanel.setLayout(new FlowLayout());
         questionsPanel.removeAll();
@@ -451,7 +452,7 @@ public class GameGraphics extends JFrame {
         this.numberOfRounds = numberOfRounds;
     }
 
-    public void setOut(ObjectOutputStream out) {
+    public void setOutPutStream(ObjectOutputStream out) {
         this.out = out;
     }
 }

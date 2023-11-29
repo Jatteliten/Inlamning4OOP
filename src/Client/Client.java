@@ -3,7 +3,6 @@ package Client;
 import java.io.*;
 import java.net.Socket;
 
-import Server.Player;
 import Utilities.AvatarProperties;
 import Utilities.Category;
 import Utilities.Question;
@@ -29,7 +28,7 @@ public class Client {
              ObjectInputStream in = new ObjectInputStream(socketToServer.getInputStream())) {
 
             GameGraphics g = new GameGraphics();
-            g.setOut(out);
+            g.setOutPutStream(out);
             while (true) {
                 while (true) {
                     try {
@@ -122,10 +121,6 @@ public class Client {
         opponentAvatar.setHeadWear(avatarProperties.headWear());
         opponentAvatar.shrinkImage();
         g.setOpponentAvatar(opponentAvatar);
-    }
-
-    public int getNumberOfRounds() {
-        return numberOfRounds;
     }
 
     public static void main(String[] args) throws IOException {
