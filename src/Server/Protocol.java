@@ -127,7 +127,9 @@ public class Protocol {
         if (gameCoordinator.getPlayers().size() % 2 == 0) {
             secondPlayer = checkForSecondPlayer(p, gameCoordinator);
             secondPlayer.getObjectOutputStream().writeObject(PLAYER_HAS_QUIT_GAME);
+            gameCoordinator.getPlayers().remove(secondPlayer);
         }
+        gameCoordinator.getPlayers().remove(p);
     }
 
     private Player checkForSecondPlayer(Player firstPlayer, GameCoordinator gameCoordinator){
