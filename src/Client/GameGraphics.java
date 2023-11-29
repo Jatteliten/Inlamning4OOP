@@ -136,6 +136,9 @@ public class GameGraphics extends JFrame {
         return nameEntry;
     }
 
+    /**
+     * Shows waiting message if opponent is currently answering questions
+     */
     public void displayWaitingMessage() {
         JLabel waitingForOpponent = new JLabel("Väntar på motståndare");
         waitingForOpponent.setFont(new Font("Arial", Font.BOLD, 38));
