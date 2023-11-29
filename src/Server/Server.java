@@ -42,6 +42,7 @@ public class Server extends Thread {
 
                gameCoordinator.addPlayer(player);
                gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
+               System.out.println(gameCoordinator.getPlayers().size());
                if (!gameCoordinator.isTwoPlayers) {
                    player.setPicksCurrentCategory(true);
                    Collections.shuffle(categories);
@@ -63,8 +64,10 @@ public class Server extends Thread {
            e.printStackTrace();
        } finally {
            try {
-               if(gameCoordinator.getPlayers().contains(player)) {
+               if(gameCoordinator.getPlayers().contains(player) && gameCoordinator.getPlayers().size() % 2 == 0) {
                    p.userHasQuitGame(gameCoordinator, player);
+               }else{
+                   gameCoordinator.getPlayers().remove(player);
                }
                serverSocket.close();
            } catch (IOException e) {
