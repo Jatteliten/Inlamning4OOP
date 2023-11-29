@@ -303,7 +303,6 @@ public class GameGraphics extends JFrame {
      * Displays results.
      */
     public void waiting() {
-        System.out.println(opponentPoints.size());
         questionsPanel.removeAll();
         questionsPanel.setLayout(new GridLayout(totalPoints.size() + 3, 3));
 

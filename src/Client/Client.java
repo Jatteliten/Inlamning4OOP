@@ -60,7 +60,6 @@ public class Client {
                             System.exit(0);
                         }
                     } catch (EOFException e) {
-                        System.out.println("EOFException fångad. Avslutar loopen.");
                         break;
                     } catch (IOException | ClassNotFoundException ex) {
                         throw new RuntimeException(ex);
@@ -74,7 +73,6 @@ public class Client {
                     try {
                         obj = in.readObject();
                         if (obj == null) {
-                            System.out.println("EOFException fångad eller sista poängen. Avslutar loopen.");
                             break;
                         }
                         if (obj instanceof Integer s) {
@@ -105,8 +103,7 @@ public class Client {
                             System.exit(0);
                         }
                     } catch (EOFException e) {
-                        System.out.println("EOFException fångad. Avslutar loopen.");
-                        break;
+                        System.exit(0);
                     } catch (IOException | ClassNotFoundException ex) {
                         throw new RuntimeException(ex);
                     }
