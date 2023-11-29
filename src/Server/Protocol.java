@@ -118,6 +118,7 @@ public class Protocol {
             }
         } else if (userInput.equals(NEW_GAME_DENIED)) {
             secondPlayer.getObjectOutputStream().writeObject(NEW_GAME_DENIED);
+            userHasQuitGame(gameCoordinator, p);
         }
     }
 
