@@ -95,7 +95,7 @@ public class Client {
                         }
                         if (obj.equals(NEW_GAME_START)) {
                             g.clearAllPointArrays();
-                            g.waiting();
+                            g.displayWaitingMessage();
                             break;
                         }
                         if (obj.equals(NEW_GAME_DENIED)) {

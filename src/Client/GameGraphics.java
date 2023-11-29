@@ -92,12 +92,9 @@ public class GameGraphics extends JFrame {
         avatar = new Avatar();
         opponentAvatar.shrinkImage();
 
-        JLabel waitingForOpponent = new JLabel("Waiting...");
-        waitingForOpponent.setFont(new Font("Arial", Font.BOLD, 40));
-
         JPanel buttons = implementButtons();
 
-        JTextField nameEntry = implementTextField(waitingForOpponent);
+        JTextField nameEntry = implementTextField();
 
         questionsPanel.add(avatar);
         questionsPanel.add(buttons);
@@ -110,7 +107,7 @@ public class GameGraphics extends JFrame {
      * Asks player for a name.
      * Sends player avatar to server when name has been given.
      */
-    private JTextField implementTextField(JLabel waitingForOpponent) {
+    private JTextField implementTextField() {
         JTextField nameEntry = new JTextField("Enter name", 15);
         nameEntry.setFont(new Font("Arial", Font.BOLD, 20));
         nameEntry.setForeground(Color.GRAY);
@@ -130,16 +127,23 @@ public class GameGraphics extends JFrame {
                         avatar.getPattern(),avatar.getAccessory(), avatar.getHeadWear());
                 out.writeObject(avatarProperties);
                 out.writeObject(nameEntry.getText());
-                questionsPanel.removeAll();
-                questionsPanel.add(waitingForOpponent);
                 avatar.shrinkImage();
-                revalidate();
-                repaint();
+                displayWaitingMessage();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         });
         return nameEntry;
+    }
+
+    public void displayWaitingMessage() {
+        JLabel waitingForOpponent = new JLabel("Väntar på motståndare");
+        waitingForOpponent.setFont(new Font("Arial", Font.BOLD, 38));
+        questionsPanel.setLayout(new FlowLayout());
+        questionsPanel.removeAll();
+        questionsPanel.add(waitingForOpponent);
+        revalidate();
+        repaint();
     }
 
     /**
