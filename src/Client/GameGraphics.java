@@ -219,34 +219,9 @@ public class GameGraphics extends JFrame {
      */
     public void displayQuestions(ArrayList<Question> ql)  {
 
-        JPanel geUppPanel = new JPanel();
-        geUppPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        Dimension panelSize = new Dimension(10, 10);
-        geUppPanel.setPreferredSize(panelSize);
-
-        gamePieces.add(geUppPanel, BorderLayout.SOUTH);
-
-        JButton geUpp = new JButton("Ge upp");
-
-        geUpp.addActionListener(e -> {
-            try {
-                out.writeObject("GeUpp");
-
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
-        geUppPanel.add(geUpp);
-        gamePieces.add(geUpp, BorderLayout.SOUTH);
-        Dimension buttonSize = new Dimension(5,5);
-        geUpp.setPreferredSize(buttonSize);
-
         questionsPanel.removeAll();
         questionsPanel.setLayout(new GridLayout(2, 2));
         ArrayList<ClickableLabel> answers = new ArrayList<>();
-        questionsPanel.add(geUpp);
-
         question.setText(ql.get(counter).getQuestionText());
         gamePieces.add(question, BorderLayout.NORTH);
 
