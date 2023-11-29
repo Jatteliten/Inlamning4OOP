@@ -54,7 +54,7 @@ public class Server extends Thread {
                    p.processUserInput(in.readObject(), out, player, gameCoordinator);
                }
            } catch (IOException e) {
-
+               e.printStackTrace();
            }
 
 
@@ -63,7 +63,9 @@ public class Server extends Thread {
            e.printStackTrace();
        } finally {
            try {
-               p.userHasQuitGame(gameCoordinator, player);
+               if(gameCoordinator.getPlayers().contains(player)) {
+                   p.userHasQuitGame(gameCoordinator, player);
+               }
                serverSocket.close();
            } catch (IOException e) {
                e.printStackTrace();
