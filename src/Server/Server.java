@@ -54,7 +54,12 @@ public class Server extends Thread {
                    p.processUserInput(in.readObject(), out, player, gameCoordinator);
                }
            } catch (IOException e) {
-               e.printStackTrace();
+               if(gameCoordinator.getPlayers().contains(player) && gameCoordinator.isTwoPlayers) {
+                   p.userHasQuitGame(gameCoordinator, player);
+               }else{
+                   gameCoordinator.getPlayers().remove(player);
+                   gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
+               }
            }
 
 
@@ -63,11 +68,6 @@ public class Server extends Thread {
            e.printStackTrace();
        } finally {
            try {
-               if(gameCoordinator.getPlayers().contains(player) && gameCoordinator.getPlayers().size() % 2 == 0) {
-                   p.userHasQuitGame(gameCoordinator, player);
-               }else{
-                   gameCoordinator.getPlayers().remove(player);
-               }
                serverSocket.close();
            } catch (IOException e) {
                e.printStackTrace();
