@@ -3,6 +3,7 @@ package Client;
 import java.io.*;
 import java.net.Socket;
 
+import Server.Player;
 import Utilities.AvatarProperties;
 import Utilities.Category;
 import Utilities.Question;
@@ -18,6 +19,7 @@ public class Client {
     static final String NEW_GAME_REQUEST = "NEW_GAME_REQUEST_FROM_SERVER_XXX";
     static final String NEW_GAME_DENIED = "NEW_GAME_DENIED_FROM_SERVER_XXX";
     static final String NEW_GAME_START = "NEW_GAME_START_FROM_SERVER_XXX";
+    static final String PLAYER_HAS_QUIT_GAME = "PLAYER_HAS_QUIT_GAME_XXX";
     int numberOfQuestions = 0;
     int numberOfRounds = 0;
 
@@ -52,6 +54,10 @@ public class Client {
                         } else if (obj instanceof AvatarProperties a) {
                             initializeOpponentAvatar(a, g);
                             g.waiting();
+                        }else if(obj.equals(PLAYER_HAS_QUIT_GAME)){
+                            JOptionPane.showMessageDialog(null,
+                                    "Your opponent has quit the game\nYou win!");
+                            System.exit(0);
                         }
                     } catch (EOFException e) {
                         System.out.println("EOFException fångad. Avslutar loopen.");

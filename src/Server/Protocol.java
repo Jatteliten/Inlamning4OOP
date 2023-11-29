@@ -1,5 +1,6 @@
 package Server;
 
+import Client.GameGraphics;
 import Utilities.Category;
 import Utilities.Question;
 
@@ -24,6 +25,7 @@ public class Protocol {
     static final String NEW_GAME_REQUEST = "NEW_GAME_REQUEST_FROM_SERVER_XXX";
     static final String NEW_GAME_START = "NEW_GAME_START_FROM_SERVER_XXX";
     static final String NEW_GAME_DENIED = "NEW_GAME_DENIED_FROM_SERVER_XXX";
+    static final String PLAYER_HAS_QUIT_GAME = "PLAYER_HAS_QUIT_GAME_XXX";
 
     public Protocol(ArrayList<Category> categories){
         this.properties = new Properties();
@@ -117,6 +119,15 @@ public class Protocol {
 
     public Properties getProperties() {
         return properties;
+    }
+
+    public void userHasQuitGame(GameCoordinator gameCoordinator, Player p) throws IOException {
+        Player secondPlayer = null;
+
+        if (gameCoordinator.getPlayers().size() % 2 == 0) {
+            secondPlayer = checkForSecondPlayer(p, gameCoordinator);
+            secondPlayer.getObjectOutputStream().writeObject(PLAYER_HAS_QUIT_GAME);
+        }
     }
 
     private Player checkForSecondPlayer(Player firstPlayer, GameCoordinator gameCoordinator){

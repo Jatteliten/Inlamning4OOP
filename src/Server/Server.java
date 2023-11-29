@@ -17,6 +17,7 @@ public class Server extends Thread {
    Socket serverSocket;
    ArrayList<Category> categories = new ArrayList<>();
    GameCoordinator gameCoordinator;
+   Player player;
    private static final String WELCOME = "START_GAME_FROM_CLIENT_XXX";
 
    public Server(Socket s, GameCoordinator g){
@@ -37,7 +38,7 @@ public class Server extends Thread {
            out.writeObject(p.getProperties().getProperty("numberOfRounds", "3"));
 
            try {
-               Player player = new Player(out, (AvatarProperties) in.readObject(), (String) in.readObject());
+               player = new Player(out, (AvatarProperties) in.readObject(), (String) in.readObject());
 
                gameCoordinator.addPlayer(player);
                gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
@@ -62,6 +63,7 @@ public class Server extends Thread {
            e.printStackTrace();
        } finally {
            try {
+               p.userHasQuitGame(gameCoordinator, player);
                serverSocket.close();
            } catch (IOException e) {
                e.printStackTrace();
