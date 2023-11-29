@@ -17,6 +17,7 @@ public class Avatar extends JLayeredPane{
     private int accessory = 0;
     private static final int AMOUNT_OF_ACCESSORIES = 30;
     private int headWear = 0;
+    private static final int AMOUNT_OF_HEAD_WEAR = 26;
     private final JLabel catLabel = new JLabel(new ImageIcon("src/Client/CatLayers/Cat/0.png"));
     private final JLabel eyesLabel = new JLabel(new ImageIcon("src/Client/CatLayers/Eyes or eyewear/0.png"));
     private final JLabel mouthLabel = new JLabel(new ImageIcon("src/Client/CatLayers/Mouth/0.png"));
@@ -130,7 +131,7 @@ public class Avatar extends JLayeredPane{
     public void changeHeadWear(int increment){
         headWear += increment;
         headWearLabel.setIcon(new ImageIcon("src/Client/CatLayers/Headwear/" +
-                headWear % AMOUNT_OF_ACCESSORIES + ".png"));
+                headWear % AMOUNT_OF_HEAD_WEAR + ".png"));
         revalidateAndRepaint();
     }
     public void randomizeCat(){
@@ -159,12 +160,18 @@ public class Avatar extends JLayeredPane{
 
     public void shrinkImage() {
         setPreferredSize(new Dimension(IMAGE_SIZE / 3,IMAGE_SIZE / 3));
-        resizeLabelImage(catLabel, "src/Client/CatLayers/Cat/" + cat % 8 + ".png");
-        resizeLabelImage(accessoryLabel, "src/Client/CatLayers/Accessories/" + accessory % 30 + ".png");
-        resizeLabelImage(eyesLabel, "src/Client/CatLayers/Eyes or eyeWear/" + eyes % 26 + ".png");
-        resizeLabelImage(headWearLabel, "src/Client/CatLayers/Headwear/" + headWear % 27 + ".png");
-        resizeLabelImage(mouthLabel, "src/Client/CatLayers/Mouth/" + mouth % 5 + ".png");
-        resizeLabelImage(patternLabel, "src/Client/CatLayers/Pattern/" + pattern % 4 + ".png");
+        resizeLabelImage(catLabel, "src/Client/CatLayers/Cat/" +
+                cat % AMOUNT_OF_CATS + ".png");
+        resizeLabelImage(accessoryLabel, "src/Client/CatLayers/Accessories/" +
+                accessory % AMOUNT_OF_ACCESSORIES + ".png");
+        resizeLabelImage(eyesLabel, "src/Client/CatLayers/Eyes or eyeWear/"
+                + eyes % AMOUNT_OF_EYES + ".png");
+        resizeLabelImage(headWearLabel, "src/Client/CatLayers/Headwear/"
+                + headWear % AMOUNT_OF_HEAD_WEAR + ".png");
+        resizeLabelImage(mouthLabel, "src/Client/CatLayers/Mouth/"
+                + mouth % AMOUNT_OF_MOUTHS + ".png");
+        resizeLabelImage(patternLabel, "src/Client/CatLayers/Pattern/"
+                + pattern % AMOUNT_OF_PATTERNS + ".png");
         revalidateAndRepaint();
     }
     private void resizeLabelImage(JLabel label, String imagePath) {
