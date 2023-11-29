@@ -122,10 +122,8 @@ public class Protocol {
     }
 
     public void userHasQuitGame(GameCoordinator gameCoordinator, Player p) throws IOException {
-        Player secondPlayer = null;
-
         if (gameCoordinator.getPlayers().size() % 2 == 0) {
-            secondPlayer = checkForSecondPlayer(p, gameCoordinator);
+            Player secondPlayer = checkForSecondPlayer(p, gameCoordinator);
             secondPlayer.getObjectOutputStream().writeObject(PLAYER_HAS_QUIT_GAME);
             gameCoordinator.getPlayers().remove(secondPlayer);
         }
