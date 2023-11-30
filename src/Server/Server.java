@@ -66,7 +66,7 @@ public class Server extends Thread {
            try {
                if(gameCoordinator.getPlayers().contains(player) && gameCoordinator.isTwoPlayers) {
                    p.userHasQuitGame(gameCoordinator, player);
-               }else{
+               }else if(!gameCoordinator.isTwoPlayers){
                    gameCoordinator.getPlayers().remove(player);
                    gameCoordinator.setTwoPlayers(!gameCoordinator.isTwoPlayers);
                }
