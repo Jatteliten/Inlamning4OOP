@@ -122,7 +122,6 @@ public class Protocol {
         }
     }
 
-
     public void userHasQuitGame(GameCoordinator gameCoordinator, Player p) throws IOException {
         if (gameCoordinator.isTwoPlayers) {
             Player secondPlayer = checkForSecondPlayer(p, gameCoordinator);

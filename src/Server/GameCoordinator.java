@@ -5,25 +5,11 @@ import java.util.ArrayList;
 public class GameCoordinator {
     ArrayList<Player> players = new ArrayList<>();
     boolean isTwoPlayers = true;
-
-    public boolean playNewGame() {
-        return playNewGame;
-    }
-
-    public void setPlayNewGame(boolean playNewGame) {
-        this.playNewGame = playNewGame;
-    }
-
     boolean playNewGame = false;
-    public GameCoordinator() {
-    }
+    public GameCoordinator() {}
 
     public ArrayList<Player> getPlayers() {
         return players;
-    }
-
-    public void setPlayers(ArrayList<Player> players) {
-        this.players = players;
     }
 
     public void addPlayer(Player p){
@@ -38,16 +24,11 @@ public class GameCoordinator {
         isTwoPlayers = twoPlayers;
     }
 
-    private boolean roundComplete = false;
-
-    public boolean isRoundComplete() {
-        return roundComplete;
+    public void setPlayNewGame(boolean playNewGame) {
+        this.playNewGame = playNewGame;
+    }
+    public boolean playNewGame() {
+        return playNewGame;
     }
 
-    public void setRoundComplete(boolean roundComplete) {
-        this.roundComplete = roundComplete;
-    }
-
-    public void playerScored() {
-    }
 }
